@@ -2,8 +2,10 @@
 // Every risky tool call goes through the approval gate before it runs.
 import { query } from "@anthropic-ai/claude-agent-sdk";
 import { boardTools, BOARD_TOOL_NAMES } from "./board-tools.mjs";
+import { libraryTools, LIBRARY_TOOL_NAMES } from "./library-tools.mjs";
+import { subscriptionEnv } from "./claude.mjs";
 
-const LEAD_PROMPT = (cwd, team) => `You are the Lead in Trident, the user's personal multi-agent workspace. You own the user's goal.
+const LEAD_PROMPT = (cwd, team, guide) => `You are the Lead in Trident, the user's personal multi-agent workspace. You own the user's goal.
 The user is not a programmer: be concise and plain-spoken, no jargon.
 
 How you work:
@@ -22,12 +24,15 @@ Comparing models:
 - When the user wants several models' views on a question (compare, "ask GPT and Gemini", a second opinion, side by side), call ask_several. The answers appear side by side on the user's screen; then reply with a short summary: where they agree, where they differ, and which answer you would trust and why. Do not repeat the answers in full.
 - ask_several answers questions only; it does not change files. Use OpenRouter names like "openai/gpt-6.2-sol" exactly as the user gives them, plus "claude" (local) and "codex" (local).
 - Every message starts with a [state] block showing the board. Trust it; it is current.
-Your working folder is ${cwd}.`;
+The Library: a shared shelf of skills and notes for every workplace (library tools: list, read, write). Your changes become drafts the user saves.
+Your working folder is ${cwd}.
+
+${guide}`;
 
 // Tools that only read are allowed without asking.
 const READ_ONLY_TOOLS = ["Read", "Glob", "Grep", "WebSearch", "WebFetch", "TodoWrite"];
 
-export function startLead({ cwd, emit, gate, board, team, askSeveral }) {
+export function startLead({ cwd, emit, gate, board, team, askSeveral, library }) {
   const inbox = [];
   let wake = null;
   let closed = false;
@@ -45,14 +50,15 @@ export function startLead({ cwd, emit, gate, board, team, askSeveral }) {
     prompt: messages(),
     options: {
       cwd,
+      env: subscriptionEnv(),
       // Keep Trident isolated from the user's global Claude Code plugins and hooks (they cost ~100s per start).
       settingSources: [],
-      mcpServers: { board: boardTools(board, team, askSeveral) },
+      mcpServers: { board: boardTools(board, team, askSeveral), ...(library && { library: libraryTools(library, "lead") }) },
       strictMcpConfig: true,
       // Board tools only change Trident's own board, so they never need approval.
-      allowedTools: [...READ_ONLY_TOOLS, ...BOARD_TOOL_NAMES],
+      allowedTools: [...READ_ONLY_TOOLS, ...BOARD_TOOL_NAMES, ...(library ? LIBRARY_TOOL_NAMES : [])],
       includePartialMessages: true,
-      systemPrompt: { type: "preset", preset: "claude_code", append: LEAD_PROMPT(cwd, team) },
+      systemPrompt: { type: "preset", preset: "claude_code", append: LEAD_PROMPT(cwd, team, library?.guide() ?? "") },
       canUseTool: async (toolName, input, { signal }) => gate.request({ agent: "lead", toolName, input, signal }),
     },
   });
@@ -80,7 +86,7 @@ export function startLead({ cwd, emit, gate, board, team, askSeveral }) {
       for (const block of m.message.content) {
         if (block.type === "text" && block.text) emit({ type: "message", agent: "lead", text: block.text });
         // Board tool calls show up on the board itself, not in Activity.
-        if (block.type === "tool_use" && !block.name.startsWith("mcp__board__") && block.name !== "ToolSearch") emit({ type: "tool", agent: "lead", toolName: block.name, summary: summarize(block.name, block.input) });
+        if (block.type === "tool_use" && !block.name.startsWith("mcp__board__") && !["ToolSearch", "mcp__library__list", "mcp__library__read"].includes(block.name)) emit({ type: "tool", agent: "lead", toolName: block.name, summary: summarize(block.name, block.input) });
       }
     } else if (m.type === "result") {
       busy = false;

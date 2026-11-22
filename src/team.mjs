@@ -5,6 +5,7 @@
 // Accepting merges the worker's copy into the workspace (M4 adds conflict help and the final report).
 import { resolve, sep, join, relative } from "node:path";
 import { talkTools, talkDigest, TALK_TOOL_NAMES } from "./talk-tools.mjs";
+import { libraryTools, LIBRARY_TOOL_NAMES } from "./library-tools.mjs";
 import { claudeSession } from "./claude.mjs";
 import { createWorktree, changes, mergeBranch, removeWorktree } from "./git.mjs";
 
@@ -19,7 +20,7 @@ const VERDICT_SCHEMA = {
   additionalProperties: false,
 };
 
-export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, openrouter, tellLead, members }) {
+export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, openrouter, tellLead, members, library, settings }) {
   const jobs = new Map(); // task num -> { worker, wt, session }
   const seen = new Map(); // participant -> newest team-talk message already shown to them
   const ALL = { claude: "Claude", codex: "Codex", ...(openrouter && { openrouter: `OpenRouter (${openrouter.model})` }) };
@@ -68,12 +69,13 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
       cwd: dir,
       instructions:
         `You are a ${readOnly ? "checker" : "worker"} on Trident, the user's multi-agent team. Your folder is ${dir}.\n` +
-        `Your teammates in this workplace: ${teammates}. You can talk with them whenever it helps, with the team tools: say (send) and read (see new messages).`,
-      allowedTools: [...READ_TOOLS, ...TALK_TOOL_NAMES],
-      mcpServers: { team: talkTools(board, agent, seen) },
+        `Your teammates in this workplace: ${teammates}. You can talk with them whenever it helps, with the team tools: say (send) and read (see new messages).\n` +
+        `The shared Library (library tools: list, read, write) holds skills and notes; use it whenever it helps.\n\n${library?.guide() ?? ""}`,
+      allowedTools: [...READ_TOOLS, ...TALK_TOOL_NAMES, ...(library ? LIBRARY_TOOL_NAMES : [])],
+      mcpServers: { team: talkTools(board, agent, seen), ...(library && { library: libraryTools(library, agent) }) },
       ...(provider && { model: provider.model, env: provider.env }),
       onToolUse: (name, input) => {
-        if (name.startsWith("mcp__team__")) return;
+        if (name.startsWith("mcp__team__") || name === "mcp__library__list" || name === "mcp__library__read") return;
         activity(agent, name, input.command ?? input.file_path ?? input.pattern ?? "");
         if (!readOnly && EDIT_TOOLS.has(name)) onEdit(agent, dir, input.file_path ?? input.notebook_path);
       },
@@ -226,6 +228,28 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
     }
   }
 
+  // ---- How many work at once --------------------------------------------------
+  // The user picks the number in Settings. Extra rounds wait in line and start by themselves.
+  let running = 0;
+  const queue = []; // [num, message]
+  const limit = () => settings?.get().maxAgents ?? 3;
+  function startRound(num, message) {
+    if (running >= limit()) {
+      queue.push([num, message]);
+      board.updateTask(num, { note: `Waiting for a free spot (${limit()} at once).` });
+      return false;
+    }
+    running++;
+    round(num, message).finally(() => {
+      running--;
+      while (queue.length && running < limit()) {
+        const [n, m] = queue.shift();
+        if (jobs.has(n)) startRound(n, m);
+      }
+    });
+    return true;
+  }
+
   // ---- What the Lead can do --------------------------------------------------
   return {
     workers,
@@ -246,7 +270,8 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
       const session = await open(worker, wt.dir, { readOnly: false });
       jobs.set(num, { worker, wt, session });
       const prompt = workPrompt(board.task(num), wt.dir) + (instructions ? `\n\nFrom the Lead: ${instructions}` : "");
-      round(num, prompt); // runs in the background; the Lead hears back with a [team] message
+      // Runs in the background; the Lead hears back with a [team] message.
+      if (!startRound(num, prompt)) return `Task ${num} is with ${worker}, waiting in line: ${limit()} workers are already busy. It starts by itself when one finishes. End your turn now.`;
       return null;
     },
 
@@ -256,7 +281,7 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
       if (!job || ctx?.task.status !== "review") return `Task ${num} is not waiting for review.`;
       board.updateTask(num, { status: "working", check_verdict: "", check_note: "" });
       emit({ type: "message", agent: "team", text: `Sent task ${num} back to ${WORKERS[job.worker]}: ${feedback}` });
-      round(num, `Your work on task ${num} was not accepted yet. Fix this, then finish with a new summary:\n${feedback}`);
+      startRound(num, `Your work on task ${num} was not accepted yet. Fix this, then finish with a new summary:\n${feedback}`);
       return null;
     },
 
@@ -284,6 +309,7 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
         status(j.worker, "idle");
         jobs.delete(num);
       }
+      queue.length = 0;
       noted.clear();
       warned.clear();
       editors.clear();

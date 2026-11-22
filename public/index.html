@@ -123,6 +123,53 @@
   .plan-card { display: grid; gap: 0.75rem; padding: 1rem; }
   .plan-card ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.25rem; }
 
+  /* Library and Settings pages */
+  .pageview { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .pageview .ds-btn { min-height: 2.75rem; }
+  .sidebar .views { display: grid; gap: 0.25rem; margin-top: 0.5rem; }
+  .lib { flex: 1; display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); min-height: 0; }
+  .lib-list { display: grid; align-content: start; gap: 1rem; padding: 1.5rem 0.75rem; border-right: 0.0625rem solid var(--border); overflow-y: auto; }
+  .lib-list .group { display: grid; gap: 0.25rem; }
+  .lib-list .group h2 { margin: 0 0.75rem 0.25rem; }
+  .lib-list .item { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%; min-height: 2.75rem; padding: 0.5rem 0.75rem; border: 0; border-radius: var(--radius-md); background: transparent; color: var(--foreground); font: inherit; text-align: left; cursor: pointer; }
+  .lib-list .item:hover { background: var(--muted); }
+  .lib-list .item.current { background: var(--secondary); }
+  .lib-list .item:focus-visible { outline: 0.125rem solid var(--ring, var(--primary)); outline-offset: 0.125rem; }
+  .lib-list .group .empty { margin: 0 0.75rem; font-size: 0.875rem; }
+  .lib-note { display: grid; align-content: start; gap: 1rem; padding: 1.5rem; overflow-y: auto; max-width: 52rem; }
+  .lib-note .note-title { margin: 0; font-size: 1.25rem; font-weight: 600; }
+  .lib-note .note-path { margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+  .lib-note .note-text { margin: 0; white-space: pre-wrap; line-height: 1.6; }
+  .lib-note .draft-card { display: grid; gap: 0.75rem; padding: 1rem; }
+  .lib-note .draft-card .why { margin: 0; color: var(--muted-foreground); }
+  .lib-note .draft-text { max-height: 24rem; overflow-y: auto; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--muted); }
+  .lib-note details summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; }
+  .lib-note textarea { min-height: 20rem; font-family: var(--font-mono, monospace); font-size: 0.875rem; line-height: 1.5; }
+  .lib-note .ds-row { flex-wrap: wrap; gap: 0.5rem; }
+  .lib-note .error { margin: 0; color: var(--destructive); }
+  .new-note { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0.75rem; align-items: end; }
+  .settings { flex: 1; display: grid; align-content: start; gap: 2rem; padding: 1.5rem; overflow-y: auto; max-width: 44rem; }
+  .settings section { display: grid; gap: 0.75rem; }
+  .settings h2 { margin: 0; }
+  .settings .ds-field { max-width: 14rem; }
+  .settings .old-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .settings .old-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1rem; align-items: center; padding: 0.5rem 0; border-bottom: 0.0625rem solid var(--border); }
+  .settings .old-row .name { margin: 0; overflow-wrap: anywhere; }
+  .settings .old-row .when { grid-column: 1; margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+  .settings .old-row .ds-row { grid-column: 2; grid-row: 1 / 3; gap: 0.5rem; flex-wrap: nowrap; }
+  .settings .confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .settings .confirm p { margin: 0; flex-basis: 100%; }
+  .settings .saved { margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+
+  @media (max-width: 760px) {
+    .lib { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .lib-list { max-height: 35vh; border-right: 0; border-bottom: 0.0625rem solid var(--border); padding: 1rem 0.25rem; }
+    .lib-note, .settings { padding: 1rem; }
+    .new-note { grid-template-columns: 1fr; }
+    .sidebar .views { display: flex; margin-top: 0; }
+    .sidebar .views .wp { width: auto; white-space: nowrap; }
+  }
+
   @media (max-width: 760px) {
     .ds { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
     .sidebar { flex-direction: row; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 0.0625rem solid var(--border); padding: 0.5rem 1rem; }
@@ -146,6 +193,10 @@
   <h2 class="ds-section-title">Workplaces</h2>
   <div id="wp-list" class="wp-list"></div>
   <button type="button" class="ds-btn ds-btn-outline" id="new-wp-open">New workplace</button>
+  <div class="views wp-list">
+   <button type="button" class="wp" id="open-library"><span class="wp-name">Library</span><span class="wp-team" id="library-sub">Skills and notes for every agent</span></button>
+   <button type="button" class="wp" id="open-settings"><span class="wp-name">Settings</span></button>
+  </div>
  </nav>
 
  <dialog id="new-wp" class="ds-card new-wp" aria-labelledby="new-wp-title">
@@ -235,6 +286,41 @@
     </aside>
   </div>
  </div>
+
+ <section class="pageview" id="library-view" aria-labelledby="library-title" hidden>
+  <header class="top">
+    <h1 id="library-title">Library</h1>
+    <button type="button" class="ds-btn ds-btn-outline" id="new-note-open">New note</button>
+  </header>
+  <p class="now" id="library-now">Skills and notes every agent can read. When an agent changes one, it waits here as a draft until you save it.</p>
+  <div class="lib">
+    <nav class="lib-list" id="lib-list" aria-label="Library notes"></nav>
+    <article class="lib-note" id="lib-note" aria-live="polite"></article>
+  </div>
+ </section>
+
+ <section class="pageview" id="settings-view" aria-labelledby="settings-title" hidden>
+  <header class="top"><h1 id="settings-title">Settings</h1></header>
+  <div class="settings">
+    <section aria-labelledby="set-agents-title">
+      <h2 class="ds-section-title" id="set-agents-title">Agents working at once</h2>
+      <p class="hint">How many workers can work at the same moment in each workplace. Extra tasks wait in line and start by themselves. More at once is faster but uses more of your plans at once.</p>
+      <div class="ds-field">
+        <label class="ds-label" for="set-agents">Number of agents</label>
+        <select class="ds-select ds-input" id="set-agents">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option>
+        </select>
+      </div>
+      <p class="saved" id="set-agents-saved" role="status"></p>
+    </section>
+    <section aria-labelledby="set-old-title">
+      <h2 class="ds-section-title" id="set-old-title">Old versions</h2>
+      <p class="hint">Each time you save a Library note, the version it replaced is kept here. Bring one back, or delete the ones you don't need.</p>
+      <ul class="old-list" id="old-list"></ul>
+      <div class="confirm" id="old-delete-all"></div>
+    </section>
+  </div>
+ </section>
 
  <dialog id="remove-wp" class="ds-card new-wp" aria-labelledby="remove-wp-title">
   <form method="dialog" id="remove-wp-form">
@@ -407,13 +493,14 @@ function renderSidebar() {
   const list = $("wp-list");
   list.replaceChildren();
   for (const w of workplaceList) {
-    const b = el("button", "wp" + (w.id === current ? " current" : ""));
+    const here = w.id === current && view === "workplace";
+    const b = el("button", "wp" + (here ? " current" : ""));
     b.type = "button";
-    b.setAttribute("aria-current", w.id === current ? "page" : "false");
+    b.setAttribute("aria-current", here ? "page" : "false");
     const n = needsCount(w.id);
     b.append(el("span", "wp-name", w.name), el("span", "wp-team", w.members.map((m) => NAMES[m] ?? m).join(", ")));
     if (n) b.append(el("span", "ds-badge ds-badge-warn wp-needs", `Needs you (${n})`));
-    b.addEventListener("click", () => switchTo(w.id));
+    b.addEventListener("click", () => { switchTo(w.id); showView("workplace"); });
     list.append(b);
   }
   const here = workplaceList.find((w) => w.id === current);
@@ -473,9 +560,241 @@ new EventSource("/events").onmessage = (ev) => {
   if (e.type === "approval-closed") openApprovals.delete(e.id);
   if (e.type === "board" && e.wp) planWaiting[e.wp] = e.goal?.status === "proposed";
   if (!workplaceList.some((w) => w.id === current) && workplaceList.length) { switchTo(workplaceList[0].id); return; }
+  if (e.type === "library") { library = e; renderLibrary(); return; }
+  if (e.type === "settings") { renderSettings(e.settings); return; }
   if (!e.wp || e.wp === current) { apply(e); renderNow(); }
   renderSidebar();
 };
+
+// ---- Pages: a workplace, the Library, or Settings ----
+let view = "workplace";
+function showView(v) {
+  view = v;
+  document.querySelector(".workarea").hidden = v !== "workplace";
+  $("library-view").hidden = v !== "library";
+  $("settings-view").hidden = v !== "settings";
+  $("open-library").classList.toggle("current", v === "library");
+  $("open-settings").classList.toggle("current", v === "settings");
+  $("open-library").setAttribute("aria-current", v === "library" ? "page" : "false");
+  $("open-settings").setAttribute("aria-current", v === "settings" ? "page" : "false");
+  renderSidebar();
+  if (v === "library") { renderLibrary(); post("/library/refresh"); } // notes may have changed outside Trident (Obsidian, Joplin)
+  if (v === "settings") post("/library/refresh");
+}
+$("open-library").addEventListener("click", () => showView("library"));
+$("open-settings").addEventListener("click", () => showView("settings"));
+
+// ---- Library ----
+let library = { sections: [], notes: [], drafts: [], old: [] };
+let openNote = null; // path of the note on screen
+let editing = false;
+const AGENT_NAMES = { ...NAMES, you: "You" };
+const ago = (t) => {
+  const m = Math.round((Date.now() - t) / 60000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString();
+};
+const sectionOf = (p) => (p.includes("/") ? p.split("/")[0] : "");
+// The note's own "# Title" line is already shown as the page heading, so it isn't repeated.
+const noteBody = (t) => md(String(t ?? "").replace(/^\s*#\s+.+\n+/, ""));
+
+function renderLibrary() {
+  const n = library.drafts.length;
+  $("library-sub").textContent = n ? `${n} draft${n > 1 ? "s" : ""} waiting for you` : "Skills and notes for every agent";
+  renderOldVersions();
+  if (view !== "library") return;
+  const list = $("lib-list");
+  list.replaceChildren();
+  const item = (note) => {
+    const b = el("button", "item" + (note.path === openNote ? " current" : ""));
+    b.type = "button";
+    b.dataset.path = note.path;
+    b.setAttribute("aria-current", note.path === openNote ? "true" : "false");
+    b.append(el("span", null, note.title));
+    if (note.draft) b.append(badge(["Draft", "ds-badge-warn"]));
+    b.addEventListener("click", () => { editing = false; showNote(note.path); });
+    return b;
+  };
+  const group = (title, notes, emptyText) => {
+    const g = el("div", "group");
+    g.append(el("h2", "ds-section-title", title));
+    if (notes.length) notes.forEach((x) => g.append(item(x)));
+    else if (emptyText) g.append(el("p", "empty", emptyText));
+    list.append(g);
+  };
+  if (n) group("Waiting for you", library.notes.filter((x) => x.draft));
+  group("Start here", library.notes.filter((x) => !sectionOf(x.path)));
+  for (const s of library.sections) group(s[0].toUpperCase() + s.slice(1), library.notes.filter((x) => sectionOf(x.path) === s), "Nothing here yet.");
+  if (!openNote) showNote("guide.md");
+  else if (!editing) showNote(openNote);
+}
+
+async function showNote(path) {
+  openNote = path;
+  const res = await post("/library/read", { path });
+  const box = $("lib-note");
+  box.replaceChildren();
+  [...$("lib-list").querySelectorAll(".item")].forEach((b) => {
+    const on = b.dataset.path === path;
+    b.classList.toggle("current", on);
+    b.setAttribute("aria-current", on ? "true" : "false");
+  });
+  if (!res.ok) { box.append(el("p", "empty", await res.text())); return; }
+  const note = await res.json();
+  const title = library.notes.find((x) => x.path === path)?.title ?? path;
+  box.append(el("h2", "note-title", title), el("p", "note-path", "library/" + note.path));
+  if (note.draft !== null) {
+    const card = el("div", "ds-card draft-card");
+    const who = AGENT_NAMES[note.draftInfo?.by] ?? note.draftInfo?.by ?? "An agent";
+    card.append(el("p", "ds-card-title", `${note.text === null ? "New note" : "Suggested change"} from ${who} · ${note.draftInfo ? ago(note.draftInfo.at) : ""}`));
+    if (note.draftInfo?.why) card.append(el("p", "why", note.draftInfo.why));
+    const draftText = el("div", "note-text draft-text");
+    draftText.innerHTML = noteBody(note.draft);
+    const row = el("div", "ds-row");
+    const save = el("button", "ds-btn ds-btn-primary", "Save this version");
+    const discard = el("button", "ds-btn ds-btn-ghost", "Discard draft");
+    save.type = discard.type = "button";
+    save.addEventListener("click", () => post("/library/save", { path }));
+    discard.addEventListener("click", () => post("/library/discard", { path }));
+    row.append(save, discard);
+    card.append(draftText, row);
+    if (note.text !== null) card.append(el("p", "hint", "Saving keeps the current version in Old versions, in Settings."));
+    box.append(card);
+    if (note.text !== null) {
+      const d = el("details");
+      d.append(el("summary", null, "Current saved version"));
+      const cur = el("div", "note-text");
+      cur.innerHTML = noteBody(note.text);
+      d.append(cur);
+      box.append(d);
+    }
+    return;
+  }
+  const body = el("div", "note-text");
+  body.innerHTML = noteBody(note.text);
+  const edit = el("button", "ds-btn ds-btn-outline", "Edit");
+  edit.type = "button";
+  edit.addEventListener("click", () => editNote(path, note.text ?? ""));
+  const row = el("div", "ds-row");
+  row.append(edit);
+  box.append(row, body);
+}
+
+// Your own edits save straight away (you are the one who approves); the old version is still kept.
+function editNote(path, text, isNew = false) {
+  editing = true;
+  const box = $("lib-note");
+  box.replaceChildren(el("h2", "note-title", isNew ? "New note" : "Editing"), el("p", "note-path", "library/" + path));
+  const field = el("div", "ds-field");
+  const label = el("label", "ds-label", "Note text (Markdown)");
+  label.htmlFor = "note-edit";
+  const ta = el("textarea", "ds-textarea");
+  ta.id = "note-edit";
+  ta.value = text;
+  field.append(label, ta);
+  const err = el("p", "error");
+  err.setAttribute("role", "alert");
+  err.hidden = true;
+  const row = el("div", "ds-row");
+  const save = el("button", "ds-btn ds-btn-primary", "Save");
+  const cancel = el("button", "ds-btn ds-btn-ghost", "Cancel");
+  save.type = cancel.type = "button";
+  save.addEventListener("click", async () => {
+    const w = await post("/library/write", { path, text: ta.value, why: "Edited by you" });
+    const s = w.ok ? await post("/library/save", { path }) : w;
+    if (!s.ok) { err.textContent = await s.text(); err.hidden = false; return; }
+    editing = false;
+    openNote = path;
+    showNote(path);
+  });
+  cancel.addEventListener("click", () => { editing = false; showNote(isNew ? "guide.md" : path); });
+  row.append(save, cancel);
+  box.append(field, err, row);
+  ta.focus();
+}
+
+$("new-note-open").addEventListener("click", () => {
+  editing = true;
+  const box = $("lib-note");
+  box.replaceChildren(el("h2", "note-title", "New note"));
+  const form = el("form", "new-note");
+  const sec = el("div", "ds-field");
+  const sl = el("label", "ds-label", "Section");
+  sl.htmlFor = "new-note-section";
+  const select = el("select", "ds-select ds-input");
+  select.id = "new-note-section";
+  library.sections.forEach((s) => select.append(new Option(s[0].toUpperCase() + s.slice(1), s)));
+  sec.append(sl, select);
+  const nm = el("div", "ds-field");
+  const nl = el("label", "ds-label", "Name");
+  nl.htmlFor = "new-note-name";
+  const name = el("input", "ds-input");
+  name.id = "new-note-name";
+  name.required = true;
+  name.maxLength = 60;
+  name.placeholder = "Mixing tips";
+  name.autocomplete = "off";
+  nm.append(nl, name);
+  const go = el("button", "ds-btn ds-btn-primary", "Start writing");
+  go.type = "submit";
+  form.append(sec, nm, go);
+  form.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const slug = name.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (!slug) return;
+    editNote(`${select.value}/${slug}.md`, `# ${name.value.trim()}\n\n`, true);
+  });
+  box.append(form);
+  name.focus();
+});
+
+// ---- Settings ----
+function renderSettings(s) {
+  $("set-agents").value = String(s.maxAgents);
+}
+$("set-agents").addEventListener("change", async (ev) => {
+  const res = await post("/settings", { maxAgents: Number(ev.target.value) });
+  $("set-agents-saved").textContent = res.ok ? `Saved. Up to ${ev.target.value} at once, starting with the next task.` : await res.text();
+});
+
+function renderOldVersions() {
+  const list = $("old-list");
+  list.replaceChildren();
+  const all = $("old-delete-all");
+  all.replaceChildren();
+  if (!library.old.length) { list.append(el("li", "empty", "None yet.")); return; }
+  for (const o of library.old) {
+    const li = el("li", "old-row");
+    const m = o.path.match(/^(.*)--(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/);
+    li.append(el("p", "name", (m ? m[1] : o.path) + ".md"), el("p", "when", "Replaced " + ago(o.at)));
+    const row = el("div", "ds-row");
+    const back = el("button", "ds-btn ds-btn-outline", "Bring back");
+    const del = el("button", "ds-btn ds-btn-ghost", "Delete");
+    back.type = del.type = "button";
+    back.setAttribute("aria-label", `Bring back ${m ? m[1] : o.path} as a draft`);
+    del.setAttribute("aria-label", `Delete old version of ${m ? m[1] : o.path}`);
+    back.addEventListener("click", async () => {
+      const res = await post("/library/restore", { path: o.path });
+      if (res.ok) { const r = await res.json(); openNote = r.path; showView("library"); }
+    });
+    del.addEventListener("click", () => post("/library/old/delete", { path: o.path }));
+    row.append(back, del);
+    li.append(row);
+    list.append(li);
+  }
+  // Deleting everything asks once more, with the safe choice focused.
+  const start = el("button", "ds-btn ds-btn-ghost", "Delete all old versions");
+  start.type = "button";
+  start.addEventListener("click", () => {
+    const yes = el("button", "ds-btn ds-btn-destructive", `Yes, delete all ${library.old.length}`);
+    const no = el("button", "ds-btn ds-btn-ghost", "Keep them");
+    yes.type = no.type = "button";
+    yes.addEventListener("click", () => post("/library/old/delete", { path: "all" }));
+    no.addEventListener("click", () => { all.replaceChildren(start); start.focus(); });
+    all.replaceChildren(el("p", null, "Delete every old version? This can't be undone. Your current notes stay."), no, yes);
+    no.focus();
+  });
+  all.append(start);
+}
 
 function apply(e) {
   if (e.type === "message") {

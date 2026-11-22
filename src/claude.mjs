@@ -2,6 +2,14 @@
 // `run(text)` resolves with Claude's final reply for that message.
 import { query } from "@anthropic-ai/claude-agent-sdk";
 
+// The environment for a Claude process that should use the user's own Claude sign-in.
+// Leftover settings that point Claude somewhere else (another address or key) are left out on purpose.
+export function subscriptionEnv() {
+  const env = { ...process.env };
+  for (const k of ["ANTHROPIC_BASE_URL", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_API_KEY"]) delete env[k];
+  return env;
+}
+
 export function claudeSession({ cwd, instructions, allowedTools, canUseTool, onToolUse, model, env, mcpServers = {} }) {
   const inbox = [];
   let wake = null;
@@ -26,7 +34,7 @@ export function claudeSession({ cwd, instructions, allowedTools, canUseTool, onT
       systemPrompt: { type: "preset", preset: "claude_code", append: instructions },
       canUseTool,
       ...(model && { model }),
-      ...(env && { env }),
+      env: env ?? subscriptionEnv(),
     },
   });
 

@@ -6,6 +6,8 @@
 //   POST /approval    { id, decision }             answer a pending approval
 //   POST /plan/approve { wp }                       approve the plan waiting on that workplace's board
 //   POST /interrupt   { wp }                       stop that Lead's current turn
+//   POST /library/read|save|discard|write|restore|old/delete   the shared Library (see library.mjs)
+//   POST /settings    { maxAgents }                change Trident-wide settings
 import { createServer } from "node:http";
 import { readFileSync, appendFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -14,6 +16,8 @@ import { createGate } from "./gate.mjs";
 import { startCodex } from "./codex.mjs";
 import { openRouterConfig } from "./openrouter.mjs";
 import { openWorkplaces } from "./workplaces.mjs";
+import { openLibrary } from "./library.mjs";
+import { openSettings } from "./settings.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dataDir = join(root, "data");
@@ -38,7 +42,11 @@ function emit(event) {
 const gate = createGate({ rulesFile: join(dataDir, "rules.json"), emit });
 const openrouter = openRouterConfig(); // null until OPENROUTER_API_KEY is set
 const codex = startCodex({ emit });
-const workplaces = openWorkplaces({ root, dataDir, emit, gate, codex, openrouter });
+const library = openLibrary({ dir: join(root, "library"), emit });
+const settings = openSettings({ file: join(dataDir, "settings.json"), emit });
+const workplaces = openWorkplaces({ root, dataDir, emit, gate, codex, openrouter, library, settings });
+library.changed();
+settings.announce();
 // Check the OpenRouter key and model once at startup, without generating anything.
 openrouter?.check().then((problem) => problem && emit({ type: "error", agent: "openrouter", text: problem })).catch(() => {});
 
@@ -75,6 +83,24 @@ createServer(async (req, res) => {
     } else if (req.method === "POST" && req.url === "/goal/cancel") {
       const r = workplaces.cancelGoal((await body(req)).wp);
       send(r.error ? 400 : 204, r.error);
+    } else if (req.method === "POST" && req.url.startsWith("/library/")) {
+      const d = await body(req);
+      const action = req.url.slice("/library/".length);
+      const r =
+        action === "read" ? library.read(d.path) :
+        action === "save" ? library.save(d.path) :
+        action === "discard" ? library.discard(d.path) :
+        action === "write" ? library.draft(d.path, String(d.text ?? ""), "you", d.why ?? "") :
+        action === "restore" ? library.restore(d.path) :
+        action === "old/delete" ? library.deleteOld(d.path) :
+        action === "refresh" ? (library.changed(), {}) :
+        { error: "Unknown Library action." };
+      if (r.error) return send(400, r.error);
+      res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(r));
+    } else if (req.method === "POST" && req.url === "/settings") {
+      const r = settings.set(await body(req));
+      if (r.error) return send(400, r.error);
+      res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(r.settings));
     } else if (req.method === "POST" && req.url === "/approval") {
       const { id, decision } = await body(req);
       const ok = ["allow", "deny", "always-allow", "always-deny"].includes(decision) && gate.decide(id, decision);

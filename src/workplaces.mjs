@@ -14,7 +14,7 @@ import { startCompare } from "./compare.mjs";
 
 const KNOWN_WORKERS = ["claude", "codex", "openrouter"];
 
-export function openWorkplaces({ root, dataDir, emit, gate, codex, openrouter }) {
+export function openWorkplaces({ root, dataDir, emit, gate, codex, openrouter, library, settings }) {
   const listFile = join(dataDir, "workplaces.json");
   let list = [];
   try { list = JSON.parse(readFileSync(listFile, "utf8")); } catch {}
@@ -46,9 +46,11 @@ export function openWorkplaces({ root, dataDir, emit, gate, codex, openrouter })
       codex,
       openrouter,
       members: w.members,
+      library,
+      settings,
       tellLead: (text) => lead.send(text),
     });
-    lead = startLead({ cwd: w.folder, emit: emitWp, gate: gateWp, board, team, askSeveral });
+    lead = startLead({ cwd: w.folder, emit: emitWp, gate: gateWp, board, team, askSeveral, library });
 
     board.changed();
     for (const m of board.recentTalk(50)) emitWp({ type: "talk", ...m }); // put earlier team talk on screen
