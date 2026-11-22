@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "trident", "runtimeExecutable": "node", "runtimeArgs": ["src/server.mjs"], "port": 4317, "url": "http://127.0.0.1:4317" }
+  ]
+}

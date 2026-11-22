@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trident</title>
+<link rel="stylesheet" href="/ember.css" />
+<style>
+  /* Host isolation (from the Ember kit) */
+  .ds{color:var(--foreground,oklch(0.2 0 0));background:var(--background,oklch(1 0 0))}
+  .ds :where(h1,h2,h3,h4,h5,h6,p,strong,label,legend,li,dt,dd,small):not(.ds-supporting):not(.ds-card-desc):not(.ds-muted){color:inherit!important}
+
+  /* Layout only */
+  html, body { margin: 0; height: 100%; background: var(--background); }
+  [hidden] { display: none !important; }
+  .ds { height: 100vh; display: grid; grid-template-columns: 15rem minmax(0, 1fr); font-family: var(--font-sans); }
+  .workarea { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .workarea > .main { flex: 1; }
+
+  /* Workplaces sidebar (Band-style: a quiet list, the current one highlighted) */
+  .sidebar { display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem 0.75rem; border-right: 0.0625rem solid var(--border); overflow-y: auto; }
+  .sidebar .brand { margin: 0 0.5rem 0.5rem; font-size: 1.125rem; font-weight: 600; }
+  .sidebar h2 { margin: 0 0.5rem; }
+  .wp-list { display: grid; gap: 0.25rem; }
+  .wp-list .wp { display: grid; gap: 0.125rem; justify-items: start; text-align: left; width: 100%; min-height: 2.75rem; padding: 0.5rem 0.75rem; border: 0; border-radius: var(--radius-md); background: transparent; color: var(--foreground); font: inherit; cursor: pointer; }
+  .wp-list .wp:hover { background: var(--muted); }
+  .wp-list .wp.current { background: var(--secondary); }
+  .wp-list .wp:focus-visible { outline: 0.125rem solid var(--ring, var(--primary)); outline-offset: 0.125rem; }
+  .wp-list .wp-name { font-weight: 600; }
+  .wp-list .wp-team { font-size: 0.8125rem; color: var(--muted-foreground); }
+  .wp-list .wp-needs { margin-top: 0.25rem; }
+  .sidebar #new-wp-open { min-height: 2.75rem; }
+
+  /* Team talk */
+  .talk { display: grid; gap: 0.5rem; max-height: 18rem; overflow-y: auto; }
+  .talk .line { margin: 0; font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
+  .talk .line .from { font-weight: 600; }
+  .talk .line.auto { color: var(--muted-foreground); font-size: 0.8125rem; }
+  .talk .line.warning { padding: 0.5rem 0.75rem; border-radius: var(--radius-md); background: var(--muted); color: var(--primary); }
+
+  /* This workplace: where its files live, and removing it */
+  .this-wp { display: grid; gap: 0.5rem; justify-items: start; }
+  .side .this-wp .folder { margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  .this-wp .ds-btn, .goal-head .cancel .ds-btn { min-height: 2.75rem; }
+  .goal-head .cancel { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+  /* New workplace dialog */
+  .new-wp:not([open]) { display: none; }
+  .new-wp p { margin: 0; line-height: 1.5; }
+  /* The kit has no destructive button, so this one is defined here from its own tokens. */
+  .ds .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground, oklch(0.98 0 0)); border-color: transparent; }
+  .ds .ds-btn-destructive:hover { filter: brightness(1.1); } /* the kit's card style would otherwise show a closed dialog */
+  .new-wp { max-width: 28rem; width: calc(100% - 2rem); padding: 1.5rem; color: var(--foreground); }
+  .new-wp::backdrop { background: oklch(0 0 0 / 0.6); }
+  .new-wp form { display: grid; gap: 1rem; }
+  .new-wp .members { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; border: 0; margin: 0; padding: 0; }
+  .new-wp .members label { display: flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; }
+  .new-wp .error { margin: 0; color: var(--destructive); }
+  .new-wp .actions { gap: 0.5rem; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1.5rem; border-bottom: 0.0625rem solid var(--border); }
+  .top h1 { margin: 0; font-size: 1.125rem; }
+  /* "Where we are": one plain sentence about what's happening and whether you're needed */
+  .ds .now { margin: 0; padding: 0.75rem 1.5rem; border-bottom: 0.0625rem solid var(--border); font-size: 1rem; line-height: 1.5; max-width: none; }
+  .ds .now.waiting { color: var(--primary); font-weight: 600; }
+  @media (max-width: 760px) { .ds .now { padding-inline: 1rem; } }
+  .team { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+  .msg.team-note { max-width: none; }
+  .log .msg.team-note p { font-size: 0.875rem; color: var(--muted-foreground); padding-left: 0.75rem; border-left: 0.125rem solid var(--border); }
+  .task .who { font-size: 0.8125rem; color: var(--muted-foreground); }
+  .task .check { grid-column: 2 / 4; margin: 0; font-size: 0.8125rem; }
+  .task .check.fail { color: var(--destructive); }
+
+  /* Ask-several: answers side by side; scrolls sideways on narrow screens */
+  .compare { display: grid; gap: 0.75rem; max-width: none; }
+  .compare .question { margin: 0; font-weight: 600; }
+  .compare .cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(16rem, 1fr); gap: 0.75rem; overflow-x: auto; padding-bottom: 0.25rem; }
+  .compare .col { display: grid; grid-template-rows: auto 1fr auto; gap: 0.5rem; padding: 1rem; align-content: start; }
+  .compare .col .answer { margin: 0; white-space: pre-wrap; line-height: 1.5; max-height: 24rem; overflow-y: auto; font-size: 0.9375rem; }
+  .compare .col .meta { margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+  .compare .col.failed .answer { color: var(--destructive); }
+  .needs { display: grid; gap: 0.5rem; padding: 0.75rem 1.5rem; border-bottom: 0.0625rem solid var(--border); }
+  .needs[hidden] { display: none; }
+  .needs h2 { margin: 0; }
+  .approval { display: grid; gap: 0.75rem; padding: 1rem; }
+  .approval code { display: block; white-space: pre-wrap; word-break: break-word; font-size: 0.875rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); }
+  .main { display: grid; grid-template-columns: minmax(0, 1fr) 24rem; min-height: 0; }
+  .chat { display: grid; grid-template-rows: 1fr auto; min-height: 0; border-right: 0.0625rem solid var(--border); }
+  .log { overflow-y: auto; scrollbar-gutter: stable; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .msg { max-width: 70ch; display: grid; gap: 0.25rem; }
+  .msg .who { font-size: 0.8125rem; color: var(--muted-foreground); }
+  .msg p { margin: 0; white-space: pre-wrap; line-height: 1.5; }
+  .msg.you { align-self: flex-end; text-align: left; }
+  .msg.you p { padding: 0.5rem 0.75rem; border-radius: var(--radius-lg); background: var(--secondary); color: var(--secondary-foreground); }
+  .side .tool, .tool { margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  .approval .preview { max-height: 10rem; overflow-y: auto; }
+  .composer { display: grid; gap: 0.5rem; padding: 1rem 1.5rem 1.5rem; border-top: 0.0625rem solid var(--border); }
+  .composer .ds-control-row { display: flex; flex-wrap: nowrap; align-items: end; gap: 0.5rem; }
+  .composer textarea { min-height: 2.75rem; max-height: 12.5rem; resize: vertical; }
+  /* The message box takes the room; buttons keep their own width. */
+  .composer .ds-control-row > .ds-field { flex: 1 1 auto; min-width: 0; }
+  .composer .ds-control-row > .ds-btn { flex: 0 0 auto; width: auto; }
+  .hint { font-size: 0.8125rem; color: var(--muted-foreground); margin: 0; }
+  .side { padding: 1.5rem; display: grid; align-content: start; gap: 1.5rem; overflow-y: auto; }
+  .side h2 { margin: 0 0 0.5rem; }
+  .side p { margin: 0; }
+  .empty { margin: 0; color: var(--muted-foreground); }
+  .hint { margin: 0; }
+
+  /* Board */
+  .goal-head { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .goal-head .ds-row { justify-content: space-between; align-items: baseline; flex-wrap: nowrap; }
+  /* Selectors are two classes deep so they outrank the kit's ".ds p" text rule. */
+  .goal-head .goal-title { margin: 0; font-size: 1.25rem; line-height: 1.3; font-weight: 600; }
+  .done-when { margin: 0; color: var(--muted-foreground); }
+  .side .tool { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .composer .hint, .log .empty { margin: 0; }
+  .composer .hint { font-size: 0.8125rem; color: var(--muted-foreground); }
+  .tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+  .task { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr) auto; gap: 0.5rem; align-items: baseline; }
+  .task .num { color: var(--muted-foreground); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+  .task .title { margin: 0; }
+  .task .note { grid-column: 2 / 4; margin: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+  .plan-card { display: grid; gap: 0.75rem; padding: 1rem; }
+  .plan-card ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.25rem; }
+
+  @media (max-width: 760px) {
+    .ds { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .sidebar { flex-direction: row; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 0.0625rem solid var(--border); padding: 0.5rem 1rem; }
+    .sidebar .brand, .sidebar h2 { display: none; }
+    .wp-list { display: flex; gap: 0.5rem; }
+    .wp-list .wp { width: auto; white-space: nowrap; }
+    .wp-list .wp-team { display: none; }
+    #new-wp-open { white-space: nowrap; }
+    .main { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .side { order: -1; max-height: 40vh; border-bottom: 0.0625rem solid var(--border); padding: 1rem; }
+    .chat { border-right: 0; }
+    .top, .needs, .composer { padding-inline: 1rem; }
+    .log { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="ds">
+ <nav class="sidebar" aria-label="Workplaces">
+  <p class="brand">Trident</p>
+  <h2 class="ds-section-title">Workplaces</h2>
+  <div id="wp-list" class="wp-list"></div>
+  <button type="button" class="ds-btn ds-btn-outline" id="new-wp-open">New workplace</button>
+ </nav>
+
+ <dialog id="new-wp" class="ds-card new-wp" aria-labelledby="new-wp-title">
+  <form id="new-wp-form" method="dialog">
+    <h2 id="new-wp-title" class="ds-card-title">New Workplace</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="new-wp-name">Name</label>
+      <input class="ds-input" id="new-wp-name" name="name" required maxlength="40" placeholder="Music site" autocomplete="off" />
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="new-wp-folder">Folder (optional)</label>
+      <input class="ds-input" id="new-wp-folder" name="folder" placeholder="Leave empty for a new folder" autocomplete="off" />
+      <p class="hint">Leave this empty and Trident makes a fresh folder for you. To use one you already have, paste its full path.</p>
+    </div>
+    <fieldset class="members">
+      <legend class="ds-label">Team</legend>
+      <label><input type="checkbox" name="members" value="claude" checked /> Claude</label>
+      <label><input type="checkbox" name="members" value="codex" checked /> Codex</label>
+      <label><input type="checkbox" name="members" value="openrouter" checked /> OpenRouter</label>
+    </fieldset>
+    <p class="error" id="new-wp-error" role="alert" hidden></p>
+    <div class="ds-row actions">
+      <button type="submit" class="ds-btn ds-btn-primary">Create workplace</button>
+      <button type="button" class="ds-btn ds-btn-ghost" id="new-wp-cancel">Cancel</button>
+    </div>
+  </form>
+ </dialog>
+
+ <div class="workarea">
+  <header class="top">
+    <h1 id="wp-title">Trident</h1>
+    <div class="team" role="status" aria-label="Team">
+      <span id="lead-state" class="ds-badge ds-badge-unknown">Lead: starting</span>
+      <span id="claude-state" class="ds-badge ds-badge-outline">Claude: free</span>
+      <span id="codex-state" class="ds-badge ds-badge-outline">Codex: free</span>
+      <span id="openrouter-state" class="ds-badge ds-badge-outline" hidden>OpenRouter: free</span>
+    </div>
+  </header>
+
+  <div class="now" id="now" role="status" aria-live="polite">Starting up.</div>
+
+  <section class="needs" id="needs" aria-label="Needs you" hidden>
+    <h2 class="ds-section-title">Needs you</h2>
+    <div id="approvals" class="ds-row" style="flex-direction:column;align-items:stretch"></div>
+  </section>
+
+  <div class="main">
+    <section class="chat" aria-label="Chat with Lead">
+      <div class="log" id="log" aria-live="polite">
+        <p class="empty" id="empty">Tell the Lead what you want to get done.</p>
+      </div>
+      <form class="composer" id="composer">
+        <div class="ds-control-row">
+          <div class="ds-field" style="flex:1">
+            <label class="ds-label" for="text">Message to Lead</label>
+            <textarea class="ds-textarea" id="text" rows="1" placeholder="Build me a page that…"></textarea>
+          </div>
+          <button type="button" class="ds-btn ds-btn-outline" id="stop" hidden>Stop</button>
+          <button type="submit" class="ds-btn ds-btn-primary">Send</button>
+        </div>
+        <p class="hint" id="hint">Enter sends. Shift+Enter adds a line.</p>
+      </form>
+    </section>
+
+    <aside class="side" aria-label="Work">
+      <div id="goal">
+        <h2 class="ds-section-title">Goal</h2>
+        <p class="empty">The Lead will set a goal and plan here.</p>
+      </div>
+      <div>
+        <h2 class="ds-section-title">Team talk</h2>
+        <div id="talk" class="talk" aria-live="polite">
+          <p class="empty" id="talk-empty">Quiet so far. Workers can message each other and the Lead here while they work.</p>
+        </div>
+      </div>
+      <div>
+        <h2 class="ds-section-title">Activity</h2>
+        <div id="activity" class="ds-row" style="flex-direction:column;align-items:stretch;gap:4px">
+          <p class="empty" id="activity-empty">Nothing yet.</p>
+        </div>
+      </div>
+      <div id="this-wp" class="this-wp" hidden>
+        <h2 class="ds-section-title">This workplace</h2>
+        <p class="folder" id="this-wp-folder"></p>
+        <button type="button" class="ds-btn ds-btn-ghost" id="remove-wp-open">Remove from Trident</button>
+      </div>
+    </aside>
+  </div>
+ </div>
+
+ <dialog id="remove-wp" class="ds-card new-wp" aria-labelledby="remove-wp-title">
+  <form method="dialog" id="remove-wp-form">
+    <h2 id="remove-wp-title" class="ds-card-title">Remove Workplace?</h2>
+    <p id="remove-wp-text"></p>
+    <p class="error" id="remove-wp-error" role="alert" hidden></p>
+    <div class="ds-row actions">
+      <button type="submit" class="ds-btn ds-btn-destructive" id="remove-wp-confirm">Remove workplace</button>
+      <button type="button" class="ds-btn ds-btn-ghost" id="remove-wp-cancel">Keep it</button>
+    </div>
+  </form>
+ </dialog>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const log = $("log");
+let draft = null; // the Lead message currently streaming in
+
+// Light markdown for agent text: escapes HTML first, then bold, italics, inline code, bullets and headings.
+function md(text) {
+  const esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return esc
+    .replace(/^\s*[-*] /gm, "• ")
+    .replace(/`([^`\n]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(/^#{1,4} (.+)$/gm, "<strong>$1</strong>");
+}
+
+function addMessage(who, text) {
+  $("empty")?.remove();
+  const el = document.createElement("div");
+  el.className = "msg" + (who === "you" ? " you" : who === "team" ? " team-note" : "");
+  el.innerHTML = `<span class="who"></span><p></p>`;
+  el.querySelector(".who").textContent = who === "you" ? "You" : who === "team" ? "Team" : "Lead";
+  if (who === "you") el.querySelector("p").textContent = text;
+  else el.querySelector("p").innerHTML = md(text);
+  log.append(el);
+  log.scrollTop = log.scrollHeight;
+  return el;
+}
+
+function addActivity(text) {
+  $("activity-empty")?.remove();
+  const p = document.createElement("p");
+  p.className = "tool";
+  p.textContent = text;
+  p.title = text; // full text on hover; the list shows two lines
+  $("activity").prepend(p);
+  while ($("activity").children.length > 20) $("activity").lastElementChild.remove();
+}
+
+const STATES = {
+  starting: ["Lead: starting", "ds-badge-unknown"],
+  ready: ["Lead: ready", "ds-badge-safe"],
+  idle: ["Lead: ready", "ds-badge-safe"],
+  working: ["Lead: working", "ds-badge-warn"],
+  stopped: ["Lead: stopped", "ds-badge-danger"],
+};
+let leadState = "idle";
+const NAMES = { lead: "Lead", claude: "Claude", codex: "Codex", openrouter: "OpenRouter" };
+// Workers: free, working on a task, or checking someone else's task.
+function setWorker(agent, state, task) {
+  const b = $(agent + "-state");
+  if (!b) return;
+  b.hidden = false; // OpenRouter only appears once its key is set
+  const [label, cls] =
+    state === "working" ? [`working on task ${task}`, "ds-badge-warn"] :
+    state === "checking" ? [`checking task ${task}`, "ds-badge-primary"] :
+    state === "unavailable" ? ["out of usage", "ds-badge-danger"] : ["free", "ds-badge-outline"];
+  b.textContent = `${NAMES[agent]}: ${label}`;
+  b.className = "ds-badge " + cls;
+}
+function setState(state) {
+  leadState = state;
+  // A pending approval outranks every other state: the Lead is blocked on you.
+  const waiting = $("approvals").children.length > 0;
+  const [label, cls] = waiting ? ["Lead: waiting for you", "ds-badge-warn"] : STATES[state] ?? [`Lead: ${state}`, "ds-badge-unknown"];
+  const b = $("lead-state");
+  b.textContent = label;
+  b.className = "ds-badge " + cls;
+  const working = state === "working";
+  $("stop").hidden = !working;
+  $("hint").textContent = working ? "Lead is working. A new message is read after the current step." : "Enter sends. Shift+Enter adds a line.";
+}
+
+function addApproval(a) {
+  $("needs").hidden = false;
+  const card = document.createElement("div");
+  card.className = "ds-card approval";
+  card.id = "ap-" + a.id;
+  card.innerHTML = `<p class="ds-card-title"></p><code></code>
+    <div class="ds-row">
+      <button class="ds-btn ds-btn-primary" data-d="allow">Allow once</button>
+      <button class="ds-btn ds-btn-outline" data-d="deny">Deny</button>
+      <button class="ds-btn ds-btn-ghost" data-d="always-allow">Always allow this</button>
+      <button class="ds-btn ds-btn-ghost" data-d="always-deny">Always deny this</button>
+    </div>`;
+  card.querySelector(".ds-card-title").textContent = `${NAMES[a.agent] ?? "Lead"} wants to ${a.toolName === "Command" ? "run a command" : "use " + a.toolName}`;
+  card.querySelector("code").textContent = a.summary;
+  // For file writes and edits, show what will be written.
+  const body = a.input?.content ?? a.input?.new_string;
+  if (body) {
+    const pre = document.createElement("code");
+    pre.className = "preview";
+    pre.textContent = body.length > 2000 ? body.slice(0, 2000) + "\n…" : body;
+    card.querySelector("code").after(pre);
+  }
+  card.querySelectorAll("button").forEach((b) =>
+    b.addEventListener("click", () => post("/approval", { id: a.id, decision: b.dataset.d })));
+  $("approvals").append(card);
+  $("needs").hidden = false;
+  setState(leadState);
+}
+function closeApproval(id) {
+  $("ap-" + id)?.remove();
+  $("needs").hidden = !$("approvals").children.length;
+  setState(leadState);
+}
+
+// ---- Where we are ----
+// Builds one plain sentence from what the screen already knows.
+const workers = {}; // agent -> { state, task }
+let lastBoard = { goal: null, tasks: [] };
+function taskName(num) {
+  const t = lastBoard.tasks.find((x) => x.num === Number(num));
+  return t ? `"${t.title}"` : `task ${num}`;
+}
+function renderNow() {
+  const now = $("now");
+  const approvals = [...$("approvals").children];
+  const plan = $("plan-card");
+  let text;
+  let waiting = false;
+  if (plan) {
+    text = "The Lead has a plan ready. Approve it, or ask for changes.";
+    waiting = true;
+  } else if (approvals.length) {
+    const who = approvals[0].querySelector(".ds-card-title")?.textContent ?? "An agent wants to do something";
+    text = `${who}. It's waiting for your answer.`;
+    waiting = true;
+  } else {
+    const busy = Object.entries(workers)
+      .filter(([, w]) => w.state === "working" || w.state === "checking")
+      .map(([a, w]) => `${NAMES[a]} is ${w.state === "working" ? "working on" : "checking"} ${taskName(w.task)}.`);
+    if (busy.length) text = `${busy.join(" ")} Nothing needs you right now.`;
+    else if (leadState === "working") text = "The Lead is thinking. Nothing needs you right now.";
+    else if (lastBoard.goal?.status === "done") text = `Finished: ${lastBoard.goal.title}. Tell the Lead what's next.`;
+    else if (lastBoard.goal?.status === "cancelled") text = "Goal cancelled. Tell the Lead what's next.";
+    else if (lastBoard.goal?.status === "active") text = "The Lead is between steps. Nothing needs you right now.";
+    else text = "All quiet. Tell the Lead what you'd like to make.";
+  }
+  now.textContent = text;
+  now.classList.toggle("waiting", waiting);
+}
+
+// ---- Workplaces ----
+// Every event is kept; only the current workplace's events are drawn. Switching redraws from them.
+const allEvents = [];
+let current = (() => { try { return localStorage.getItem("trident.wp") || "main"; } catch { return "main"; } })();
+let workplaceList = [];
+const openApprovals = new Map(); // approval id -> workplace id
+const planWaiting = {}; // workplace id -> true while a plan waits for approval
+
+function needsCount(id) {
+  return [...openApprovals.values()].filter((w) => w === id).length + (planWaiting[id] ? 1 : 0);
+}
+function renderSidebar() {
+  const list = $("wp-list");
+  list.replaceChildren();
+  for (const w of workplaceList) {
+    const b = el("button", "wp" + (w.id === current ? " current" : ""));
+    b.type = "button";
+    b.setAttribute("aria-current", w.id === current ? "page" : "false");
+    const n = needsCount(w.id);
+    b.append(el("span", "wp-name", w.name), el("span", "wp-team", w.members.map((m) => NAMES[m] ?? m).join(", ")));
+    if (n) b.append(el("span", "ds-badge ds-badge-warn wp-needs", `Needs you (${n})`));
+    b.addEventListener("click", () => switchTo(w.id));
+    list.append(b);
+  }
+  const here = workplaceList.find((w) => w.id === current);
+  $("wp-title").textContent = here?.name ?? "Trident";
+  $("this-wp").hidden = !here;
+  if (here) {
+    $("this-wp-folder").textContent = "Files: " + here.folder;
+    $("remove-wp-open").hidden = here.id === "main"; // Main is where Trident starts, so it stays
+  }
+  for (const a of ["claude", "codex", "openrouter"]) {
+    const badgeEl = $(a + "-state");
+    if (badgeEl && here) badgeEl.hidden = !here.members.includes(a);
+  }
+}
+function resetView() {
+  draft = null;
+  log.replaceChildren(el("p", "empty", "Tell the Lead what you want to get done."));
+  log.firstChild.id = "empty";
+  $("activity").replaceChildren(el("p", "empty", "Nothing yet."));
+  $("activity").firstChild.id = "activity-empty";
+  $("approvals").replaceChildren();
+  $("needs").hidden = true;
+  $("talk").replaceChildren(el("p", "empty", "Quiet so far. Workers can message each other and the Lead here while they work."));
+  $("talk").firstChild.id = "talk-empty";
+  for (const k of Object.keys(workers)) delete workers[k];
+  for (const a of ["claude", "codex", "openrouter"]) setWorker(a, "idle");
+  lastBoard = { goal: null, tasks: [] };
+  renderBoard(lastBoard);
+  setState("idle");
+}
+function switchTo(id) {
+  current = id;
+  try { localStorage.setItem("trident.wp", id); } catch {}
+  resetView();
+  for (const e of allEvents) if (!e.wp || e.wp === id) apply(e);
+  renderSidebar();
+  renderNow();
+}
+
+const seen = new Set();
+new EventSource("/events").onmessage = (ev) => {
+  const e = JSON.parse(ev.data);
+  if (e.type === "delta") {
+    if (e.wp && e.wp !== current) return;
+    draft ??= addMessage("lead", "");
+    draft.querySelector("p").textContent += e.text;
+    log.scrollTop = log.scrollHeight;
+    return;
+  }
+  // History replays on reconnect: skip events already shown.
+  const key = e.at + e.type + (e.wp ?? "") + (e.id ?? "") + (e.text ?? "") + (e.agent ?? "");
+  if (seen.has(key)) return;
+  seen.add(key);
+  allEvents.push(e);
+  if (e.type === "workplaces") workplaceList = e.list;
+  if (e.type === "approval") openApprovals.set(e.id, e.wp);
+  if (e.type === "approval-closed") openApprovals.delete(e.id);
+  if (e.type === "board" && e.wp) planWaiting[e.wp] = e.goal?.status === "proposed";
+  if (!workplaceList.some((w) => w.id === current) && workplaceList.length) { switchTo(workplaceList[0].id); return; }
+  if (!e.wp || e.wp === current) { apply(e); renderNow(); }
+  renderSidebar();
+};
+
+function apply(e) {
+  if (e.type === "message") {
+    if (e.agent === "lead" && draft) { draft.querySelector("p").innerHTML = md(e.text); draft = null; }
+    else addMessage(e.agent, e.text);
+  } else if (e.type === "tool") addActivity(`${NAMES[e.agent] ?? "Lead"} · ${e.toolName}: ${e.summary}`);
+  else if (e.type === "status" && e.agent !== "lead") { workers[e.agent] = { state: e.state, task: e.task }; setWorker(e.agent, e.state, e.task); if (e.reason) $(e.agent + "-state").title = e.reason; }
+  else if (e.type === "status") { setState(e.state); if (e.state !== "working") draft = null; }
+  else if (e.type === "approval") addApproval(e);
+  else if (e.type === "approval-closed") closeApproval(e.id);
+  else if (e.type === "error") addActivity(`Error: ${e.text}`);
+  else if (e.type === "board") { lastBoard = e; renderBoard(e); }
+  else if (e.type === "compare") addCompare(e);
+  else if (e.type === "compare-answer") fillCompare(e);
+  else if (e.type === "talk") addTalk(e);
+}
+
+// ---- Team talk ----
+const TALK_NAMES = { ...NAMES, trident: "Trident" };
+function addTalk(m) {
+  $("talk-empty")?.remove();
+  const box = $("talk");
+  if (box.querySelector(`[data-id="${m.id}"]`)) return; // already shown (replayed history)
+  const line = el("p", "line " + (m.kind === "auto" ? "auto" : m.kind === "warning" ? "warning" : ""));
+  line.dataset.id = m.id;
+  const who = TALK_NAMES[m.from_who] ?? m.from_who;
+  const to = m.to_who ? ` → ${TALK_NAMES[m.to_who] ?? m.to_who}` : "";
+  if (m.kind === "auto") line.textContent = `${who} ${m.text}`;
+  else line.append(el("span", "from", m.kind === "warning" ? "Heads up: " : `${who}${to}: `), m.text);
+  box.append(line);
+  while (box.querySelectorAll(".line").length > 40) box.querySelector(".line").remove();
+  box.scrollTop = box.scrollHeight;
+}
+
+// ---- Ask-several: one column per model, filled as each answer arrives ----
+function addCompare({ id, question, columns }) {
+  $("empty")?.remove();
+  const box = el("section", "msg compare");
+  box.id = "cmp-" + id;
+  box.setAttribute("aria-label", "Answers side by side");
+  box.append(el("span", "who", "Asked " + columns.length + " models"), el("p", "question", question));
+  const cols = el("div", "cols");
+  for (const c of columns) {
+    const col = el("div", "ds-card col");
+    col.dataset.model = c.model;
+    const head = el("div", "ds-row");
+    head.append(badge([c.label, "ds-badge-outline"]));
+    col.append(head, el("p", "answer", "Thinking…"), el("p", "meta", ""));
+    cols.append(col);
+  }
+  box.append(cols);
+  log.append(box);
+  log.scrollTop = log.scrollHeight;
+}
+function fillCompare({ id, model, state, text, seconds, cost }) {
+  const col = [...($("cmp-" + id)?.querySelectorAll(".col") ?? [])].find((c) => c.dataset.model === model);
+  if (!col) return;
+  col.classList.toggle("failed", state === "failed");
+  if (state === "failed") col.querySelector(".answer").textContent = "Could not answer: " + text;
+  else col.querySelector(".answer").innerHTML = md(text);
+  const meta = [];
+  if (seconds != null) meta.push(seconds + "s");
+  if (cost != null) meta.push("$" + Number(cost).toFixed(4));
+  col.querySelector(".meta").textContent = meta.join(" · ");
+}
+
+// ---- Board ----
+const TASK_BADGE = {
+  todo: ["To do", "ds-badge-outline"],
+  working: ["Working", "ds-badge-warn"],
+  review: ["In review", "ds-badge-primary"],
+  blocked: ["Blocked", "ds-badge-danger"],
+  done: ["Done", "ds-badge-safe"],
+};
+const GOAL_BADGE = {
+  proposed: ["Plan waiting", "ds-badge-warn"],
+  active: ["In progress", "ds-badge-primary"],
+  done: ["Done", "ds-badge-safe"],
+  cancelled: ["Cancelled", "ds-badge-outline"],
+};
+const el =(tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+const badge = ([label, cls]) => el("span", "ds-badge " + cls, label);
+
+function renderBoard({ goal, tasks }) {
+  const box = $("goal");
+  box.replaceChildren(el("h2", "ds-section-title", "Goal"));
+  $("plan-card")?.remove();
+  if (!goal) {
+    box.append(el("p", "empty", "The Lead will set a goal and plan here."));
+  } else {
+    const head = el("div", "goal-head");
+    const row = el("div", "ds-row");
+    row.append(el("p", "goal-title", goal.title), badge(GOAL_BADGE[goal.status] ?? [goal.status, "ds-badge-unknown"]));
+    head.append(row, el("p", "done-when", "Done when: " + goal.done_when));
+    // Cancel asks once more before stopping the workers.
+    if (goal.status === "active" || goal.status === "proposed") {
+      const wrap = el("div", "cancel");
+      const start = el("button", "ds-btn ds-btn-ghost", "Cancel goal");
+      start.type = "button";
+      start.addEventListener("click", () => {
+        const yes = el("button", "ds-btn ds-btn-destructive", "Yes, cancel it");
+        const no = el("button", "ds-btn ds-btn-ghost", "Keep going");
+        yes.type = no.type = "button";
+        yes.addEventListener("click", () => post("/goal/cancel", { wp: current }));
+        no.addEventListener("click", () => wrap.replaceChildren(start));
+        wrap.replaceChildren(el("p", "done-when", "Stop the workers? Anything already added to the folder stays."), yes, no);
+        yes.focus();
+      });
+      wrap.append(start);
+      head.append(wrap);
+    }
+    const list = el("ol", "tasks");
+    for (const t of tasks) {
+      const li = el("li", "task");
+      const title = el("p", "title", t.title);
+      if (t.owner && t.owner !== "lead") title.append(" ", el("span", "who", "· " + NAMES[t.owner]));
+      li.append(el("span", "num", t.num + "."), title, badge(TASK_BADGE[t.status] ?? [t.status, "ds-badge-unknown"]));
+      if (t.note) li.append(el("p", "note", t.note));
+      if (t.check_verdict) {
+        const pass = t.check_verdict === "pass";
+        li.append(el("p", "check" + (pass ? "" : " fail"), `${pass ? "✓" : "✗"} Checked by ${NAMES[t.check_by]}: ${pass ? "looks right" : "found a problem"}. ${t.check_note}`));
+      } else if (t.status === "review" && t.check_by) li.append(el("p", "note", `${NAMES[t.check_by]} is checking this.`));
+      list.append(li);
+    }
+    box.append(head, list);
+    if (goal.status === "proposed") showPlanCard(goal, tasks);
+  }
+  $("needs").hidden = !$("approvals").children.length;
+  setState(leadState);
+}
+
+// The plan waits in "Needs you" until approved; changes go through the normal chat.
+function showPlanCard(goal, tasks) {
+  const card = el("div", "ds-card plan-card");
+  card.id = "plan-card";
+  card.append(el("p", "ds-card-title", "Lead proposed a plan: " + goal.title), el("p", "done-when", "Done when: " + goal.done_when));
+  const ol = el("ol");
+  tasks.forEach((t) => ol.append(el("li", null, t.title + (t.owner && t.owner !== "lead" ? ` (${NAMES[t.owner]})` : ""))));
+  const actions = el("div", "ds-row");
+  const approve = el("button", "ds-btn ds-btn-primary", "Approve plan");
+  const change = el("button", "ds-btn ds-btn-outline", "Ask for changes");
+  approve.addEventListener("click", () => post("/plan/approve", { wp: current }));
+  change.addEventListener("click", () => { $("text").placeholder = "What should change in the plan?"; $("text").focus(); });
+  actions.append(approve, change);
+  card.append(ol, actions);
+  $("approvals").prepend(card);
+}
+
+function post(path, data) {
+  return fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data ?? {}) });
+}
+$("composer").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const text = $("text").value.trim();
+  if (!text) return;
+  post("/message", { wp: current, text });
+  $("text").value = "";
+});
+$("text").addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); $("composer").requestSubmit(); }
+});
+$("stop").addEventListener("click", () => post("/interrupt", { wp: current }));
+
+// ---- Remove workplace ----
+const removeDialog = $("remove-wp");
+$("remove-wp-open").addEventListener("click", () => {
+  const here = workplaceList.find((w) => w.id === current);
+  if (!here) return;
+  $("remove-wp-title").textContent = `Remove "${here.name}"?`;
+  $("remove-wp-text").textContent =
+    `It leaves Trident's list and its workers stop. Its files stay on your computer, in ${here.folder}. Its chat and board are saved, not erased.`;
+  $("remove-wp-error").hidden = true;
+  removeDialog.showModal();
+  $("remove-wp-cancel").focus(); // the safe choice has focus
+});
+$("remove-wp-cancel").addEventListener("click", () => removeDialog.close());
+$("remove-wp-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const res = await post("/workplaces/remove", { wp: current });
+  if (!res.ok) {
+    $("remove-wp-error").textContent = await res.text();
+    $("remove-wp-error").hidden = false;
+    return;
+  }
+  removeDialog.close();
+  switchTo("main");
+});
+
+// ---- New workplace ----
+const dialog = $("new-wp");
+$("new-wp-open").addEventListener("click", () => {
+  $("new-wp-error").hidden = true;
+  $("new-wp-form").reset();
+  // Offer only workers that exist on this computer (OpenRouter needs its key).
+  const known = new Set(workplaceList.flatMap((w) => w.members));
+  dialog.querySelector('[value="openrouter"]').closest("label").hidden = !known.has("openrouter");
+  dialog.showModal();
+});
+$("new-wp-cancel").addEventListener("click", () => dialog.close());
+$("new-wp-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const f = new FormData(ev.target);
+  const submit = ev.target.querySelector('[type="submit"]');
+  // Setting up a folder and a Lead takes a few seconds; say so instead of looking stuck.
+  submit.disabled = true;
+  submit.textContent = "Creating…";
+  $("new-wp-error").hidden = true;
+  const res = await post("/workplaces", { name: f.get("name"), folder: f.get("folder"), members: f.getAll("members") });
+  submit.disabled = false;
+  submit.textContent = "Create workplace";
+  if (!res.ok) {
+    $("new-wp-error").textContent = await res.text();
+    $("new-wp-error").hidden = false;
+    return;
+  }
+  const w = await res.json();
+  dialog.close();
+  // The server announces the new list; switch once it has arrived.
+  const wait = setInterval(() => { if (workplaceList.some((x) => x.id === w.id)) { clearInterval(wait); switchTo(w.id); } }, 100);
+});
+</script>
+</body>
+</html>
