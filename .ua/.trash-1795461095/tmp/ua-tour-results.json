@@ -1,0 +1,657 @@
+{
+  "scriptCompleted": true,
+  "entryPointCandidates": [
+    {
+      "id": "file:src/server.mjs",
+      "score": 5,
+      "name": "server.mjs",
+      "type": "file",
+      "summary": "Trident's entry point: a local HTTP server bound to 127.0.0.1 that wires together the gate, Codex, OpenRouter, Library, settings and workplaces, streams every event to the page over server-sent events, and handles the POST routes for workplaces, messages, approvals, plans, interrupts, Library actions and settings."
+    },
+    {
+      "id": "document:README.md",
+      "score": 5,
+      "name": "README.md",
+      "type": "document",
+      "summary": "Project overview explaining Trident's Lead/worker/cross-check model, workplaces, Ask several, Library and approvals, plus requirements (Node 26, git, Claude/Codex logins), setup, optional OpenRouter keys, folder layout, work flow diagram, status and privacy notes."
+    },
+    {
+      "id": "file:src/team.mjs",
+      "score": 2,
+      "name": "team.mjs",
+      "type": "file",
+      "summary": "Core worker-team orchestrator: assigns Lead tasks to Claude, Codex, or OpenRouter workers in isolated git worktrees, gates risky edits, broadcasts file-edit notes and clash warnings, runs cross-vendor review rounds, and merges or rejects results."
+    },
+    {
+      "id": "file:src/workplaces.mjs",
+      "score": 2,
+      "name": "workplaces.mjs",
+      "type": "file",
+      "summary": "Manages multiple isolated workplaces (each with its own folder, board, Lead, team and compare node) persisted in data/workplaces.json, handling create, remove/archive, goal cancellation and folder validation."
+    },
+    {
+      "id": "file:spikes/appserver.mjs",
+      "score": 2,
+      "name": "appserver.mjs",
+      "type": "file",
+      "summary": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests."
+    }
+  ],
+  "fanInRanking": [
+    {
+      "id": "file:src/claude.mjs",
+      "fanIn": 8,
+      "name": "claude.mjs"
+    },
+    {
+      "id": "file:src/codex.mjs",
+      "fanIn": 6,
+      "name": "codex.mjs"
+    },
+    {
+      "id": "file:src/openrouter.mjs",
+      "fanIn": 5,
+      "name": "openrouter.mjs"
+    },
+    {
+      "id": "file:src/server.mjs",
+      "fanIn": 5,
+      "name": "server.mjs"
+    },
+    {
+      "id": "file:src/board.mjs",
+      "fanIn": 4,
+      "name": "board.mjs"
+    },
+    {
+      "id": "file:src/lead.mjs",
+      "fanIn": 4,
+      "name": "lead.mjs"
+    },
+    {
+      "id": "file:src/git.mjs",
+      "fanIn": 3,
+      "name": "git.mjs"
+    },
+    {
+      "id": "file:src/team.mjs",
+      "fanIn": 3,
+      "name": "team.mjs"
+    },
+    {
+      "id": "file:src/gate.mjs",
+      "fanIn": 3,
+      "name": "gate.mjs"
+    },
+    {
+      "id": "file:src/compare.mjs",
+      "fanIn": 2,
+      "name": "compare.mjs"
+    },
+    {
+      "id": "file:src/library-tools.mjs",
+      "fanIn": 2,
+      "name": "library-tools.mjs"
+    },
+    {
+      "id": "file:src/workplaces.mjs",
+      "fanIn": 2,
+      "name": "workplaces.mjs"
+    },
+    {
+      "id": "file:src/library.mjs",
+      "fanIn": 2,
+      "name": "library.mjs"
+    },
+    {
+      "id": "file:src/board-tools.mjs",
+      "fanIn": 2,
+      "name": "board-tools.mjs"
+    },
+    {
+      "id": "file:public/index.html",
+      "fanIn": 2,
+      "name": "index.html"
+    },
+    {
+      "id": "file:src/talk-tools.mjs",
+      "fanIn": 1,
+      "name": "talk-tools.mjs"
+    },
+    {
+      "id": "file:src/settings.mjs",
+      "fanIn": 1,
+      "name": "settings.mjs"
+    },
+    {
+      "id": "document:docs/agent-collab-teardown.md",
+      "fanIn": 1,
+      "name": "agent-collab-teardown.md"
+    },
+    {
+      "id": "document:docs/design.md",
+      "fanIn": 1,
+      "name": "design.md"
+    },
+    {
+      "id": "file:public/ember.css",
+      "fanIn": 1,
+      "name": "ember.css"
+    }
+  ],
+  "fanOutRanking": [
+    {
+      "id": "document:README.md",
+      "fanOut": 11,
+      "name": "README.md"
+    },
+    {
+      "id": "document:docs/design.md",
+      "fanOut": 10,
+      "name": "design.md"
+    },
+    {
+      "id": "file:src/server.mjs",
+      "fanOut": 6,
+      "name": "server.mjs"
+    },
+    {
+      "id": "file:src/workplaces.mjs",
+      "fanOut": 5,
+      "name": "workplaces.mjs"
+    },
+    {
+      "id": "file:src/team.mjs",
+      "fanOut": 4,
+      "name": "team.mjs"
+    },
+    {
+      "id": "file:src/lead.mjs",
+      "fanOut": 3,
+      "name": "lead.mjs"
+    },
+    {
+      "id": "document:docs/agent-collab-teardown.md",
+      "fanOut": 2,
+      "name": "agent-collab-teardown.md"
+    },
+    {
+      "id": "file:public/index.html",
+      "fanOut": 2,
+      "name": "index.html"
+    },
+    {
+      "id": "file:spikes/or-route.mjs",
+      "fanOut": 2,
+      "name": "or-route.mjs"
+    },
+    {
+      "id": "file:spikes/twoturn.mjs",
+      "fanOut": 2,
+      "name": "twoturn.mjs"
+    },
+    {
+      "id": "file:src/compare.mjs",
+      "fanOut": 1,
+      "name": "compare.mjs"
+    },
+    {
+      "id": "file:src/board-tools.mjs",
+      "fanOut": 1,
+      "name": "board-tools.mjs"
+    },
+    {
+      "id": "file:src/gate.mjs",
+      "fanOut": 1,
+      "name": "gate.mjs"
+    },
+    {
+      "id": "config:.claude/launch.json",
+      "fanOut": 1,
+      "name": "launch.json"
+    },
+    {
+      "id": "config:package.json",
+      "fanOut": 1,
+      "name": "package.json"
+    },
+    {
+      "id": "file:spikes/appserver.mjs",
+      "fanOut": 1,
+      "name": "appserver.mjs"
+    },
+    {
+      "id": "file:spikes/claude.mjs",
+      "fanOut": 1,
+      "name": "claude.mjs"
+    },
+    {
+      "id": "file:spikes/codex.mjs",
+      "fanOut": 1,
+      "name": "codex.mjs"
+    },
+    {
+      "id": "file:spikes/e2e-team.mjs",
+      "fanOut": 1,
+      "name": "e2e-team.mjs"
+    },
+    {
+      "id": "file:spikes/or-check.mjs",
+      "fanOut": 1,
+      "name": "or-check.mjs"
+    }
+  ],
+  "bfsTraversal": {
+    "startNode": "file:src/server.mjs",
+    "order": [
+      "file:src/server.mjs",
+      "file:src/codex.mjs",
+      "file:src/gate.mjs",
+      "file:src/library.mjs",
+      "file:src/openrouter.mjs",
+      "file:src/settings.mjs",
+      "file:src/workplaces.mjs",
+      "file:src/lead.mjs",
+      "file:src/board.mjs",
+      "file:src/compare.mjs",
+      "file:src/git.mjs",
+      "file:src/team.mjs",
+      "file:src/board-tools.mjs",
+      "file:src/claude.mjs",
+      "file:src/library-tools.mjs",
+      "file:src/talk-tools.mjs"
+    ],
+    "depthMap": {
+      "file:src/server.mjs": 0,
+      "file:src/codex.mjs": 1,
+      "file:src/gate.mjs": 1,
+      "file:src/library.mjs": 1,
+      "file:src/openrouter.mjs": 1,
+      "file:src/settings.mjs": 1,
+      "file:src/workplaces.mjs": 1,
+      "file:src/lead.mjs": 2,
+      "file:src/board.mjs": 2,
+      "file:src/compare.mjs": 2,
+      "file:src/git.mjs": 2,
+      "file:src/team.mjs": 2,
+      "file:src/board-tools.mjs": 3,
+      "file:src/claude.mjs": 3,
+      "file:src/library-tools.mjs": 3,
+      "file:src/talk-tools.mjs": 3
+    },
+    "byDepth": {
+      "0": [
+        "file:src/server.mjs"
+      ],
+      "1": [
+        "file:src/codex.mjs",
+        "file:src/gate.mjs",
+        "file:src/library.mjs",
+        "file:src/openrouter.mjs",
+        "file:src/settings.mjs",
+        "file:src/workplaces.mjs"
+      ],
+      "2": [
+        "file:src/lead.mjs",
+        "file:src/board.mjs",
+        "file:src/compare.mjs",
+        "file:src/git.mjs",
+        "file:src/team.mjs"
+      ],
+      "3": [
+        "file:src/board-tools.mjs",
+        "file:src/claude.mjs",
+        "file:src/library-tools.mjs",
+        "file:src/talk-tools.mjs"
+      ]
+    }
+  },
+  "nonCodeFiles": {
+    "documentation": [
+      {
+        "id": "document:README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "Project overview explaining Trident's Lead/worker/cross-check model, workplaces, Ask several, Library and approvals, plus requirements (Node 26, git, Claude/Codex logins), setup, optional OpenRouter keys, folder layout, work flow diagram, status and privacy notes."
+      },
+      {
+        "id": "document:docs/agent-collab-teardown.md",
+        "name": "agent-collab-teardown.md",
+        "type": "document",
+        "summary": "Research teardown comparing how Band, Coral and PandaOS coordinate AI agents (chat-room @mentions, task board with proof of completion, Director router) and the ideas Trident borrows from each."
+      },
+      {
+        "id": "document:docs/design.md",
+        "name": "design.md",
+        "type": "document",
+        "summary": "Design document for Trident: the problem, the Lead-plan-approve-worker-cross-check-merge flow, the engine pieces (SDK adapters, team tools, SQLite board, worktrees, approval gate, state snapshot), the interface sketch, milestones M1-M4 and open questions."
+      }
+    ],
+    "infrastructure": [],
+    "data": [],
+    "config": [
+      {
+        "id": "config:.claude/launch.json",
+        "name": "launch.json",
+        "type": "config",
+        "summary": "Claude Code launch configuration that starts the Trident engine with `node src/server.mjs` and points the preview at http://127.0.0.1:4317."
+      },
+      {
+        "id": "config:.ua/config.json",
+        "name": "config.json",
+        "type": "config",
+        "summary": "Understand-Anything tool settings that fix the knowledge-graph output language to English."
+      },
+      {
+        "id": "config:package.json",
+        "name": "package.json",
+        "type": "config",
+        "summary": "npm manifest for the private ES-module Trident package; `npm start` runs src/server.mjs and the only dependencies are the Claude Agent SDK and the Codex SDK."
+      }
+    ]
+  },
+  "clusters": [
+    {
+      "nodes": [
+        "file:src/claude.mjs",
+        "file:src/team.mjs",
+        "document:docs/design.md",
+        "file:src/git.mjs",
+        "file:src/workplaces.mjs"
+      ],
+      "edgeCount": 11
+    },
+    {
+      "nodes": [
+        "file:src/gate.mjs",
+        "file:src/server.mjs",
+        "document:README.md",
+        "document:docs/design.md",
+        "file:public/index.html"
+      ],
+      "edgeCount": 9
+    },
+    {
+      "nodes": [
+        "file:src/library.mjs",
+        "file:src/server.mjs",
+        "document:README.md",
+        "file:public/index.html",
+        "file:src/workplaces.mjs"
+      ],
+      "edgeCount": 9
+    },
+    {
+      "nodes": [
+        "file:src/openrouter.mjs",
+        "file:src/server.mjs",
+        "document:README.md",
+        "file:public/index.html",
+        "file:src/workplaces.mjs"
+      ],
+      "edgeCount": 9
+    },
+    {
+      "nodes": [
+        "file:src/board.mjs",
+        "file:src/workplaces.mjs",
+        "document:README.md",
+        "document:docs/design.md",
+        "file:public/index.html"
+      ],
+      "edgeCount": 8
+    },
+    {
+      "nodes": [
+        "file:src/lead.mjs",
+        "file:src/workplaces.mjs",
+        "document:README.md",
+        "document:docs/design.md",
+        "file:public/index.html"
+      ],
+      "edgeCount": 8
+    },
+    {
+      "nodes": [
+        "file:src/claude.mjs",
+        "file:src/compare.mjs"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:src/library-tools.mjs",
+        "file:src/team.mjs"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:src/talk-tools.mjs",
+        "file:src/team.mjs"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:src/codex.mjs",
+        "file:src/server.mjs"
+      ],
+      "edgeCount": 2
+    }
+  ],
+  "layers": {
+    "count": 8,
+    "list": [
+      {
+        "id": "layer:server",
+        "name": "Server and Workplaces",
+        "description": "The local 127.0.0.1 HTTP entry point plus the workplace manager and Trident-wide settings store that wire each workplace's board, Lead, team and compare node together."
+      },
+      {
+        "id": "layer:orchestration",
+        "name": "Agent Orchestration",
+        "description": "The Lead agent session, the cross-vendor worker team that builds in git worktrees and cross-checks work, the side-by-side compare node, and the approval gate that holds risky tool calls for the user."
+      },
+      {
+        "id": "layer:providers",
+        "name": "Model Providers",
+        "description": "Adapters that turn the Claude Agent SDK, the long-lived Codex app-server and the OpenRouter route into message-at-a-time worker sessions."
+      },
+      {
+        "id": "layer:agent-tools",
+        "name": "Agent Tool Servers",
+        "description": "In-process MCP servers that give agents board actions (plans, tasks, assignment), team-talk messaging and Library read/write tools."
+      },
+      {
+        "id": "layer:storage",
+        "name": "Storage and Workspace State",
+        "description": "Persistent state behind the agents: the SQLite board of goals, tasks and talk, the draft-then-approve Markdown Library folder, and git worktree plumbing for worker workspaces."
+      },
+      {
+        "id": "layer:ui",
+        "name": "Web Interface",
+        "description": "The single-page Trident UI (workplaces sidebar, Lead chat, approvals bar, task board, Library and Settings) styled by the Ember design-system stylesheet."
+      },
+      {
+        "id": "layer:spikes",
+        "name": "Spikes and Probes",
+        "description": "Standalone experiment and check scripts that confirm SDK logins, Codex app-server behaviour, OpenRouter keys and models, timing, and an end-to-end team run against the live server."
+      },
+      {
+        "id": "layer:project-support",
+        "name": "Docs and Configuration",
+        "description": "The README, the design document and agent-collaboration teardown, plus the npm manifest, Claude Code launch config and tooling settings that start and describe Trident."
+      }
+    ]
+  },
+  "nodeSummaryIndex": {
+    "file:src/claude.mjs": {
+      "name": "claude.mjs",
+      "type": "file",
+      "summary": "Wraps the Claude Agent SDK query() into a long-lived, message-at-a-time Claude worker session whose run(text) resolves with the final reply; also builds a subscription-only environment that strips stray Anthropic API overrides."
+    },
+    "file:src/compare.mjs": {
+      "name": "compare.mjs",
+      "type": "file",
+      "summary": "Side-by-side model comparison node: sends one question to up to four sources (local Claude, local Codex, or any OpenRouter model) in parallel and emits their answers with timing and cost."
+    },
+    "file:src/git.mjs": {
+      "name": "git.mjs",
+      "type": "file",
+      "summary": "Git plumbing for worker workspaces: initializes the workspace repo, creates per-task worktrees on their own branches, reports diffs, merges accepted branches, and removes worktrees, all committed under a local Trident identity."
+    },
+    "file:src/library-tools.mjs": {
+      "name": "library-tools.mjs",
+      "type": "file",
+      "summary": "Builds an in-process MCP server exposing list/read/write tools over the shared Markdown Library to Claude-harness agents, where writes become unsaved drafts the user approves."
+    },
+    "file:src/talk-tools.mjs": {
+      "name": "talk-tools.mjs",
+      "type": "file",
+      "summary": "Builds an in-process MCP server with say/read team-talk tools for Claude-harness workers, plus a digest helper that surfaces unread board messages without ever waking other agents."
+    },
+    "file:src/team.mjs": {
+      "name": "team.mjs",
+      "type": "file",
+      "summary": "Core worker-team orchestrator: assigns Lead tasks to Claude, Codex, or OpenRouter workers in isolated git worktrees, gates risky edits, broadcasts file-edit notes and clash warnings, runs cross-vendor review rounds, and merges or rejects results."
+    },
+    "file:src/workplaces.mjs": {
+      "name": "workplaces.mjs",
+      "type": "file",
+      "summary": "Manages multiple isolated workplaces (each with its own folder, board, Lead, team and compare node) persisted in data/workplaces.json, handling create, remove/archive, goal cancellation and folder validation."
+    },
+    "file:src/codex.mjs": {
+      "name": "codex.mjs",
+      "type": "file",
+      "summary": "Codex worker adapter that keeps one long-lived codex app-server process running and talks to it over JSON-RPC on stdio, giving the rest of Trident per-thread conversations, approval forwarding and out-of-usage tracking."
+    },
+    "file:src/library.mjs": {
+      "name": "library.mjs",
+      "type": "file",
+      "summary": "The shared Markdown Library: a plain folder of notes in sections that every agent can read, where every change is first stored as a draft and only becomes the real note when the user saves it, with replaced versions kept under .old."
+    },
+    "file:src/openrouter.mjs": {
+      "name": "openrouter.mjs",
+      "type": "file",
+      "summary": "OpenRouter integration that reads the API key and model from the process or Windows user environment and builds the environment that points the Claude Agent SDK worker at OpenRouter's Anthropic-compatible endpoint, plus a no-cost key and model check."
+    },
+    "file:src/server.mjs": {
+      "name": "server.mjs",
+      "type": "file",
+      "summary": "Trident's entry point: a local HTTP server bound to 127.0.0.1 that wires together the gate, Codex, OpenRouter, Library, settings and workplaces, streams every event to the page over server-sent events, and handles the POST routes for workplaces, messages, approvals, plans, interrupts, Library actions and settings."
+    },
+    "file:src/settings.mjs": {
+      "name": "settings.mjs",
+      "type": "file",
+      "summary": "Trident-wide settings store kept in data/settings.json, currently holding the maximum number of workers per workplace, with validation and a settings event on every change."
+    },
+    "file:src/board-tools.mjs": {
+      "name": "board-tools.mjs",
+      "type": "file",
+      "summary": "Defines the in-process MCP server of board tools the Lead agent calls (propose_plan, update_task, finish_goal, assign_task, accept_task, reject_task, ask_several, team_say), so the Lead changes the board and team only through validated tool calls."
+    },
+    "file:src/board.mjs": {
+      "name": "board.mjs",
+      "type": "file",
+      "summary": "SQLite-backed board store (via node:sqlite) holding goals, their tasks and team talk; handles schema creation and column migrations, plan proposal, task updates, and renders the [state] block fed to the Lead."
+    },
+    "file:src/gate.mjs": {
+      "name": "gate.mjs",
+      "type": "file",
+      "summary": "Approval gate that holds an agent's risky tool calls until the user allows or denies them, persisting 'always allow' and 'always deny' rules per exact operation to a JSON file."
+    },
+    "file:src/lead.mjs": {
+      "name": "lead.mjs",
+      "type": "file",
+      "summary": "Runs the Lead agent as one long-lived Claude Agent SDK session fed by an async message queue, wiring in board and library MCP tools and the approval gate, and streaming its output as UI events; also exports a one-line tool-call summarizer."
+    },
+    "file:.claude/autoharness/requests": {
+      "name": "requests",
+      "type": "file",
+      "summary": "Tiny runtime counter file used by the autoharness Claude Code plugin to queue skill-learning requests; it holds a single character and no project logic."
+    },
+    "config:.claude/launch.json": {
+      "name": "launch.json",
+      "type": "config",
+      "summary": "Claude Code launch configuration that starts the Trident engine with `node src/server.mjs` and points the preview at http://127.0.0.1:4317."
+    },
+    "config:.ua/config.json": {
+      "name": "config.json",
+      "type": "config",
+      "summary": "Understand-Anything tool settings that fix the knowledge-graph output language to English."
+    },
+    "document:README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "Project overview explaining Trident's Lead/worker/cross-check model, workplaces, Ask several, Library and approvals, plus requirements (Node 26, git, Claude/Codex logins), setup, optional OpenRouter keys, folder layout, work flow diagram, status and privacy notes."
+    },
+    "document:docs/agent-collab-teardown.md": {
+      "name": "agent-collab-teardown.md",
+      "type": "document",
+      "summary": "Research teardown comparing how Band, Coral and PandaOS coordinate AI agents (chat-room @mentions, task board with proof of completion, Director router) and the ideas Trident borrows from each."
+    },
+    "document:docs/design.md": {
+      "name": "design.md",
+      "type": "document",
+      "summary": "Design document for Trident: the problem, the Lead-plan-approve-worker-cross-check-merge flow, the engine pieces (SDK adapters, team tools, SQLite board, worktrees, approval gate, state snapshot), the interface sketch, milestones M1-M4 and open questions."
+    },
+    "config:package.json": {
+      "name": "package.json",
+      "type": "config",
+      "summary": "npm manifest for the private ES-module Trident package; `npm start` runs src/server.mjs and the only dependencies are the Claude Agent SDK and the Codex SDK."
+    },
+    "file:public/ember.css": {
+      "name": "ember.css",
+      "type": "file",
+      "summary": "Ember design-system stylesheet for the web page: dark warm oklch color tokens, radius and glass/shadow variables, and ds-* component styles for buttons, inputs, cards, badges, alerts, switches, tabs, steppers, sliders, tables and chips, with touch, small-screen and hover media rules."
+    },
+    "file:public/index.html": {
+      "name": "index.html",
+      "type": "file",
+      "summary": "Single-page Trident interface: sidebar of workplaces plus Library and Settings views, a Lead chat, a Needs-you approvals bar, the goal/task board, team talk, activity log and Ask-several comparison columns, all driven by an inline script that consumes the server's /events stream and posts actions back."
+    },
+    "file:spikes/appserver.mjs": {
+      "name": "appserver.mjs",
+      "type": "file",
+      "summary": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests."
+    },
+    "file:spikes/claude.mjs": {
+      "name": "claude.mjs",
+      "type": "file",
+      "summary": "Spike confirming the Claude Agent SDK runs on the existing Claude Code login, sending one isolated prompt with settings, plugins and MCP servers disabled."
+    },
+    "file:spikes/codex.mjs": {
+      "name": "codex.mjs",
+      "type": "file",
+      "summary": "Spike confirming the Codex SDK runs on the existing Codex login by streaming one read-only turn and printing events and usage."
+    },
+    "file:spikes/e2e-team.mjs": {
+      "name": "e2e-team.mjs",
+      "type": "file",
+      "summary": "End-to-end script against the running server: sends a request, auto-approves the plan and every approval, and logs board, message, talk, tool and status events from the /events stream until the goal is done."
+    },
+    "file:spikes/or-check.mjs": {
+      "name": "or-check.mjs",
+      "type": "file",
+      "summary": "Free check of the configured OpenRouter key and model: runs the config's validity check and prints account tier and usage from the key-info endpoint without generating text."
+    },
+    "file:spikes/or-models.mjs": {
+      "name": "or-models.mjs",
+      "type": "file",
+      "summary": "Lists tool-capable coding models from the public OpenRouter catalog with prices, and reports whether given model ids are still listed."
+    },
+    "file:spikes/or-route.mjs": {
+      "name": "or-route.mjs",
+      "type": "file",
+      "summary": "Checks the OpenRouter route with a deliberately invalid placeholder key, expecting both the key check and a Claude-session worker turn to be refused, at no cost."
+    },
+    "file:spikes/twoturn.mjs": {
+      "name": "twoturn.mjs",
+      "type": "file",
+      "summary": "Spike measuring whether SDK slowness is a one-time startup cost or per-message, using one streaming Claude session with two messages or two Codex runs on one thread."
+    }
+  },
+  "totalNodes": 33,
+  "totalEdges": 166
+}

@@ -1,0 +1,50 @@
+[
+ {
+  "filePath": "src/claude.mjs",
+  "tourOrder": 8
+ },
+ {
+  "filePath": "src/codex.mjs",
+  "tourOrder": 8
+ },
+ {
+  "filePath": "src/openrouter.mjs",
+  "tourOrder": 8
+ },
+ {
+  "filePath": "src/team.mjs",
+  "tourOrder": 9
+ },
+ {
+  "filePath": "src/git.mjs",
+  "tourOrder": 9
+ },
+ {
+  "filePath": "src/talk-tools.mjs",
+  "tourOrder": 9
+ },
+ {
+  "filePath": "src/library.mjs",
+  "tourOrder": 10
+ },
+ {
+  "filePath": "src/library-tools.mjs",
+  "tourOrder": 10
+ },
+ {
+  "filePath": "src/compare.mjs",
+  "tourOrder": 11
+ },
+ {
+  "filePath": "public/index.html",
+  "tourOrder": 12
+ },
+ {
+  "filePath": "public/ember.css",
+  "tourOrder": 12
+ },
+ {
+  "filePath": "spikes/e2e-team.mjs",
+  "tourOrder": 13
+ }
+]

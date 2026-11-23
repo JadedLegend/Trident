@@ -1,0 +1,329 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/board-tools.mjs",
+      "type": "file",
+      "name": "board-tools.mjs",
+      "filePath": "src/board-tools.mjs",
+      "summary": "Defines the in-process MCP server of board tools the Lead agent calls (propose_plan, update_task, finish_goal, assign_task, accept_task, reject_task, ask_several, team_say), so the Lead changes the board and team only through validated tool calls.",
+      "tags": [
+        "mcp-server",
+        "agent-tools",
+        "validation",
+        "service",
+        "board"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses zod schemas inside the Claude Agent SDK's tool() helper so each tool's arguments are validated and self-described to the model."
+    },
+    {
+      "id": "file:src/board.mjs",
+      "type": "file",
+      "name": "board.mjs",
+      "filePath": "src/board.mjs",
+      "summary": "SQLite-backed board store (via node:sqlite) holding goals, their tasks and team talk; handles schema creation and column migrations, plan proposal, task updates, and renders the [state] block fed to the Lead.",
+      "tags": [
+        "data-model",
+        "persistence",
+        "sqlite",
+        "board",
+        "service"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Node's built-in DatabaseSync and adds missing columns at startup with PRAGMA table_info, a lightweight in-code migration pattern."
+    },
+    {
+      "id": "file:src/gate.mjs",
+      "type": "file",
+      "name": "gate.mjs",
+      "filePath": "src/gate.mjs",
+      "summary": "Approval gate that holds an agent's risky tool calls until the user allows or denies them, persisting 'always allow' and 'always deny' rules per exact operation to a JSON file.",
+      "tags": [
+        "security",
+        "approval",
+        "permissions",
+        "event-handler",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/lead.mjs",
+      "type": "file",
+      "name": "lead.mjs",
+      "filePath": "src/lead.mjs",
+      "summary": "Runs the Lead agent as one long-lived Claude Agent SDK session fed by an async message queue, wiring in board and library MCP tools and the approval gate, and streaming its output as UI events; also exports a one-line tool-call summarizer.",
+      "tags": [
+        "agent",
+        "orchestration",
+        "claude-sdk",
+        "event-stream",
+        "service"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Feeds the SDK an async generator that parks on a Promise until send() wakes it, turning a push-style inbox into a pull-style prompt stream."
+    },
+    {
+      "id": "function:src/board-tools.mjs:boardTools",
+      "type": "function",
+      "name": "boardTools",
+      "filePath": "src/board-tools.mjs",
+      "lineRange": [
+        11,
+        121
+      ],
+      "summary": "Builds the 'board' MCP server with eight tools that propose plans, update and assign tasks, accept or reject worker results via the team, run multi-model comparisons, and post team talk.",
+      "tags": [
+        "factory",
+        "mcp-server",
+        "agent-tools",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/board.mjs:openBoard",
+      "type": "function",
+      "name": "openBoard",
+      "filePath": "src/board.mjs",
+      "lineRange": [
+        10,
+        124
+      ],
+      "summary": "Opens or creates the board database, migrates columns, marks interrupted worker tasks as blocked, and returns the board API (snapshot, proposePlan, setGoalStatus, updateTask, task, stateBlock, say and talk queries).",
+      "tags": [
+        "factory",
+        "persistence",
+        "sqlite",
+        "data-model"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/gate.mjs:createGate",
+      "type": "function",
+      "name": "createGate",
+      "filePath": "src/gate.mjs",
+      "lineRange": [
+        9,
+        57
+      ],
+      "summary": "Creates the approval gate with request/decide/open: checks saved rules, otherwise emits an approval event and waits for a decision or abort, saving permanent rules when asked.",
+      "tags": [
+        "factory",
+        "approval",
+        "security",
+        "promise"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "function",
+      "name": "LEAD_PROMPT",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        8,
+        30
+      ],
+      "summary": "Template that builds the Lead's appended system prompt, describing the plan-then-approve workflow, worker assignment and cross-checks, model comparison, and the Library.",
+      "tags": [
+        "prompt",
+        "template",
+        "agent-instructions"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/lead.mjs:startLead",
+      "type": "function",
+      "name": "startLead",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        35,
+        114
+      ],
+      "summary": "Starts the Lead's Claude session with board and library tools, auto-allowed read-only tools and a gate-backed canUseTool, translates SDK messages into status/delta/message/tool events, and returns send/interrupt/close controls.",
+      "tags": [
+        "orchestration",
+        "agent",
+        "event-stream",
+        "claude-sdk"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/lead.mjs:summarize",
+      "type": "function",
+      "name": "summarize",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        117,
+        123
+      ],
+      "summary": "Produces a short one-line description of a tool call from its command, file path, pattern, URL or JSON input, used for the activity view and approval rule keys.",
+      "tags": [
+        "utility",
+        "formatting",
+        "logging"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/board.mjs",
+      "target": "function:src/board.mjs:openBoard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "function:src/gate.mjs:createGate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:startLead",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/board.mjs",
+      "target": "function:src/board.mjs:openBoard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "function:src/gate.mjs:createGate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:startLead",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "file:src/board.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "file:src/lead.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/board-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/library-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/library-tools.mjs:libraryTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/claude.mjs:subscriptionEnv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/gate.mjs:createGate",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

@@ -1,0 +1,476 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 33,
+  "totalBatches": 4,
+  "exportsByPath": {
+    ".claude/autoharness/requests": [],
+    "spikes/appserver.mjs": [],
+    "spikes/claude.mjs": [],
+    "spikes/codex.mjs": [],
+    "spikes/e2e-team.mjs": [],
+    "spikes/or-check.mjs": [],
+    "spikes/or-models.mjs": [],
+    "spikes/or-route.mjs": [],
+    "spikes/twoturn.mjs": [],
+    "src/board-tools.mjs": [
+      "BOARD_TOOL_NAMES",
+      "boardTools"
+    ],
+    "src/board.mjs": [
+      "TASK_STATUSES",
+      "openBoard"
+    ],
+    "src/claude.mjs": [
+      "subscriptionEnv",
+      "claudeSession"
+    ],
+    "src/codex.mjs": [
+      "startCodex"
+    ],
+    "src/compare.mjs": [
+      "DEFAULT_MODELS",
+      "startCompare"
+    ],
+    "src/gate.mjs": [
+      "createGate"
+    ],
+    "src/git.mjs": [
+      "git",
+      "commitAll",
+      "ensureRepo",
+      "createWorktree",
+      "changes",
+      "mergeBranch",
+      "removeWorktree"
+    ],
+    "src/lead.mjs": [
+      "startLead",
+      "summarize"
+    ],
+    "src/library-tools.mjs": [
+      "LIBRARY_TOOL_NAMES",
+      "libraryTools"
+    ],
+    "src/library.mjs": [
+      "openLibrary"
+    ],
+    "src/openrouter.mjs": [
+      "DEFAULT_MODEL",
+      "openRouterConfig"
+    ],
+    "src/server.mjs": [],
+    "src/settings.mjs": [
+      "openSettings"
+    ],
+    "src/talk-tools.mjs": [
+      "TALK_TOOL_NAMES",
+      "talkTools",
+      "talkDigest"
+    ],
+    "src/team.mjs": [
+      "NAMES",
+      "startTeam",
+      "worktreeRootFor"
+    ],
+    "src/workplaces.mjs": [
+      "openWorkplaces"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "src/claude.mjs",
+          "language": "javascript",
+          "sizeLines": 73,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/compare.mjs",
+          "language": "javascript",
+          "sizeLines": 87,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/git.mjs",
+          "language": "javascript",
+          "sizeLines": 65,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/library-tools.mjs",
+          "language": "javascript",
+          "sizeLines": 44,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/talk-tools.mjs",
+          "language": "javascript",
+          "sizeLines": 51,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/team.mjs",
+          "language": "javascript",
+          "sizeLines": 320,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/workplaces.mjs",
+          "language": "javascript",
+          "sizeLines": 141,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/claude.mjs": [],
+        "src/compare.mjs": [
+          "src/claude.mjs"
+        ],
+        "src/git.mjs": [],
+        "src/library-tools.mjs": [],
+        "src/talk-tools.mjs": [],
+        "src/team.mjs": [
+          "src/claude.mjs",
+          "src/git.mjs",
+          "src/library-tools.mjs",
+          "src/talk-tools.mjs"
+        ],
+        "src/workplaces.mjs": [
+          "src/board.mjs",
+          "src/compare.mjs",
+          "src/git.mjs",
+          "src/lead.mjs",
+          "src/team.mjs"
+        ]
+      },
+      "neighborMap": {
+        "src/claude.mjs": [
+          {
+            "path": "src/lead.mjs",
+            "batchIndex": 3,
+            "symbols": [
+              "startLead",
+              "summarize"
+            ]
+          }
+        ],
+        "src/library-tools.mjs": [
+          {
+            "path": "src/lead.mjs",
+            "batchIndex": 3,
+            "symbols": [
+              "startLead",
+              "summarize"
+            ]
+          }
+        ],
+        "src/workplaces.mjs": [
+          {
+            "path": "src/board.mjs",
+            "batchIndex": 3,
+            "symbols": [
+              "TASK_STATUSES",
+              "openBoard"
+            ]
+          },
+          {
+            "path": "src/lead.mjs",
+            "batchIndex": 3,
+            "symbols": [
+              "startLead",
+              "summarize"
+            ]
+          },
+          {
+            "path": "src/server.mjs",
+            "batchIndex": 2,
+            "symbols": []
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "src/codex.mjs",
+          "language": "javascript",
+          "sizeLines": 138,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/library.mjs",
+          "language": "javascript",
+          "sizeLines": 168,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/openrouter.mjs",
+          "language": "javascript",
+          "sizeLines": 57,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/server.mjs",
+          "language": "javascript",
+          "sizeLines": 133,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/settings.mjs",
+          "language": "javascript",
+          "sizeLines": 24,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/codex.mjs": [],
+        "src/library.mjs": [],
+        "src/openrouter.mjs": [],
+        "src/server.mjs": [
+          "src/codex.mjs",
+          "src/gate.mjs",
+          "src/library.mjs",
+          "src/openrouter.mjs",
+          "src/settings.mjs",
+          "src/workplaces.mjs"
+        ],
+        "src/settings.mjs": []
+      },
+      "neighborMap": {
+        "src/server.mjs": [
+          {
+            "path": "src/gate.mjs",
+            "batchIndex": 3,
+            "symbols": [
+              "createGate"
+            ]
+          },
+          {
+            "path": "src/workplaces.mjs",
+            "batchIndex": 1,
+            "symbols": [
+              "openWorkplaces"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "src/board-tools.mjs",
+          "language": "javascript",
+          "sizeLines": 121,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/board.mjs",
+          "language": "javascript",
+          "sizeLines": 124,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/gate.mjs",
+          "language": "javascript",
+          "sizeLines": 57,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/lead.mjs",
+          "language": "javascript",
+          "sizeLines": 123,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/board-tools.mjs": [
+          "src/board.mjs"
+        ],
+        "src/board.mjs": [],
+        "src/gate.mjs": [
+          "src/lead.mjs"
+        ],
+        "src/lead.mjs": [
+          "src/board-tools.mjs",
+          "src/claude.mjs",
+          "src/library-tools.mjs"
+        ]
+      },
+      "neighborMap": {
+        "src/board.mjs": [
+          {
+            "path": "src/workplaces.mjs",
+            "batchIndex": 1,
+            "symbols": [
+              "openWorkplaces"
+            ]
+          }
+        ],
+        "src/gate.mjs": [
+          {
+            "path": "src/server.mjs",
+            "batchIndex": 2,
+            "symbols": []
+          }
+        ],
+        "src/lead.mjs": [
+          {
+            "path": "src/claude.mjs",
+            "batchIndex": 1,
+            "symbols": [
+              "subscriptionEnv",
+              "claudeSession"
+            ]
+          },
+          {
+            "path": "src/library-tools.mjs",
+            "batchIndex": 1,
+            "symbols": [
+              "LIBRARY_TOOL_NAMES",
+              "libraryTools"
+            ]
+          },
+          {
+            "path": "src/workplaces.mjs",
+            "batchIndex": 1,
+            "symbols": [
+              "openWorkplaces"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": ".claude/autoharness/requests",
+          "language": "unknown",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": ".claude/launch.json",
+          "language": "json",
+          "sizeLines": 6,
+          "fileCategory": "config"
+        },
+        {
+          "path": ".ua/config.json",
+          "language": "json",
+          "sizeLines": 1,
+          "fileCategory": "config"
+        },
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 79,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/agent-collab-teardown.md",
+          "language": "markdown",
+          "sizeLines": 56,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/design.md",
+          "language": "markdown",
+          "sizeLines": 83,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "package.json",
+          "language": "json",
+          "sizeLines": 22,
+          "fileCategory": "config"
+        },
+        {
+          "path": "public/ember.css",
+          "language": "css",
+          "sizeLines": 312,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "public/index.html",
+          "language": "html",
+          "sizeLines": 1025,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "spikes/appserver.mjs",
+          "language": "javascript",
+          "sizeLines": 55,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/claude.mjs",
+          "language": "javascript",
+          "sizeLines": 19,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/codex.mjs",
+          "language": "javascript",
+          "sizeLines": 13,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/e2e-team.mjs",
+          "language": "javascript",
+          "sizeLines": 40,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/or-check.mjs",
+          "language": "javascript",
+          "sizeLines": 11,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/or-models.mjs",
+          "language": "javascript",
+          "sizeLines": 13,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/or-route.mjs",
+          "language": "javascript",
+          "sizeLines": 18,
+          "fileCategory": "code"
+        },
+        {
+          "path": "spikes/twoturn.mjs",
+          "language": "javascript",
+          "sizeLines": 38,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".claude/autoharness/requests": [],
+        ".claude/launch.json": [],
+        ".ua/config.json": [],
+        "README.md": [],
+        "docs/agent-collab-teardown.md": [],
+        "docs/design.md": [],
+        "package.json": [],
+        "public/ember.css": [],
+        "public/index.html": [],
+        "spikes/appserver.mjs": [],
+        "spikes/claude.mjs": [],
+        "spikes/codex.mjs": [],
+        "spikes/e2e-team.mjs": [],
+        "spikes/or-check.mjs": [],
+        "spikes/or-models.mjs": [],
+        "spikes/or-route.mjs": [],
+        "spikes/twoturn.mjs": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

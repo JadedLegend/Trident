@@ -1,0 +1,50 @@
+[
+ {
+  "filePath": "README.md",
+  "tourOrder": 1
+ },
+ {
+  "filePath": "docs/design.md",
+  "tourOrder": 2
+ },
+ {
+  "filePath": "docs/agent-collab-teardown.md",
+  "tourOrder": 2
+ },
+ {
+  "filePath": "src/server.mjs",
+  "tourOrder": 3
+ },
+ {
+  "filePath": "package.json",
+  "tourOrder": 3
+ },
+ {
+  "filePath": ".claude/launch.json",
+  "tourOrder": 3
+ },
+ {
+  "filePath": "src/workplaces.mjs",
+  "tourOrder": 4
+ },
+ {
+  "filePath": "src/settings.mjs",
+  "tourOrder": 4
+ },
+ {
+  "filePath": "src/board.mjs",
+  "tourOrder": 5
+ },
+ {
+  "filePath": "src/lead.mjs",
+  "tourOrder": 6
+ },
+ {
+  "filePath": "src/board-tools.mjs",
+  "tourOrder": 6
+ },
+ {
+  "filePath": "src/gate.mjs",
+  "tourOrder": 7
+ }
+]

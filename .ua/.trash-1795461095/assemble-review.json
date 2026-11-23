@@ -1,0 +1,19 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 0,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "Merge report lists no mechanical fixes and no 'could not fix' items: input 74 nodes / 166 edges equals output 74 / 166, and the batch files sum to the same, so nothing was deduplicated or dropped.",
+    "Verified independently: 0 nodes without an id, 0 dangling edges, 0 duplicate (source,target,type) edges, 0 self-loops, and every node has a summary and tags.",
+    "Node types are all valid (function 41, file 27, config 3, document 3). Complexity values are all valid (simple 41, moderate 24, complex 9).",
+    "All 33 scanned files have a matching file, config or document node.",
+    "All 21 internal importMap links have a matching 'imports' edge, and no 'imports' edge exists that the importMap does not back.",
+    "Every function node has exactly one 'contains' edge from its own file node, with a matching filePath.",
+    "Batch 4 cross-batch edges (README.md and docs/design.md 'documents' edges, .claude/launch.json and package.json 'configures' edges, plus spikes/* calls, depends_on and related edges) all resolve to existing src/*.mjs nodes, as the batch note expected.",
+    "Minor: function:src/lead.mjs:LEAD_PROMPT is a prompt template (lines 8-30) typed as a function. This is plausible if it is a template function, so it was left unchanged.",
+    "Minor: 'related' edges from spikes/* to src/* (weight 0.5) are inferred by the analyzer rather than backed by importMap. They are kept as analyzer output, not added by this review."
+  ]
+}

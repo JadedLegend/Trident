@@ -1,0 +1,43 @@
+{
+ "projectRoot": "C:/Users/aLLIEDiNTENT/Desktop/TridentIGuess/Trident",
+ "batchFiles": [
+  {
+   "path": "src/board-tools.mjs",
+   "language": "javascript",
+   "sizeLines": 121,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/board.mjs",
+   "language": "javascript",
+   "sizeLines": 124,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/gate.mjs",
+   "language": "javascript",
+   "sizeLines": 57,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/lead.mjs",
+   "language": "javascript",
+   "sizeLines": 123,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "src/board-tools.mjs": [
+   "src/board.mjs"
+  ],
+  "src/board.mjs": [],
+  "src/gate.mjs": [
+   "src/lead.mjs"
+  ],
+  "src/lead.mjs": [
+   "src/board-tools.mjs",
+   "src/claude.mjs",
+   "src/library-tools.mjs"
+  ]
+ }
+}

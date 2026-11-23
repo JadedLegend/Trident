@@ -1,0 +1,2364 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 7,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 7,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/claude.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 73,
+      "nonEmptyLines": 67,
+      "functions": [
+        {
+          "name": "subscriptionEnv",
+          "startLine": 7,
+          "endLine": 11,
+          "params": []
+        },
+        {
+          "name": "claudeSession",
+          "startLine": 13,
+          "endLine": 73,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "subscriptionEnv",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "claudeSession",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "claudeSession",
+          "callee": "inbox.shift",
+          "lineNumber": 21
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "query",
+          "lineNumber": 26
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "messages",
+          "lineNumber": 27
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "subscriptionEnv",
+          "lineNumber": 37
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "(async () => {\r\n    try {\r\n      for await (const m of q) {\r\n        if (m.type === \"assistant\") {\r\n          for (const b of m.message.content) if (b.type === \"tool_use\") onToolUse?.(b.name, b.input);\r\n        } else if (m.type === \"result\") {\r\n          const w = waiting;\r\n          waiting = null;\r\n          // An API failure (bad key, no credit) can arrive as a \"success\" result with is_error set.\r\n          if (m.subtype === \"success\" && !m.is_error) w?.resolve(m.result ?? \"\");\r\n          else w?.reject(new Error(m.is_error ? String(m.result ?? \"API error\").slice(0, 300) : `Claude stopped: ${m.subtype}`));\r\n        }\r\n      }\r\n    } catch (err) {\r\n      waiting?.reject(err);\r\n    }\r\n  })",
+          "lineNumber": 41
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "onToolUse",
+          "lineNumber": 45
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "w?.resolve",
+          "lineNumber": 50
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "w?.reject",
+          "lineNumber": 51
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "String(m.result ?? \"API error\").slice",
+          "lineNumber": 51
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "String",
+          "lineNumber": 51
+        },
+        {
+          "caller": "claudeSession",
+          "callee": "waiting?.reject",
+          "lineNumber": 55
+        },
+        {
+          "caller": "run",
+          "callee": "inbox.push",
+          "lineNumber": 63
+        },
+        {
+          "caller": "run",
+          "callee": "wake",
+          "lineNumber": 64
+        },
+        {
+          "caller": "close",
+          "callee": "wake",
+          "lineNumber": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/compare.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 87,
+      "nonEmptyLines": 79,
+      "functions": [
+        {
+          "name": "startCompare",
+          "startLine": 14,
+          "endLine": 87,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "DEFAULT_MODELS",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "startCompare",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "models",
+          "callee": "await (await fetch(\"https://openrouter.ai/api/v1/models\")).json",
+          "lineNumber": 17
+        },
+        {
+          "caller": "models",
+          "callee": "await",
+          "lineNumber": 17
+        },
+        {
+          "caller": "models",
+          "callee": "fetch",
+          "lineNumber": 17
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "fetch",
+          "lineNumber": 22
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "JSON.stringify",
+          "lineNumber": 26
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "r.json().catch",
+          "lineNumber": 28
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "r.json",
+          "lineNumber": 28
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "String(body.error?.message ?? `HTTP ${r.status}`).slice",
+          "lineNumber": 29
+        },
+        {
+          "caller": "askOpenRouter",
+          "callee": "String",
+          "lineNumber": 29
+        },
+        {
+          "caller": "askClaude",
+          "callee": "claudeSession",
+          "lineNumber": 34
+        },
+        {
+          "caller": "askClaude",
+          "callee": "s.run",
+          "lineNumber": 36
+        },
+        {
+          "caller": "askClaude",
+          "callee": "s.close",
+          "lineNumber": 38
+        },
+        {
+          "caller": "askCodex",
+          "callee": "codex.unavailableReason",
+          "lineNumber": 43
+        },
+        {
+          "caller": "askCodex",
+          "callee": "codex.thread",
+          "lineNumber": 45
+        },
+        {
+          "caller": "askCodex",
+          "callee": "t.run",
+          "lineNumber": 47
+        },
+        {
+          "caller": "askCodex",
+          "callee": "t.close",
+          "lineNumber": 49
+        },
+        {
+          "caller": "startCompare",
+          "callee": "[...new Set(wanted)].slice",
+          "lineNumber": 57
+        },
+        {
+          "caller": "startCompare",
+          "callee": "list.filter",
+          "lineNumber": 59
+        },
+        {
+          "caller": "startCompare",
+          "callee": "m.includes",
+          "lineNumber": 59
+        },
+        {
+          "caller": "startCompare",
+          "callee": "(await models()).map",
+          "lineNumber": 62
+        },
+        {
+          "caller": "startCompare",
+          "callee": "models",
+          "lineNumber": 62
+        },
+        {
+          "caller": "startCompare",
+          "callee": "remote.filter",
+          "lineNumber": 63
+        },
+        {
+          "caller": "startCompare",
+          "callee": "known.has",
+          "lineNumber": 63
+        },
+        {
+          "caller": "startCompare",
+          "callee": "missing.join",
+          "lineNumber": 64
+        },
+        {
+          "caller": "startCompare",
+          "callee": "randomUUID().slice",
+          "lineNumber": 67
+        },
+        {
+          "caller": "startCompare",
+          "callee": "randomUUID",
+          "lineNumber": 67
+        },
+        {
+          "caller": "startCompare",
+          "callee": "emit",
+          "lineNumber": 68
+        },
+        {
+          "caller": "startCompare",
+          "callee": "list.map",
+          "lineNumber": 68
+        },
+        {
+          "caller": "startCompare",
+          "callee": "label",
+          "lineNumber": 68
+        },
+        {
+          "caller": "startCompare",
+          "callee": "Promise.all",
+          "lineNumber": 69
+        },
+        {
+          "caller": "startCompare",
+          "callee": "list.map",
+          "lineNumber": 70
+        },
+        {
+          "caller": "startCompare",
+          "callee": "Date.now",
+          "lineNumber": 71
+        },
+        {
+          "caller": "startCompare",
+          "callee": "askClaude",
+          "lineNumber": 73
+        },
+        {
+          "caller": "startCompare",
+          "callee": "askCodex",
+          "lineNumber": 73
+        },
+        {
+          "caller": "startCompare",
+          "callee": "askOpenRouter",
+          "lineNumber": 73
+        },
+        {
+          "caller": "startCompare",
+          "callee": "label",
+          "lineNumber": 74
+        },
+        {
+          "caller": "startCompare",
+          "callee": "Math.round",
+          "lineNumber": 74
+        },
+        {
+          "caller": "startCompare",
+          "callee": "Date.now",
+          "lineNumber": 74
+        },
+        {
+          "caller": "startCompare",
+          "callee": "emit",
+          "lineNumber": 75
+        },
+        {
+          "caller": "startCompare",
+          "callee": "label",
+          "lineNumber": 78
+        },
+        {
+          "caller": "startCompare",
+          "callee": "emit",
+          "lineNumber": 79
+        },
+        {
+          "caller": "startCompare",
+          "callee": "answers.reduce",
+          "lineNumber": 84
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/git.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 65,
+      "nonEmptyLines": 57,
+      "functions": [
+        {
+          "name": "git",
+          "startLine": 11,
+          "endLine": 13,
+          "params": [
+            "cwd",
+            "...args"
+          ]
+        },
+        {
+          "name": "commitAll",
+          "startLine": 16,
+          "endLine": 21,
+          "params": [
+            "cwd",
+            "message"
+          ]
+        },
+        {
+          "name": "ensureRepo",
+          "startLine": 23,
+          "endLine": 28,
+          "params": [
+            "workspace"
+          ]
+        },
+        {
+          "name": "createWorktree",
+          "startLine": 31,
+          "endLine": 40,
+          "params": [
+            "workspace",
+            "root",
+            "name"
+          ]
+        },
+        {
+          "name": "changes",
+          "startLine": 43,
+          "endLine": 49,
+          "params": [
+            "dir",
+            "base"
+          ]
+        },
+        {
+          "name": "mergeBranch",
+          "startLine": 52,
+          "endLine": 61,
+          "params": [
+            "workspace",
+            "branch",
+            "message"
+          ]
+        },
+        {
+          "name": "removeWorktree",
+          "startLine": 63,
+          "endLine": 65,
+          "params": [
+            "workspace",
+            "dir"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "git",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "commitAll",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "ensureRepo",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "createWorktree",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "changes",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "mergeBranch",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "removeWorktree",
+          "line": 63,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "git",
+          "callee": "execFileSync(\"git\", [...ID, ...args], { cwd, encoding: \"utf8\", stdio: [\"ignore\", \"pipe\", \"pipe\"] }).trim",
+          "lineNumber": 12
+        },
+        {
+          "caller": "git",
+          "callee": "execFileSync",
+          "lineNumber": 12
+        },
+        {
+          "caller": "commitAll",
+          "callee": "git",
+          "lineNumber": 17
+        },
+        {
+          "caller": "commitAll",
+          "callee": "git",
+          "lineNumber": 18
+        },
+        {
+          "caller": "commitAll",
+          "callee": "git",
+          "lineNumber": 19
+        },
+        {
+          "caller": "ensureRepo",
+          "callee": "existsSync",
+          "lineNumber": 24
+        },
+        {
+          "caller": "ensureRepo",
+          "callee": "join",
+          "lineNumber": 24
+        },
+        {
+          "caller": "ensureRepo",
+          "callee": "git",
+          "lineNumber": 25
+        },
+        {
+          "caller": "ensureRepo",
+          "callee": "commitAll",
+          "lineNumber": 26
+        },
+        {
+          "caller": "ensureRepo",
+          "callee": "git",
+          "lineNumber": 26
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "commitAll",
+          "lineNumber": 32
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "mkdirSync",
+          "lineNumber": 33
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "join",
+          "lineNumber": 34
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "existsSync",
+          "lineNumber": 36
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "git",
+          "lineNumber": 36
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "git",
+          "lineNumber": 37
+        },
+        {
+          "caller": "createWorktree",
+          "callee": "git",
+          "lineNumber": 38
+        },
+        {
+          "caller": "changes",
+          "callee": "commitAll",
+          "lineNumber": 44
+        },
+        {
+          "caller": "changes",
+          "callee": "git",
+          "lineNumber": 46
+        },
+        {
+          "caller": "changes",
+          "callee": "git",
+          "lineNumber": 47
+        },
+        {
+          "caller": "mergeBranch",
+          "callee": "commitAll",
+          "lineNumber": 53
+        },
+        {
+          "caller": "mergeBranch",
+          "callee": "git",
+          "lineNumber": 55
+        },
+        {
+          "caller": "mergeBranch",
+          "callee": "git",
+          "lineNumber": 58
+        },
+        {
+          "caller": "mergeBranch",
+          "callee": "String(err.stderr || err.message).split",
+          "lineNumber": 59
+        },
+        {
+          "caller": "mergeBranch",
+          "callee": "String",
+          "lineNumber": 59
+        },
+        {
+          "caller": "removeWorktree",
+          "callee": "git",
+          "lineNumber": 64
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 7,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/library-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 44,
+      "nonEmptyLines": 42,
+      "functions": [
+        {
+          "name": "text",
+          "startLine": 6,
+          "endLine": 6,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "libraryTools",
+          "startLine": 9,
+          "endLine": 44,
+          "params": [
+            "library",
+            "who"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "LIBRARY_TOOL_NAMES",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "libraryTools",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "libraryTools",
+          "callee": "createSdkMcpServer",
+          "lineNumber": 10
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "tool",
+          "lineNumber": 14
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "text",
+          "lineNumber": 14
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "library.list",
+          "lineNumber": 14
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "tool",
+          "lineNumber": 15
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string().describe",
+          "lineNumber": 18
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string",
+          "lineNumber": 18
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "library.read",
+          "lineNumber": 20
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "text",
+          "lineNumber": 21
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "text",
+          "lineNumber": 22
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "[\n            r.text !== null ? r.text : \"(This note only exists as an unsaved draft so far.)\",\n            r.draft !== null && `\\n--- unsaved draft by ${r.draftInfo?.by ?? \"someone\"} ---\\n${r.draft}`,\n          ].filter(Boolean).join",
+          "lineNumber": 22
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "[\n            r.text !== null ? r.text : \"(This note only exists as an unsaved draft so far.)\",\n            r.draft !== null && `\\n--- unsaved draft by ${r.draftInfo?.by ?? \"someone\"} ---\\n${r.draft}`,\n          ].filter",
+          "lineNumber": 22
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "tool",
+          "lineNumber": 28
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string().describe",
+          "lineNumber": 33
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string",
+          "lineNumber": 33
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string().describe",
+          "lineNumber": 34
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string",
+          "lineNumber": 34
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string().describe",
+          "lineNumber": 35
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "z.string",
+          "lineNumber": 35
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "library.draft",
+          "lineNumber": 38
+        },
+        {
+          "caller": "libraryTools",
+          "callee": "text",
+          "lineNumber": 39
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/talk-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 51,
+      "nonEmptyLines": 48,
+      "functions": [
+        {
+          "name": "text",
+          "startLine": 7,
+          "endLine": 7,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "talkTools",
+          "startLine": 12,
+          "endLine": 43,
+          "params": [
+            "board",
+            "who",
+            "seen"
+          ]
+        },
+        {
+          "name": "talkDigest",
+          "startLine": 46,
+          "endLine": 51,
+          "params": [
+            "board",
+            "who",
+            "seen"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TALK_TOOL_NAMES",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "talkTools",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "talkDigest",
+          "line": 46,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "talkTools",
+          "callee": "createSdkMcpServer",
+          "lineNumber": 13
+        },
+        {
+          "caller": "talkTools",
+          "callee": "tool",
+          "lineNumber": 17
+        },
+        {
+          "caller": "talkTools",
+          "callee": "z.string().describe",
+          "lineNumber": 22
+        },
+        {
+          "caller": "talkTools",
+          "callee": "z.string",
+          "lineNumber": 22
+        },
+        {
+          "caller": "talkTools",
+          "callee": "z.enum([\"lead\", \"claude\", \"codex\", \"openrouter\"]).optional().describe",
+          "lineNumber": 23
+        },
+        {
+          "caller": "talkTools",
+          "callee": "z.enum([\"lead\", \"claude\", \"codex\", \"openrouter\"]).optional",
+          "lineNumber": 23
+        },
+        {
+          "caller": "talkTools",
+          "callee": "z.enum",
+          "lineNumber": 23
+        },
+        {
+          "caller": "talkTools",
+          "callee": "text",
+          "lineNumber": 26
+        },
+        {
+          "caller": "talkTools",
+          "callee": "text",
+          "lineNumber": 27
+        },
+        {
+          "caller": "talkTools",
+          "callee": "board.say",
+          "lineNumber": 27
+        },
+        {
+          "caller": "talkTools",
+          "callee": "tool",
+          "lineNumber": 30
+        },
+        {
+          "caller": "talkTools",
+          "callee": "board.talkFor",
+          "lineNumber": 35
+        },
+        {
+          "caller": "talkTools",
+          "callee": "seen.get",
+          "lineNumber": 35
+        },
+        {
+          "caller": "talkTools",
+          "callee": "text",
+          "lineNumber": 36
+        },
+        {
+          "caller": "talkTools",
+          "callee": "seen.set",
+          "lineNumber": 37
+        },
+        {
+          "caller": "talkTools",
+          "callee": "msgs.at",
+          "lineNumber": 37
+        },
+        {
+          "caller": "talkTools",
+          "callee": "text",
+          "lineNumber": 38
+        },
+        {
+          "caller": "talkTools",
+          "callee": "msgs.map(board.talkLine).join",
+          "lineNumber": 38
+        },
+        {
+          "caller": "talkTools",
+          "callee": "msgs.map",
+          "lineNumber": 38
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "board.talkFor",
+          "lineNumber": 47
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "seen.get",
+          "lineNumber": 47
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "seen.set",
+          "lineNumber": 49
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "msgs.at",
+          "lineNumber": 49
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "msgs.map(board.talkLine).join",
+          "lineNumber": 50
+        },
+        {
+          "caller": "talkDigest",
+          "callee": "msgs.map",
+          "lineNumber": 50
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/team.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 320,
+      "nonEmptyLines": 296,
+      "functions": [
+        {
+          "name": "startTeam",
+          "startLine": 23,
+          "endLine": 318,
+          "params": []
+        },
+        {
+          "name": "worktreeRootFor",
+          "startLine": 320,
+          "endLine": 320,
+          "params": [
+            "dataDir"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "NAMES",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "startTeam",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "worktreeRootFor",
+          "line": 320,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "startTeam",
+          "callee": "Object.fromEntries",
+          "lineNumber": 28
+        },
+        {
+          "caller": "startTeam",
+          "callee": "Object.entries(ALL).filter",
+          "lineNumber": 28
+        },
+        {
+          "caller": "startTeam",
+          "callee": "Object.entries",
+          "lineNumber": 28
+        },
+        {
+          "caller": "startTeam",
+          "callee": "members.includes",
+          "lineNumber": 28
+        },
+        {
+          "caller": "startTeam",
+          "callee": "Object.keys",
+          "lineNumber": 29
+        },
+        {
+          "caller": "startTeam",
+          "callee": "Object.keys",
+          "lineNumber": 30
+        },
+        {
+          "caller": "unavailable",
+          "callee": "codex.unavailableReason",
+          "lineNumber": 32
+        },
+        {
+          "caller": "checkersFor",
+          "callee": "workers.filter",
+          "lineNumber": 33
+        },
+        {
+          "caller": "checkersFor",
+          "callee": "unavailable",
+          "lineNumber": 33
+        },
+        {
+          "caller": "status",
+          "callee": "emit",
+          "lineNumber": 35
+        },
+        {
+          "caller": "activity",
+          "callee": "emit",
+          "lineNumber": 36
+        },
+        {
+          "caller": "onEdit",
+          "callee": "relative(dir, resolve(dir, path)).split(sep).join",
+          "lineNumber": 46
+        },
+        {
+          "caller": "onEdit",
+          "callee": "relative(dir, resolve(dir, path)).split",
+          "lineNumber": 46
+        },
+        {
+          "caller": "onEdit",
+          "callee": "relative",
+          "lineNumber": 46
+        },
+        {
+          "caller": "onEdit",
+          "callee": "resolve",
+          "lineNumber": 46
+        },
+        {
+          "caller": "onEdit",
+          "callee": "file.startsWith",
+          "lineNumber": 47
+        },
+        {
+          "caller": "onEdit",
+          "callee": "noted.has",
+          "lineNumber": 48
+        },
+        {
+          "caller": "onEdit",
+          "callee": "noted.add",
+          "lineNumber": 49
+        },
+        {
+          "caller": "onEdit",
+          "callee": "board.say",
+          "lineNumber": 50
+        },
+        {
+          "caller": "onEdit",
+          "callee": "editors.get",
+          "lineNumber": 52
+        },
+        {
+          "caller": "onEdit",
+          "callee": "who.add",
+          "lineNumber": 53
+        },
+        {
+          "caller": "onEdit",
+          "callee": "editors.set",
+          "lineNumber": 54
+        },
+        {
+          "caller": "onEdit",
+          "callee": "[...jobs.values()].map",
+          "lineNumber": 55
+        },
+        {
+          "caller": "onEdit",
+          "callee": "jobs.values",
+          "lineNumber": 55
+        },
+        {
+          "caller": "onEdit",
+          "callee": "[...who].filter",
+          "lineNumber": 56
+        },
+        {
+          "caller": "onEdit",
+          "callee": "active.has",
+          "lineNumber": 56
+        },
+        {
+          "caller": "onEdit",
+          "callee": "[o, worker].sort().join",
+          "lineNumber": 57
+        },
+        {
+          "caller": "onEdit",
+          "callee": "[o, worker].sort",
+          "lineNumber": 57
+        },
+        {
+          "caller": "onEdit",
+          "callee": "warned.has",
+          "lineNumber": 58
+        },
+        {
+          "caller": "onEdit",
+          "callee": "warned.add",
+          "lineNumber": 59
+        },
+        {
+          "caller": "onEdit",
+          "callee": "board.say",
+          "lineNumber": 60
+        },
+        {
+          "caller": "inside",
+          "callee": "(resolve(dir, p) + sep).toLowerCase().startsWith",
+          "lineNumber": 66
+        },
+        {
+          "caller": "inside",
+          "callee": "(resolve(dir, p) + sep).toLowerCase",
+          "lineNumber": 66
+        },
+        {
+          "caller": "inside",
+          "callee": "resolve",
+          "lineNumber": 66
+        },
+        {
+          "caller": "inside",
+          "callee": "(resolve(dir) + sep).toLowerCase",
+          "lineNumber": 66
+        },
+        {
+          "caller": "inside",
+          "callee": "resolve",
+          "lineNumber": 66
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "[\"lead\", ...workers.filter((w) => w !== agent)].join",
+          "lineNumber": 67
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "workers.filter",
+          "lineNumber": 67
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "claudeSession",
+          "lineNumber": 68
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "library?.guide",
+          "lineNumber": 73
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "talkTools",
+          "lineNumber": 75
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "libraryTools",
+          "lineNumber": 75
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "name.startsWith",
+          "lineNumber": 78
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "activity",
+          "lineNumber": 79
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "EDIT_TOOLS.has",
+          "lineNumber": 80
+        },
+        {
+          "caller": "claudeWorker",
+          "callee": "onEdit",
+          "lineNumber": 80
+        },
+        {
+          "caller": "canUseTool",
+          "callee": "EDIT_TOOLS.has",
+          "lineNumber": 84
+        },
+        {
+          "caller": "canUseTool",
+          "callee": "inside",
+          "lineNumber": 86
+        },
+        {
+          "caller": "canUseTool",
+          "callee": "gate.request",
+          "lineNumber": 88
+        },
+        {
+          "caller": "codexWorker",
+          "callee": "codex.thread",
+          "lineNumber": 96
+        },
+        {
+          "caller": "onItem",
+          "callee": "activity",
+          "lineNumber": 100
+        },
+        {
+          "caller": "onItem",
+          "callee": "files.set",
+          "lineNumber": 102
+        },
+        {
+          "caller": "onItem",
+          "callee": "item.changes.map",
+          "lineNumber": 102
+        },
+        {
+          "caller": "onItem",
+          "callee": "activity",
+          "lineNumber": 103
+        },
+        {
+          "caller": "onItem",
+          "callee": "item.changes.map((c) => c.path).join",
+          "lineNumber": 103
+        },
+        {
+          "caller": "onItem",
+          "callee": "item.changes.map",
+          "lineNumber": 103
+        },
+        {
+          "caller": "onItem",
+          "callee": "onEdit",
+          "lineNumber": 104
+        },
+        {
+          "caller": "onRequest",
+          "callee": "gate.request",
+          "lineNumber": 109
+        },
+        {
+          "caller": "onRequest",
+          "callee": "gate.request",
+          "lineNumber": 114
+        },
+        {
+          "caller": "onRequest",
+          "callee": "(files.get(p.itemId) ?? []).join",
+          "lineNumber": 114
+        },
+        {
+          "caller": "onRequest",
+          "callee": "files.get",
+          "lineNumber": 114
+        },
+        {
+          "caller": "codexWorker",
+          "callee": "t.run",
+          "lineNumber": 122
+        },
+        {
+          "caller": "codexWorker",
+          "callee": "t.run",
+          "lineNumber": 123
+        },
+        {
+          "caller": "open",
+          "callee": "codexWorker",
+          "lineNumber": 129
+        },
+        {
+          "caller": "open",
+          "callee": "claudeWorker",
+          "lineNumber": 130
+        },
+        {
+          "caller": "open",
+          "callee": "claudeWorker",
+          "lineNumber": 131
+        },
+        {
+          "caller": "withTalk",
+          "callee": "talkDigest",
+          "lineNumber": 136
+        },
+        {
+          "caller": "workPrompt",
+          "callee": "[\r\n      `Your task (#${task.num}): ${task.title}`,\r\n      task.detail && `Details: ${task.detail}`,\r\n      `It is part of the goal \"${goal.title}\", which is done when: ${goal.done_when}`,\r\n      `Work only inside ${dir}. It is your own copy of the project; other workers have their own.`,\r\n      `Make the change, check that it works, then finish with a plain 2-4 sentence summary of what you changed and how you checked it. Do not commit; Trident does that.`,\r\n    ].filter(Boolean).join",
+          "lineNumber": 140
+        },
+        {
+          "caller": "workPrompt",
+          "callee": "[\r\n      `Your task (#${task.num}): ${task.title}`,\r\n      task.detail && `Details: ${task.detail}`,\r\n      `It is part of the goal \"${goal.title}\", which is done when: ${goal.done_when}`,\r\n      `Work only inside ${dir}. It is your own copy of the project; other workers have their own.`,\r\n      `Make the change, check that it works, then finish with a plain 2-4 sentence summary of what you changed and how you checked it. Do not commit; Trident does that.`,\r\n    ].filter",
+          "lineNumber": 140
+        },
+        {
+          "caller": "checkPrompt",
+          "callee": "diff.slice",
+          "lineNumber": 150
+        },
+        {
+          "caller": "checkPrompt",
+          "callee": "[\r\n      `You are cross-checking another agent's work. Do not change any files.`,\r\n      `Task (#${task.num}): ${task.title}`,\r\n      task.detail && `Details: ${task.detail}`,\r\n      `Goal: ${goal.title}. Done when: ${goal.done_when}`,\r\n      `The worker says: ${summary || \"(no summary)\"}`,\r\n      `The changes (git diff):\\n\\`\\`\\`diff\\n${shown || \"(no file changes)\"}\\n\\`\\`\\``,\r\n      `The changed project is in ${dir}. Read files there, and run checks if useful. Judge only this task: is it done correctly and completely, with nothing broken? Small style preferences are not failures.`,\r\n      `Answer with JSON only: {\"verdict\": \"pass\" or \"fail\", \"notes\": \"one to three plain sentences\"}.`,\r\n    ].filter(Boolean).join",
+          "lineNumber": 151
+        },
+        {
+          "caller": "checkPrompt",
+          "callee": "[\r\n      `You are cross-checking another agent's work. Do not change any files.`,\r\n      `Task (#${task.num}): ${task.title}`,\r\n      task.detail && `Details: ${task.detail}`,\r\n      `Goal: ${goal.title}. Done when: ${goal.done_when}`,\r\n      `The worker says: ${summary || \"(no summary)\"}`,\r\n      `The changes (git diff):\\n\\`\\`\\`diff\\n${shown || \"(no file changes)\"}\\n\\`\\`\\``,\r\n      `The changed project is in ${dir}. Read files there, and run checks if useful. Judge only this task: is it done correctly and completely, with nothing broken? Small style preferences are not failures.`,\r\n      `Answer with JSON only: {\"verdict\": \"pass\" or \"fail\", \"notes\": \"one to three plain sentences\"}.`,\r\n    ].filter",
+          "lineNumber": 151
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "String(text).match",
+          "lineNumber": 164
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "String",
+          "lineNumber": 164
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "JSON.parse",
+          "lineNumber": 166
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "String",
+          "lineNumber": 167
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "String(text).slice",
+          "lineNumber": 169
+        },
+        {
+          "caller": "parseVerdict",
+          "callee": "String",
+          "lineNumber": 169
+        },
+        {
+          "caller": "oneLine",
+          "callee": "String(s).replace(/\\s+/g, \" \").trim",
+          "lineNumber": 172
+        },
+        {
+          "caller": "oneLine",
+          "callee": "String(s).replace",
+          "lineNumber": 172
+        },
+        {
+          "caller": "oneLine",
+          "callee": "String",
+          "lineNumber": 172
+        },
+        {
+          "caller": "oneLine",
+          "callee": "t.slice",
+          "lineNumber": 172
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "status",
+          "lineNumber": 175
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "open",
+          "lineNumber": 176
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "checkPrompt",
+          "lineNumber": 178
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "parseVerdict",
+          "lineNumber": 179
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "reviewer.check",
+          "lineNumber": 179
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "reviewer.run",
+          "lineNumber": 179
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "reviewer.close",
+          "lineNumber": 181
+        },
+        {
+          "caller": "crossCheck",
+          "callee": "status",
+          "lineNumber": 182
+        },
+        {
+          "caller": "round",
+          "callee": "jobs.get",
+          "lineNumber": 188
+        },
+        {
+          "caller": "round",
+          "callee": "status",
+          "lineNumber": 191
+        },
+        {
+          "caller": "round",
+          "callee": "job.session.run",
+          "lineNumber": 192
+        },
+        {
+          "caller": "round",
+          "callee": "withTalk",
+          "lineNumber": 192
+        },
+        {
+          "caller": "round",
+          "callee": "jobs.get",
+          "lineNumber": 193
+        },
+        {
+          "caller": "round",
+          "callee": "status",
+          "lineNumber": 194
+        },
+        {
+          "caller": "round",
+          "callee": "changes",
+          "lineNumber": 195
+        },
+        {
+          "caller": "round",
+          "callee": "board.task",
+          "lineNumber": 197
+        },
+        {
+          "caller": "round",
+          "callee": "board.updateTask",
+          "lineNumber": 198
+        },
+        {
+          "caller": "round",
+          "callee": "oneLine",
+          "lineNumber": 198
+        },
+        {
+          "caller": "round",
+          "callee": "checkersFor",
+          "lineNumber": 202
+        },
+        {
+          "caller": "round",
+          "callee": "board.updateTask",
+          "lineNumber": 204
+        },
+        {
+          "caller": "round",
+          "callee": "crossCheck",
+          "lineNumber": 206
+        },
+        {
+          "caller": "round",
+          "callee": "skipped.push",
+          "lineNumber": 209
+        },
+        {
+          "caller": "round",
+          "callee": "oneLine",
+          "lineNumber": 209
+        },
+        {
+          "caller": "round",
+          "callee": "skipped.join",
+          "lineNumber": 213
+        },
+        {
+          "caller": "round",
+          "callee": "board.updateTask",
+          "lineNumber": 214
+        },
+        {
+          "caller": "round",
+          "callee": "oneLine",
+          "lineNumber": 214
+        },
+        {
+          "caller": "round",
+          "callee": "emit",
+          "lineNumber": 216
+        },
+        {
+          "caller": "round",
+          "callee": "tellLead",
+          "lineNumber": 217
+        },
+        {
+          "caller": "round",
+          "callee": "v.verdict.toUpperCase",
+          "lineNumber": 221
+        },
+        {
+          "caller": "round",
+          "callee": "status",
+          "lineNumber": 225
+        },
+        {
+          "caller": "round",
+          "callee": "board.updateTask",
+          "lineNumber": 226
+        },
+        {
+          "caller": "round",
+          "callee": "oneLine",
+          "lineNumber": 226
+        },
+        {
+          "caller": "round",
+          "callee": "tellLead",
+          "lineNumber": 227
+        },
+        {
+          "caller": "limit",
+          "callee": "settings?.get",
+          "lineNumber": 235
+        },
+        {
+          "caller": "startRound",
+          "callee": "limit",
+          "lineNumber": 237
+        },
+        {
+          "caller": "startRound",
+          "callee": "queue.push",
+          "lineNumber": 238
+        },
+        {
+          "caller": "startRound",
+          "callee": "board.updateTask",
+          "lineNumber": 239
+        },
+        {
+          "caller": "startRound",
+          "callee": "limit",
+          "lineNumber": 239
+        },
+        {
+          "caller": "startRound",
+          "callee": "round(num, message).finally",
+          "lineNumber": 243
+        },
+        {
+          "caller": "startRound",
+          "callee": "round",
+          "lineNumber": 243
+        },
+        {
+          "caller": "startRound",
+          "callee": "limit",
+          "lineNumber": 245
+        },
+        {
+          "caller": "startRound",
+          "callee": "queue.shift",
+          "lineNumber": 246
+        },
+        {
+          "caller": "startRound",
+          "callee": "jobs.has",
+          "lineNumber": 247
+        },
+        {
+          "caller": "startRound",
+          "callee": "startRound",
+          "lineNumber": 247
+        },
+        {
+          "caller": "assign",
+          "callee": "workers.join",
+          "lineNumber": 258
+        },
+        {
+          "caller": "assign",
+          "callee": "unavailable",
+          "lineNumber": 259
+        },
+        {
+          "caller": "assign",
+          "callee": "unavailable",
+          "lineNumber": 259
+        },
+        {
+          "caller": "assign",
+          "callee": "board.task",
+          "lineNumber": 260
+        },
+        {
+          "caller": "assign",
+          "callee": "jobs.has",
+          "lineNumber": 263
+        },
+        {
+          "caller": "assign",
+          "callee": "jobs.get",
+          "lineNumber": 263
+        },
+        {
+          "caller": "assign",
+          "callee": "ctx.task.depends_on.filter",
+          "lineNumber": 264
+        },
+        {
+          "caller": "assign",
+          "callee": "ctx.tasks.find",
+          "lineNumber": 264
+        },
+        {
+          "caller": "assign",
+          "callee": "waiting.join",
+          "lineNumber": 265
+        },
+        {
+          "caller": "assign",
+          "callee": "jobs.get(num)?.session.close",
+          "lineNumber": 267
+        },
+        {
+          "caller": "assign",
+          "callee": "jobs.get",
+          "lineNumber": 267
+        },
+        {
+          "caller": "assign",
+          "callee": "createWorktree",
+          "lineNumber": 268
+        },
+        {
+          "caller": "assign",
+          "callee": "board.updateTask",
+          "lineNumber": 269
+        },
+        {
+          "caller": "assign",
+          "callee": "open",
+          "lineNumber": 270
+        },
+        {
+          "caller": "assign",
+          "callee": "jobs.set",
+          "lineNumber": 271
+        },
+        {
+          "caller": "assign",
+          "callee": "workPrompt",
+          "lineNumber": 272
+        },
+        {
+          "caller": "assign",
+          "callee": "board.task",
+          "lineNumber": 272
+        },
+        {
+          "caller": "assign",
+          "callee": "startRound",
+          "lineNumber": 274
+        },
+        {
+          "caller": "assign",
+          "callee": "limit",
+          "lineNumber": 274
+        },
+        {
+          "caller": "reject",
+          "callee": "jobs.get",
+          "lineNumber": 279
+        },
+        {
+          "caller": "reject",
+          "callee": "board.task",
+          "lineNumber": 280
+        },
+        {
+          "caller": "reject",
+          "callee": "board.updateTask",
+          "lineNumber": 282
+        },
+        {
+          "caller": "reject",
+          "callee": "emit",
+          "lineNumber": 283
+        },
+        {
+          "caller": "reject",
+          "callee": "startRound",
+          "lineNumber": 284
+        },
+        {
+          "caller": "accept",
+          "callee": "board.task",
+          "lineNumber": 289
+        },
+        {
+          "caller": "accept",
+          "callee": "mergeBranch",
+          "lineNumber": 291
+        },
+        {
+          "caller": "accept",
+          "callee": "board.updateTask",
+          "lineNumber": 293
+        },
+        {
+          "caller": "accept",
+          "callee": "oneLine",
+          "lineNumber": 293
+        },
+        {
+          "caller": "accept",
+          "callee": "jobs.get(num)?.session.close",
+          "lineNumber": 296
+        },
+        {
+          "caller": "accept",
+          "callee": "jobs.get",
+          "lineNumber": 296
+        },
+        {
+          "caller": "accept",
+          "callee": "jobs.delete",
+          "lineNumber": 297
+        },
+        {
+          "caller": "accept",
+          "callee": "removeWorktree",
+          "lineNumber": 298
+        },
+        {
+          "caller": "accept",
+          "callee": "board.updateTask",
+          "lineNumber": 299
+        },
+        {
+          "caller": "accept",
+          "callee": "oneLine",
+          "lineNumber": 299
+        },
+        {
+          "caller": "accept",
+          "callee": "emit",
+          "lineNumber": 300
+        },
+        {
+          "caller": "stopAll",
+          "callee": "j.session.close",
+          "lineNumber": 308
+        },
+        {
+          "caller": "stopAll",
+          "callee": "status",
+          "lineNumber": 309
+        },
+        {
+          "caller": "stopAll",
+          "callee": "jobs.delete",
+          "lineNumber": 310
+        },
+        {
+          "caller": "stopAll",
+          "callee": "noted.clear",
+          "lineNumber": 313
+        },
+        {
+          "caller": "stopAll",
+          "callee": "warned.clear",
+          "lineNumber": 314
+        },
+        {
+          "caller": "stopAll",
+          "callee": "editors.clear",
+          "lineNumber": 315
+        },
+        {
+          "caller": "worktreeRootFor",
+          "callee": "join",
+          "lineNumber": 320
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/workplaces.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 141,
+      "nonEmptyLines": 128,
+      "functions": [
+        {
+          "name": "openWorkplaces",
+          "startLine": 17,
+          "endLine": 141,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "openWorkplaces",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "openWorkplaces",
+          "callee": "join",
+          "lineNumber": 18
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "JSON.parse",
+          "lineNumber": 20
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "readFileSync",
+          "lineNumber": 20
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "join",
+          "lineNumber": 22
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "Date.now",
+          "lineNumber": 22
+        },
+        {
+          "caller": "save",
+          "callee": "writeFileSync",
+          "lineNumber": 24
+        },
+        {
+          "caller": "save",
+          "callee": "JSON.stringify",
+          "lineNumber": 24
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "save",
+          "lineNumber": 25
+        },
+        {
+          "caller": "start",
+          "callee": "join",
+          "lineNumber": 30
+        },
+        {
+          "caller": "start",
+          "callee": "mkdirSync",
+          "lineNumber": 31
+        },
+        {
+          "caller": "start",
+          "callee": "mkdirSync",
+          "lineNumber": 32
+        },
+        {
+          "caller": "start",
+          "callee": "ensureRepo",
+          "lineNumber": 33
+        },
+        {
+          "caller": "emitWp",
+          "callee": "emit",
+          "lineNumber": 35
+        },
+        {
+          "caller": "start",
+          "callee": "gate.request",
+          "lineNumber": 36
+        },
+        {
+          "caller": "start",
+          "callee": "openBoard",
+          "lineNumber": 37
+        },
+        {
+          "caller": "start",
+          "callee": "join",
+          "lineNumber": 37
+        },
+        {
+          "caller": "start",
+          "callee": "startCompare",
+          "lineNumber": 38
+        },
+        {
+          "caller": "start",
+          "callee": "startTeam",
+          "lineNumber": 40
+        },
+        {
+          "caller": "start",
+          "callee": "worktreeRootFor",
+          "lineNumber": 42
+        },
+        {
+          "caller": "start",
+          "callee": "lead.send",
+          "lineNumber": 51
+        },
+        {
+          "caller": "start",
+          "callee": "startLead",
+          "lineNumber": 53
+        },
+        {
+          "caller": "start",
+          "callee": "board.changed",
+          "lineNumber": 55
+        },
+        {
+          "caller": "start",
+          "callee": "board.recentTalk",
+          "lineNumber": 56
+        },
+        {
+          "caller": "start",
+          "callee": "emitWp",
+          "lineNumber": 56
+        },
+        {
+          "caller": "start",
+          "callee": "emitWp",
+          "lineNumber": 57
+        },
+        {
+          "caller": "start",
+          "callee": "emitWp",
+          "lineNumber": 58
+        },
+        {
+          "caller": "start",
+          "callee": "live.set",
+          "lineNumber": 60
+        },
+        {
+          "caller": "summary",
+          "callee": "live.get",
+          "lineNumber": 65
+        },
+        {
+          "caller": "announce",
+          "callee": "emit",
+          "lineNumber": 66
+        },
+        {
+          "caller": "announce",
+          "callee": "list.map",
+          "lineNumber": 66
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "isAbsolute",
+          "lineNumber": 70
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "resolve",
+          "lineNumber": 71
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "parse",
+          "lineNumber": 72
+        },
+        {
+          "caller": "lower",
+          "callee": "resolve(p).toLowerCase",
+          "lineNumber": 73
+        },
+        {
+          "caller": "lower",
+          "callee": "resolve",
+          "lineNumber": 73
+        },
+        {
+          "caller": "inside",
+          "callee": "lower(a).startsWith",
+          "lineNumber": 74
+        },
+        {
+          "caller": "inside",
+          "callee": "lower",
+          "lineNumber": 74
+        },
+        {
+          "caller": "inside",
+          "callee": "lower",
+          "lineNumber": 74
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "inside",
+          "lineNumber": 75
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "inside",
+          "lineNumber": 75
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "join",
+          "lineNumber": 75
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "inside",
+          "lineNumber": 75
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "join",
+          "lineNumber": 75
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "list.find",
+          "lineNumber": 76
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "inside",
+          "lineNumber": 76
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "inside",
+          "lineNumber": 76
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "existsSync",
+          "lineNumber": 78
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "statSync(f).isDirectory",
+          "lineNumber": 78
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "statSync",
+          "lineNumber": 78
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "existsSync",
+          "lineNumber": 79
+        },
+        {
+          "caller": "checkFolder",
+          "callee": "join",
+          "lineNumber": 79
+        },
+        {
+          "caller": "create",
+          "callee": "String(name ?? \"\").trim().slice",
+          "lineNumber": 84
+        },
+        {
+          "caller": "create",
+          "callee": "String(name ?? \"\").trim",
+          "lineNumber": 84
+        },
+        {
+          "caller": "create",
+          "callee": "String",
+          "lineNumber": 84
+        },
+        {
+          "caller": "create",
+          "callee": "list.some",
+          "lineNumber": 86
+        },
+        {
+          "caller": "create",
+          "callee": "w.name.toLowerCase",
+          "lineNumber": 86
+        },
+        {
+          "caller": "create",
+          "callee": "name.toLowerCase",
+          "lineNumber": 86
+        },
+        {
+          "caller": "create",
+          "callee": "name.toLowerCase().replace(/[^a-z0-9]+/g, \"-\").replace",
+          "lineNumber": 87
+        },
+        {
+          "caller": "create",
+          "callee": "name.toLowerCase().replace",
+          "lineNumber": 87
+        },
+        {
+          "caller": "create",
+          "callee": "name.toLowerCase",
+          "lineNumber": 87
+        },
+        {
+          "caller": "create",
+          "callee": "randomUUID().slice",
+          "lineNumber": 88
+        },
+        {
+          "caller": "create",
+          "callee": "randomUUID",
+          "lineNumber": 88
+        },
+        {
+          "caller": "create",
+          "callee": "String(folder ?? \"\").trim",
+          "lineNumber": 89
+        },
+        {
+          "caller": "create",
+          "callee": "String",
+          "lineNumber": 89
+        },
+        {
+          "caller": "create",
+          "callee": "join",
+          "lineNumber": 89
+        },
+        {
+          "caller": "create",
+          "callee": "checkFolder",
+          "lineNumber": 90
+        },
+        {
+          "caller": "create",
+          "callee": "resolve",
+          "lineNumber": 92
+        },
+        {
+          "caller": "create",
+          "callee": "(members ?? []).filter",
+          "lineNumber": 92
+        },
+        {
+          "caller": "create",
+          "callee": "KNOWN_WORKERS.includes",
+          "lineNumber": 92
+        },
+        {
+          "caller": "create",
+          "callee": "Date.now",
+          "lineNumber": 92
+        },
+        {
+          "caller": "create",
+          "callee": "list.push",
+          "lineNumber": 93
+        },
+        {
+          "caller": "create",
+          "callee": "save",
+          "lineNumber": 94
+        },
+        {
+          "caller": "create",
+          "callee": "start",
+          "lineNumber": 95
+        },
+        {
+          "caller": "create",
+          "callee": "announce",
+          "lineNumber": 96
+        },
+        {
+          "caller": "create",
+          "callee": "summary",
+          "lineNumber": 97
+        },
+        {
+          "caller": "remove",
+          "callee": "live.get",
+          "lineNumber": 103
+        },
+        {
+          "caller": "remove",
+          "callee": "w.team.stopAll",
+          "lineNumber": 106
+        },
+        {
+          "caller": "remove",
+          "callee": "w.lead.close",
+          "lineNumber": 107
+        },
+        {
+          "caller": "remove",
+          "callee": "live.delete",
+          "lineNumber": 108
+        },
+        {
+          "caller": "remove",
+          "callee": "list.filter",
+          "lineNumber": 109
+        },
+        {
+          "caller": "remove",
+          "callee": "save",
+          "lineNumber": 110
+        },
+        {
+          "caller": "remove",
+          "callee": "join",
+          "lineNumber": 111
+        },
+        {
+          "caller": "remove",
+          "callee": "JSON.parse",
+          "lineNumber": 113
+        },
+        {
+          "caller": "remove",
+          "callee": "readFileSync",
+          "lineNumber": 113
+        },
+        {
+          "caller": "remove",
+          "callee": "archived.push",
+          "lineNumber": 114
+        },
+        {
+          "caller": "remove",
+          "callee": "Date.now",
+          "lineNumber": 114
+        },
+        {
+          "caller": "remove",
+          "callee": "writeFileSync",
+          "lineNumber": 115
+        },
+        {
+          "caller": "remove",
+          "callee": "JSON.stringify",
+          "lineNumber": 115
+        },
+        {
+          "caller": "remove",
+          "callee": "announce",
+          "lineNumber": 116
+        },
+        {
+          "caller": "cancelGoal",
+          "callee": "live.get",
+          "lineNumber": 122
+        },
+        {
+          "caller": "cancelGoal",
+          "callee": "w.team.stopAll",
+          "lineNumber": 124
+        },
+        {
+          "caller": "cancelGoal",
+          "callee": "w.board.setGoalStatus",
+          "lineNumber": 125
+        },
+        {
+          "caller": "cancelGoal",
+          "callee": "emit",
+          "lineNumber": 126
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "start",
+          "lineNumber": 130
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "announce",
+          "lineNumber": 131
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "live.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "openWorkplaces",
+          "callee": "live.values",
+          "lineNumber": 135
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

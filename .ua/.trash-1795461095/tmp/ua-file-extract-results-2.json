@@ -1,0 +1,1390 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 5,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/codex.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 138,
+      "nonEmptyLines": 129,
+      "functions": [
+        {
+          "name": "isolationArgs",
+          "startLine": 11,
+          "endLine": 18,
+          "params": []
+        },
+        {
+          "name": "plainError",
+          "startLine": 21,
+          "endLine": 27,
+          "params": [
+            "msg"
+          ]
+        },
+        {
+          "name": "startCodex",
+          "startLine": 29,
+          "endLine": 138,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "startCodex",
+          "line": 29,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "isolationArgs",
+          "callee": "args.push",
+          "lineNumber": 13
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "readFileSync",
+          "lineNumber": 15
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "join",
+          "lineNumber": 15
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "join",
+          "lineNumber": 15
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "homedir",
+          "lineNumber": 15
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "config.matchAll",
+          "lineNumber": 16
+        },
+        {
+          "caller": "isolationArgs",
+          "callee": "args.push",
+          "lineNumber": 16
+        },
+        {
+          "caller": "plainError",
+          "callee": "/usage limit/i.test",
+          "lineNumber": 22
+        },
+        {
+          "caller": "plainError",
+          "callee": "msg.match",
+          "lineNumber": 23
+        },
+        {
+          "caller": "plainError",
+          "callee": "when.trim",
+          "lineNumber": 24
+        },
+        {
+          "caller": "plainError",
+          "callee": "msg.split(\"\\n\")[0].slice",
+          "lineNumber": 26
+        },
+        {
+          "caller": "plainError",
+          "callee": "msg.split",
+          "lineNumber": 26
+        },
+        {
+          "caller": "start",
+          "callee": "spawn",
+          "lineNumber": 38
+        },
+        {
+          "caller": "start",
+          "callee": "isolationArgs",
+          "lineNumber": 38
+        },
+        {
+          "caller": "start",
+          "callee": "proc.stderr.on",
+          "lineNumber": 39
+        },
+        {
+          "caller": "start",
+          "callee": "proc.on",
+          "lineNumber": 40
+        },
+        {
+          "caller": "start",
+          "callee": "pending.values",
+          "lineNumber": 41
+        },
+        {
+          "caller": "start",
+          "callee": "rej",
+          "lineNumber": 41
+        },
+        {
+          "caller": "start",
+          "callee": "pending.clear",
+          "lineNumber": 42
+        },
+        {
+          "caller": "start",
+          "callee": "threads.values",
+          "lineNumber": 43
+        },
+        {
+          "caller": "start",
+          "callee": "h.onExit",
+          "lineNumber": 43
+        },
+        {
+          "caller": "start",
+          "callee": "createInterface({ input: proc.stdout }).on",
+          "lineNumber": 47
+        },
+        {
+          "caller": "start",
+          "callee": "createInterface",
+          "lineNumber": 47
+        },
+        {
+          "caller": "start",
+          "callee": "(async () => {\r\n      await request(\"initialize\", { clientInfo: { name: \"trident\", title: \"Trident\", version: \"0.3\" }, capabilities: null });\r\n      send({ method: \"initialized\" });\r\n    })",
+          "lineNumber": 48
+        },
+        {
+          "caller": "start",
+          "callee": "request",
+          "lineNumber": 49
+        },
+        {
+          "caller": "start",
+          "callee": "send",
+          "lineNumber": 50
+        },
+        {
+          "caller": "send",
+          "callee": "proc.stdin.write",
+          "lineNumber": 55
+        },
+        {
+          "caller": "send",
+          "callee": "JSON.stringify",
+          "lineNumber": 55
+        },
+        {
+          "caller": "request",
+          "callee": "pending.set",
+          "lineNumber": 59
+        },
+        {
+          "caller": "request",
+          "callee": "send",
+          "lineNumber": 60
+        },
+        {
+          "caller": "onLine",
+          "callee": "JSON.parse",
+          "lineNumber": 66
+        },
+        {
+          "caller": "onLine",
+          "callee": "pending.get",
+          "lineNumber": 68
+        },
+        {
+          "caller": "onLine",
+          "callee": "pending.delete",
+          "lineNumber": 70
+        },
+        {
+          "caller": "onLine",
+          "callee": "p.rej",
+          "lineNumber": 71
+        },
+        {
+          "caller": "onLine",
+          "callee": "JSON.stringify",
+          "lineNumber": 71
+        },
+        {
+          "caller": "onLine",
+          "callee": "p.res",
+          "lineNumber": 71
+        },
+        {
+          "caller": "onLine",
+          "callee": "threads.get",
+          "lineNumber": 73
+        },
+        {
+          "caller": "onLine",
+          "callee": "Promise.resolve(h?.onRequest?.(m.method, m.params) ?? { decision: \"decline\" })\r\n        .then((result) => send({ id: m.id, result }))\r\n        .catch",
+          "lineNumber": 76
+        },
+        {
+          "caller": "onLine",
+          "callee": "Promise.resolve(h?.onRequest?.(m.method, m.params) ?? { decision: \"decline\" })\r\n        .then",
+          "lineNumber": 76
+        },
+        {
+          "caller": "onLine",
+          "callee": "Promise.resolve",
+          "lineNumber": 76
+        },
+        {
+          "caller": "onLine",
+          "callee": "h?.onRequest",
+          "lineNumber": 76
+        },
+        {
+          "caller": "onLine",
+          "callee": "send",
+          "lineNumber": 77
+        },
+        {
+          "caller": "onLine",
+          "callee": "send",
+          "lineNumber": 78
+        },
+        {
+          "caller": "onLine",
+          "callee": "h.onEvent",
+          "lineNumber": 81
+        },
+        {
+          "caller": "thread",
+          "callee": "start",
+          "lineNumber": 86
+        },
+        {
+          "caller": "thread",
+          "callee": "request",
+          "lineNumber": 87
+        },
+        {
+          "caller": "thread",
+          "callee": "threads.set",
+          "lineNumber": 91
+        },
+        {
+          "caller": "thread",
+          "callee": "finish?.reject",
+          "lineNumber": 93
+        },
+        {
+          "caller": "onEvent",
+          "callee": "onItem",
+          "lineNumber": 98
+        },
+        {
+          "caller": "onEvent",
+          "callee": "finish?.resolve",
+          "lineNumber": 101
+        },
+        {
+          "caller": "onEvent",
+          "callee": "plainError",
+          "lineNumber": 103
+        },
+        {
+          "caller": "onEvent",
+          "callee": "Date.parse",
+          "lineNumber": 106
+        },
+        {
+          "caller": "onEvent",
+          "callee": "(e.when ?? \"\").replace",
+          "lineNumber": 106
+        },
+        {
+          "caller": "onEvent",
+          "callee": "Date.now",
+          "lineNumber": 106
+        },
+        {
+          "caller": "onEvent",
+          "callee": "emit",
+          "lineNumber": 108
+        },
+        {
+          "caller": "onEvent",
+          "callee": "finish?.reject",
+          "lineNumber": 110
+        },
+        {
+          "caller": "run",
+          "callee": "request",
+          "lineNumber": 120
+        },
+        {
+          "caller": "thread",
+          "callee": "request(\"turn/interrupt\", { threadId: thread.id, turnId }).catch",
+          "lineNumber": 123
+        },
+        {
+          "caller": "thread",
+          "callee": "request",
+          "lineNumber": 123
+        },
+        {
+          "caller": "thread",
+          "callee": "threads.delete",
+          "lineNumber": 124
+        },
+        {
+          "caller": "unavailableReason",
+          "callee": "Date.now",
+          "lineNumber": 130
+        },
+        {
+          "caller": "unavailableReason",
+          "callee": "emit",
+          "lineNumber": 132
+        },
+        {
+          "caller": "startCodex",
+          "callee": "proc?.kill",
+          "lineNumber": 137
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/library.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 168,
+      "nonEmptyLines": 148,
+      "functions": [
+        {
+          "name": "openLibrary",
+          "startLine": 33,
+          "endLine": 168,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "openLibrary",
+          "line": 33,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 34
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 35
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 36
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "SECTIONS.map",
+          "lineNumber": 37
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 37
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "mkdirSync",
+          "lineNumber": 37
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "existsSync",
+          "lineNumber": 38
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 38
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "writeFileSync",
+          "lineNumber": 38
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 38
+        },
+        {
+          "caller": "index",
+          "callee": "JSON.parse",
+          "lineNumber": 40
+        },
+        {
+          "caller": "index",
+          "callee": "readFileSync",
+          "lineNumber": 40
+        },
+        {
+          "caller": "saveIndex",
+          "callee": "writeFileSync",
+          "lineNumber": 41
+        },
+        {
+          "caller": "saveIndex",
+          "callee": "JSON.stringify",
+          "lineNumber": 41
+        },
+        {
+          "caller": "clean",
+          "callee": "normalize(String(p ?? \"\").trim()).split(sep).join(\"/\").replace",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "normalize(String(p ?? \"\").trim()).split(sep).join",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "normalize(String(p ?? \"\").trim()).split",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "normalize",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "String(p ?? \"\").trim",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "String",
+          "lineNumber": 45
+        },
+        {
+          "caller": "clean",
+          "callee": "rel.startsWith",
+          "lineNumber": 46
+        },
+        {
+          "caller": "clean",
+          "callee": "rel.includes",
+          "lineNumber": 46
+        },
+        {
+          "caller": "clean",
+          "callee": "rel.startsWith",
+          "lineNumber": 46
+        },
+        {
+          "caller": "clean",
+          "callee": "rel.endsWith",
+          "lineNumber": 47
+        },
+        {
+          "caller": "clean",
+          "callee": "/^[\\w\\- ./]+$/.test",
+          "lineNumber": 48
+        },
+        {
+          "caller": "real",
+          "callee": "join",
+          "lineNumber": 51
+        },
+        {
+          "caller": "real",
+          "callee": "rel.split",
+          "lineNumber": 51
+        },
+        {
+          "caller": "readOr",
+          "callee": "readFileSync",
+          "lineNumber": 52
+        },
+        {
+          "caller": "titleOf",
+          "callee": "text?.match(/^#\\s+(.+)$/m)?.[1]?.trim",
+          "lineNumber": 53
+        },
+        {
+          "caller": "titleOf",
+          "callee": "text?.match",
+          "lineNumber": 53
+        },
+        {
+          "caller": "titleOf",
+          "callee": "rel.split(\"/\").pop().replace",
+          "lineNumber": 53
+        },
+        {
+          "caller": "titleOf",
+          "callee": "rel.split(\"/\").pop",
+          "lineNumber": 53
+        },
+        {
+          "caller": "titleOf",
+          "callee": "rel.split",
+          "lineNumber": 53
+        },
+        {
+          "caller": "stamp",
+          "callee": "new Date().toISOString().replace(/[-:]/g, \"\").replace(\"T\", \"-\").slice",
+          "lineNumber": 54
+        },
+        {
+          "caller": "stamp",
+          "callee": "new Date().toISOString().replace(/[-:]/g, \"\").replace",
+          "lineNumber": 54
+        },
+        {
+          "caller": "stamp",
+          "callee": "new Date().toISOString().replace",
+          "lineNumber": 54
+        },
+        {
+          "caller": "stamp",
+          "callee": "new Date().toISOString",
+          "lineNumber": 54
+        },
+        {
+          "caller": "walk",
+          "callee": "readdirSync",
+          "lineNumber": 58
+        },
+        {
+          "caller": "walk",
+          "callee": "e.name.startsWith",
+          "lineNumber": 59
+        },
+        {
+          "caller": "walk",
+          "callee": "e.isDirectory",
+          "lineNumber": 61
+        },
+        {
+          "caller": "walk",
+          "callee": "out.push",
+          "lineNumber": 61
+        },
+        {
+          "caller": "walk",
+          "callee": "walk",
+          "lineNumber": 61
+        },
+        {
+          "caller": "walk",
+          "callee": "join",
+          "lineNumber": 61
+        },
+        {
+          "caller": "walk",
+          "callee": "e.name.endsWith",
+          "lineNumber": 62
+        },
+        {
+          "caller": "walk",
+          "callee": "out.push",
+          "lineNumber": 62
+        },
+        {
+          "caller": "snapshot",
+          "callee": "index",
+          "lineNumber": 69
+        },
+        {
+          "caller": "snapshot",
+          "callee": "walk(dir).map",
+          "lineNumber": 70
+        },
+        {
+          "caller": "snapshot",
+          "callee": "walk",
+          "lineNumber": 70
+        },
+        {
+          "caller": "snapshot",
+          "callee": "titleOf",
+          "lineNumber": 70
+        },
+        {
+          "caller": "snapshot",
+          "callee": "readOr",
+          "lineNumber": 70
+        },
+        {
+          "caller": "snapshot",
+          "callee": "real",
+          "lineNumber": 70
+        },
+        {
+          "caller": "snapshot",
+          "callee": "Object.entries",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "notes.some",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "notes.push",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "titleOf",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "readOr",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "join",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "rel.split",
+          "lineNumber": 71
+        },
+        {
+          "caller": "snapshot",
+          "callee": "notes.map((n) => (n.path.includes(\"/\") ? n.path.split(\"/\")[0] : \"\")).filter",
+          "lineNumber": 72
+        },
+        {
+          "caller": "snapshot",
+          "callee": "notes.map",
+          "lineNumber": 72
+        },
+        {
+          "caller": "snapshot",
+          "callee": "n.path.includes",
+          "lineNumber": 72
+        },
+        {
+          "caller": "snapshot",
+          "callee": "n.path.split",
+          "lineNumber": 72
+        },
+        {
+          "caller": "replacedAt",
+          "callee": "rel.match",
+          "lineNumber": 75
+        },
+        {
+          "caller": "replacedAt",
+          "callee": "Date.UTC",
+          "lineNumber": 76
+        },
+        {
+          "caller": "replacedAt",
+          "callee": "statSync",
+          "lineNumber": 76
+        },
+        {
+          "caller": "replacedAt",
+          "callee": "join",
+          "lineNumber": 76
+        },
+        {
+          "caller": "replacedAt",
+          "callee": "rel.split",
+          "lineNumber": 76
+        },
+        {
+          "caller": "snapshot",
+          "callee": "existsSync",
+          "lineNumber": 78
+        },
+        {
+          "caller": "snapshot",
+          "callee": "walk(old).map((rel) => ({ path: rel, at: replacedAt(rel) })).sort",
+          "lineNumber": 78
+        },
+        {
+          "caller": "snapshot",
+          "callee": "walk(old).map",
+          "lineNumber": 78
+        },
+        {
+          "caller": "snapshot",
+          "callee": "walk",
+          "lineNumber": 78
+        },
+        {
+          "caller": "snapshot",
+          "callee": "replacedAt",
+          "lineNumber": 78
+        },
+        {
+          "caller": "snapshot",
+          "callee": "Object.entries(i).map",
+          "lineNumber": 79
+        },
+        {
+          "caller": "snapshot",
+          "callee": "Object.entries",
+          "lineNumber": 79
+        },
+        {
+          "caller": "changed",
+          "callee": "emit",
+          "lineNumber": 81
+        },
+        {
+          "caller": "changed",
+          "callee": "snapshot",
+          "lineNumber": 81
+        },
+        {
+          "caller": "keepOld",
+          "callee": "real",
+          "lineNumber": 84
+        },
+        {
+          "caller": "keepOld",
+          "callee": "existsSync",
+          "lineNumber": 85
+        },
+        {
+          "caller": "keepOld",
+          "callee": "join",
+          "lineNumber": 86
+        },
+        {
+          "caller": "keepOld",
+          "callee": "`${rel.replace(/\\.md$/, \"\")}--${stamp()}.md`.split",
+          "lineNumber": 86
+        },
+        {
+          "caller": "keepOld",
+          "callee": "rel.replace",
+          "lineNumber": 86
+        },
+        {
+          "caller": "keepOld",
+          "callee": "stamp",
+          "lineNumber": 86
+        },
+        {
+          "caller": "keepOld",
+          "callee": "mkdirSync",
+          "lineNumber": 87
+        },
+        {
+          "caller": "keepOld",
+          "callee": "dirname",
+          "lineNumber": 87
+        },
+        {
+          "caller": "keepOld",
+          "callee": "copyFileSync",
+          "lineNumber": 88
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "readOr",
+          "lineNumber": 94
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "join",
+          "lineNumber": 94
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "snapshot().notes.map((n) => `${n.path} — ${n.title}${n.draft ? \" (has an unsaved draft)\" : \"\"}`).join",
+          "lineNumber": 95
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "snapshot().notes.map",
+          "lineNumber": 95
+        },
+        {
+          "caller": "openLibrary",
+          "callee": "snapshot",
+          "lineNumber": 95
+        },
+        {
+          "caller": "read",
+          "callee": "clean",
+          "lineNumber": 98
+        },
+        {
+          "caller": "read",
+          "callee": "readOr",
+          "lineNumber": 100
+        },
+        {
+          "caller": "read",
+          "callee": "real",
+          "lineNumber": 100
+        },
+        {
+          "caller": "read",
+          "callee": "readOr",
+          "lineNumber": 101
+        },
+        {
+          "caller": "read",
+          "callee": "join",
+          "lineNumber": 101
+        },
+        {
+          "caller": "read",
+          "callee": "rel.split",
+          "lineNumber": 101
+        },
+        {
+          "caller": "read",
+          "callee": "index",
+          "lineNumber": 103
+        },
+        {
+          "caller": "draft",
+          "callee": "clean",
+          "lineNumber": 108
+        },
+        {
+          "caller": "draft",
+          "callee": "join",
+          "lineNumber": 110
+        },
+        {
+          "caller": "draft",
+          "callee": "rel.split",
+          "lineNumber": 110
+        },
+        {
+          "caller": "draft",
+          "callee": "mkdirSync",
+          "lineNumber": 111
+        },
+        {
+          "caller": "draft",
+          "callee": "dirname",
+          "lineNumber": 111
+        },
+        {
+          "caller": "draft",
+          "callee": "writeFileSync",
+          "lineNumber": 112
+        },
+        {
+          "caller": "draft",
+          "callee": "String",
+          "lineNumber": 112
+        },
+        {
+          "caller": "draft",
+          "callee": "index",
+          "lineNumber": 113
+        },
+        {
+          "caller": "draft",
+          "callee": "String(why).slice",
+          "lineNumber": 114
+        },
+        {
+          "caller": "draft",
+          "callee": "String",
+          "lineNumber": 114
+        },
+        {
+          "caller": "draft",
+          "callee": "Date.now",
+          "lineNumber": 114
+        },
+        {
+          "caller": "draft",
+          "callee": "saveIndex",
+          "lineNumber": 115
+        },
+        {
+          "caller": "draft",
+          "callee": "changed",
+          "lineNumber": 116
+        },
+        {
+          "caller": "save",
+          "callee": "clean",
+          "lineNumber": 122
+        },
+        {
+          "caller": "save",
+          "callee": "join",
+          "lineNumber": 123
+        },
+        {
+          "caller": "save",
+          "callee": "rel.split",
+          "lineNumber": 123
+        },
+        {
+          "caller": "save",
+          "callee": "existsSync",
+          "lineNumber": 124
+        },
+        {
+          "caller": "save",
+          "callee": "keepOld",
+          "lineNumber": 125
+        },
+        {
+          "caller": "save",
+          "callee": "mkdirSync",
+          "lineNumber": 126
+        },
+        {
+          "caller": "save",
+          "callee": "dirname",
+          "lineNumber": 126
+        },
+        {
+          "caller": "save",
+          "callee": "real",
+          "lineNumber": 126
+        },
+        {
+          "caller": "save",
+          "callee": "renameSync",
+          "lineNumber": 127
+        },
+        {
+          "caller": "save",
+          "callee": "real",
+          "lineNumber": 127
+        },
+        {
+          "caller": "save",
+          "callee": "index",
+          "lineNumber": 128
+        },
+        {
+          "caller": "save",
+          "callee": "saveIndex",
+          "lineNumber": 130
+        },
+        {
+          "caller": "save",
+          "callee": "changed",
+          "lineNumber": 131
+        },
+        {
+          "caller": "discard",
+          "callee": "clean",
+          "lineNumber": 136
+        },
+        {
+          "caller": "discard",
+          "callee": "rmSync",
+          "lineNumber": 138
+        },
+        {
+          "caller": "discard",
+          "callee": "join",
+          "lineNumber": 138
+        },
+        {
+          "caller": "discard",
+          "callee": "rel.split",
+          "lineNumber": 138
+        },
+        {
+          "caller": "discard",
+          "callee": "index",
+          "lineNumber": 139
+        },
+        {
+          "caller": "discard",
+          "callee": "saveIndex",
+          "lineNumber": 141
+        },
+        {
+          "caller": "discard",
+          "callee": "changed",
+          "lineNumber": 142
+        },
+        {
+          "caller": "restore",
+          "callee": "clean",
+          "lineNumber": 148
+        },
+        {
+          "caller": "restore",
+          "callee": "readOr",
+          "lineNumber": 149
+        },
+        {
+          "caller": "restore",
+          "callee": "join",
+          "lineNumber": 149
+        },
+        {
+          "caller": "restore",
+          "callee": "rel.split",
+          "lineNumber": 149
+        },
+        {
+          "caller": "restore",
+          "callee": "this.draft",
+          "lineNumber": 151
+        },
+        {
+          "caller": "restore",
+          "callee": "rel.replace",
+          "lineNumber": 151
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "rmSync",
+          "lineNumber": 157
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "mkdirSync",
+          "lineNumber": 158
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "clean",
+          "lineNumber": 160
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "rmSync",
+          "lineNumber": 162
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "join",
+          "lineNumber": 162
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "rel.split",
+          "lineNumber": 162
+        },
+        {
+          "caller": "deleteOld",
+          "callee": "changed",
+          "lineNumber": 164
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/openrouter.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 54,
+      "functions": [
+        {
+          "name": "setting",
+          "startLine": 12,
+          "endLine": 21,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "openRouterConfig",
+          "startLine": 23,
+          "endLine": 57,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "DEFAULT_MODEL",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "openRouterConfig",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "setting",
+          "callee": "execFileSync",
+          "lineNumber": 16
+        },
+        {
+          "caller": "setting",
+          "callee": "out.trim",
+          "lineNumber": 17
+        },
+        {
+          "caller": "openRouterConfig",
+          "callee": "setting",
+          "lineNumber": 24
+        },
+        {
+          "caller": "openRouterConfig",
+          "callee": "setting",
+          "lineNumber": 26
+        },
+        {
+          "caller": "check",
+          "callee": "fetch",
+          "lineNumber": 46
+        },
+        {
+          "caller": "check",
+          "callee": "r.json",
+          "lineNumber": 48
+        },
+        {
+          "caller": "check",
+          "callee": "await (await fetch(\"https://openrouter.ai/api/v1/models\")).json",
+          "lineNumber": 49
+        },
+        {
+          "caller": "check",
+          "callee": "await",
+          "lineNumber": 49
+        },
+        {
+          "caller": "check",
+          "callee": "fetch",
+          "lineNumber": 49
+        },
+        {
+          "caller": "check",
+          "callee": "models.find",
+          "lineNumber": 50
+        },
+        {
+          "caller": "check",
+          "callee": "(m.supported_parameters ?? []).includes",
+          "lineNumber": 52
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/server.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 133,
+      "nonEmptyLines": 127,
+      "functions": [
+        {
+          "name": "emit",
+          "startLine": 32,
+          "endLine": 40,
+          "params": [
+            "event"
+          ]
+        },
+        {
+          "name": "html",
+          "startLine": 53,
+          "endLine": 53,
+          "params": []
+        },
+        {
+          "name": "body",
+          "startLine": 55,
+          "endLine": 59,
+          "params": [
+            "req"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "emit",
+          "callee": "Date.now",
+          "lineNumber": 33
+        },
+        {
+          "caller": "emit",
+          "callee": "history.push",
+          "lineNumber": 35
+        },
+        {
+          "caller": "emit",
+          "callee": "appendFileSync",
+          "lineNumber": 36
+        },
+        {
+          "caller": "emit",
+          "callee": "JSON.stringify",
+          "lineNumber": 36
+        },
+        {
+          "caller": "emit",
+          "callee": "JSON.stringify",
+          "lineNumber": 38
+        },
+        {
+          "caller": "emit",
+          "callee": "res.write",
+          "lineNumber": 39
+        },
+        {
+          "caller": "html",
+          "callee": "readFileSync",
+          "lineNumber": 53
+        },
+        {
+          "caller": "html",
+          "callee": "join",
+          "lineNumber": 53
+        },
+        {
+          "caller": "body",
+          "callee": "JSON.parse",
+          "lineNumber": 58
+        },
+        {
+          "caller": "send",
+          "callee": "res.writeHead(code, { \"content-type\": \"text/plain; charset=utf-8\" }).end",
+          "lineNumber": 63
+        },
+        {
+          "caller": "send",
+          "callee": "res.writeHead",
+          "lineNumber": 63
+        },
+        {
+          "caller": "emitWp",
+          "callee": "emit",
+          "lineNumber": 112
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 0,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/settings.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 24,
+      "nonEmptyLines": 22,
+      "functions": [
+        {
+          "name": "openSettings",
+          "startLine": 6,
+          "endLine": 24,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "openSettings",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "openSettings",
+          "callee": "JSON.parse",
+          "lineNumber": 8
+        },
+        {
+          "caller": "openSettings",
+          "callee": "readFileSync",
+          "lineNumber": 8
+        },
+        {
+          "caller": "announce",
+          "callee": "emit",
+          "lineNumber": 9
+        },
+        {
+          "caller": "set",
+          "callee": "Math.round",
+          "lineNumber": 15
+        },
+        {
+          "caller": "set",
+          "callee": "Number",
+          "lineNumber": 15
+        },
+        {
+          "caller": "set",
+          "callee": "writeFileSync",
+          "lineNumber": 19
+        },
+        {
+          "caller": "set",
+          "callee": "JSON.stringify",
+          "lineNumber": 19
+        },
+        {
+          "caller": "set",
+          "callee": "announce",
+          "lineNumber": 20
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

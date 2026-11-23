@@ -1,0 +1,14 @@
+Found 4 batch files (4 logical batches, 0 multi-part):
+  batch-1.json: 23 nodes, 68 edges
+  batch-2.json: 11 nodes, 23 edges
+  batch-3.json: 10 nodes, 22 edges
+  batch-4.json: 30 nodes, 53 edges
+
+Input: 74 nodes, 166 edges
+
+Output: 74 nodes, 166 edges
+
+Imports edge recovery:
+  Recovered 0 `imports` edges from importMap (33 entries scanned)
+
+Written to C:\Users\aLLIEDiNTENT\Desktop\TridentIGuess\Trident\.ua\intermediate\assembled-graph.json (69 KB)

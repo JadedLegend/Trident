@@ -1,0 +1,108 @@
+{
+ "layers": [
+  {
+   "id": "layer:spikes",
+   "name": "Spikes and Probes",
+   "description": "Standalone experiment and check scripts that confirm SDK logins, Codex app-server behaviour, OpenRouter keys and models, timing, and an end-to-end team run against the live server.",
+   "nodes": [
+    {
+     "id": "file:spikes/appserver.mjs",
+     "name": "appserver.mjs",
+     "filePath": "spikes/appserver.mjs",
+     "summary": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests.",
+     "tags": [
+      "spike",
+      "codex",
+      "json-rpc",
+      "benchmark"
+     ]
+    },
+    {
+     "id": "file:spikes/claude.mjs",
+     "name": "claude.mjs",
+     "filePath": "spikes/claude.mjs",
+     "summary": "Spike confirming the Claude Agent SDK runs on the existing Claude Code login, sending one isolated prompt with settings, plugins and MCP servers disabled.",
+     "tags": [
+      "spike",
+      "claude-agent-sdk",
+      "smoke-test",
+      "authentication"
+     ]
+    },
+    {
+     "id": "file:spikes/codex.mjs",
+     "name": "codex.mjs",
+     "filePath": "spikes/codex.mjs",
+     "summary": "Spike confirming the Codex SDK runs on the existing Codex login by streaming one read-only turn and printing events and usage.",
+     "tags": [
+      "spike",
+      "codex-sdk",
+      "smoke-test",
+      "authentication"
+     ]
+    },
+    {
+     "id": "file:spikes/e2e-team.mjs",
+     "name": "e2e-team.mjs",
+     "filePath": "spikes/e2e-team.mjs",
+     "summary": "End-to-end script against the running server: sends a request, auto-approves the plan and every approval, and logs board, message, talk, tool and status events from the /events stream until the goal is done.",
+     "tags": [
+      "test",
+      "end-to-end",
+      "server-sent-events",
+      "automation"
+     ]
+    },
+    {
+     "id": "file:spikes/or-check.mjs",
+     "name": "or-check.mjs",
+     "filePath": "spikes/or-check.mjs",
+     "summary": "Free check of the configured OpenRouter key and model: runs the config's validity check and prints account tier and usage from the key-info endpoint without generating text.",
+     "tags": [
+      "spike",
+      "openrouter",
+      "validation",
+      "diagnostics"
+     ]
+    },
+    {
+     "id": "file:spikes/or-models.mjs",
+     "name": "or-models.mjs",
+     "filePath": "spikes/or-models.mjs",
+     "summary": "Lists tool-capable coding models from the public OpenRouter catalog with prices, and reports whether given model ids are still listed.",
+     "tags": [
+      "spike",
+      "openrouter",
+      "model-catalog",
+      "utility"
+     ]
+    },
+    {
+     "id": "file:spikes/or-route.mjs",
+     "name": "or-route.mjs",
+     "filePath": "spikes/or-route.mjs",
+     "summary": "Checks the OpenRouter route with a deliberately invalid placeholder key, expecting both the key check and a Claude-session worker turn to be refused, at no cost.",
+     "tags": [
+      "spike",
+      "openrouter",
+      "negative-test",
+      "routing"
+     ]
+    },
+    {
+     "id": "file:spikes/twoturn.mjs",
+     "name": "twoturn.mjs",
+     "filePath": "spikes/twoturn.mjs",
+     "summary": "Spike measuring whether SDK slowness is a one-time startup cost or per-message, using one streaming Claude session with two messages or two Codex runs on one thread.",
+     "tags": [
+      "spike",
+      "benchmark",
+      "claude-agent-sdk",
+      "codex-sdk"
+     ]
+    }
+   ]
+  }
+ ],
+ "edges": []
+}

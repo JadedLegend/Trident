@@ -1,0 +1,10 @@
+[
+  {
+    "layerId": "layer:spikes",
+    "labels": [
+      { "name": "Claude SDK probes", "nodeIds": ["file:spikes/claude.mjs", "file:spikes/twoturn.mjs"] },
+      { "name": "Codex SDK probes", "nodeIds": ["file:spikes/appserver.mjs", "file:spikes/codex.mjs"] },
+      { "name": "OpenRouter checks", "nodeIds": ["file:spikes/or-check.mjs", "file:spikes/or-models.mjs", "file:spikes/or-route.mjs"] }
+    ]
+  }
+]

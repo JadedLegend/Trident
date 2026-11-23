@@ -1,0 +1,1441 @@
+{
+ "nodes": [
+  {
+   "id": "file:src/claude.mjs",
+   "name": "claude.mjs",
+   "filePath": "src/claude.mjs",
+   "summary": "Wraps the Claude Agent SDK query() into a long-lived, message-at-a-time Claude worker session whose run(text) resolves with the final reply; also builds a subscription-only environment that strips stray Anthropic API overrides.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/compare.mjs",
+   "name": "compare.mjs",
+   "filePath": "src/compare.mjs",
+   "summary": "Side-by-side model comparison node: sends one question to up to four sources (local Claude, local Codex, or any OpenRouter model) in parallel and emits their answers with timing and cost.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/git.mjs",
+   "name": "git.mjs",
+   "filePath": "src/git.mjs",
+   "summary": "Git plumbing for worker workspaces: initializes the workspace repo, creates per-task worktrees on their own branches, reports diffs, merges accepted branches, and removes worktrees, all committed under a local Trident identity.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/library-tools.mjs",
+   "name": "library-tools.mjs",
+   "filePath": "src/library-tools.mjs",
+   "summary": "Builds an in-process MCP server exposing list/read/write tools over the shared Markdown Library to Claude-harness agents, where writes become unsaved drafts the user approves.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/talk-tools.mjs",
+   "name": "talk-tools.mjs",
+   "filePath": "src/talk-tools.mjs",
+   "summary": "Builds an in-process MCP server with say/read team-talk tools for Claude-harness workers, plus a digest helper that surfaces unread board messages without ever waking other agents.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/team.mjs",
+   "name": "team.mjs",
+   "filePath": "src/team.mjs",
+   "summary": "Core worker-team orchestrator: assigns Lead tasks to Claude, Codex, or OpenRouter workers in isolated git worktrees, gates risky edits, broadcasts file-edit notes and clash warnings, runs cross-vendor review rounds, and merges or rejects results.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/workplaces.mjs",
+   "name": "workplaces.mjs",
+   "filePath": "src/workplaces.mjs",
+   "summary": "Manages multiple isolated workplaces (each with its own folder, board, Lead, team and compare node) persisted in data/workplaces.json, handling create, remove/archive, goal cancellation and folder validation.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/codex.mjs",
+   "name": "codex.mjs",
+   "filePath": "src/codex.mjs",
+   "summary": "Codex worker adapter that keeps one long-lived codex app-server process running and talks to it over JSON-RPC on stdio, giving the rest of Trident per-thread conversations, approval forwarding and out-of-usage tracking.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/library.mjs",
+   "name": "library.mjs",
+   "filePath": "src/library.mjs",
+   "summary": "The shared Markdown Library: a plain folder of notes in sections that every agent can read, where every change is first stored as a draft and only becomes the real note when the user saves it, with replaced versions kept under .old.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/openrouter.mjs",
+   "name": "openrouter.mjs",
+   "filePath": "src/openrouter.mjs",
+   "summary": "OpenRouter integration that reads the API key and model from the process or Windows user environment and builds the environment that points the Claude Agent SDK worker at OpenRouter's Anthropic-compatible endpoint, plus a no-cost key and model check.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/server.mjs",
+   "name": "server.mjs",
+   "filePath": "src/server.mjs",
+   "summary": "Trident's entry point: a local HTTP server bound to 127.0.0.1 that wires together the gate, Codex, OpenRouter, Library, settings and workplaces, streams every event to the page over server-sent events, and handles the POST routes for workplaces, messages, approvals, plans, interrupts, Library actions and settings.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/settings.mjs",
+   "name": "settings.mjs",
+   "filePath": "src/settings.mjs",
+   "summary": "Trident-wide settings store kept in data/settings.json, currently holding the maximum number of workers per workplace, with validation and a settings event on every change.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/board-tools.mjs",
+   "name": "board-tools.mjs",
+   "filePath": "src/board-tools.mjs",
+   "summary": "Defines the in-process MCP server of board tools the Lead agent calls (propose_plan, update_task, finish_goal, assign_task, accept_task, reject_task, ask_several, team_say), so the Lead changes the board and team only through validated tool calls.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/board.mjs",
+   "name": "board.mjs",
+   "filePath": "src/board.mjs",
+   "summary": "SQLite-backed board store (via node:sqlite) holding goals, their tasks and team talk; handles schema creation and column migrations, plan proposal, task updates, and renders the [state] block fed to the Lead.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/gate.mjs",
+   "name": "gate.mjs",
+   "filePath": "src/gate.mjs",
+   "summary": "Approval gate that holds an agent's risky tool calls until the user allows or denies them, persisting 'always allow' and 'always deny' rules per exact operation to a JSON file.",
+   "type": "file"
+  },
+  {
+   "id": "file:src/lead.mjs",
+   "name": "lead.mjs",
+   "filePath": "src/lead.mjs",
+   "summary": "Runs the Lead agent as one long-lived Claude Agent SDK session fed by an async message queue, wiring in board and library MCP tools and the approval gate, and streaming its output as UI events; also exports a one-line tool-call summarizer.",
+   "type": "file"
+  },
+  {
+   "id": "file:.claude/autoharness/requests",
+   "name": "requests",
+   "filePath": ".claude/autoharness/requests",
+   "summary": "Tiny runtime counter file used by the autoharness Claude Code plugin to queue skill-learning requests; it holds a single character and no project logic.",
+   "type": "file"
+  },
+  {
+   "id": "config:.claude/launch.json",
+   "name": "launch.json",
+   "filePath": ".claude/launch.json",
+   "summary": "Claude Code launch configuration that starts the Trident engine with `node src/server.mjs` and points the preview at http://127.0.0.1:4317.",
+   "type": "config"
+  },
+  {
+   "id": "config:.ua/config.json",
+   "name": "config.json",
+   "filePath": ".ua/config.json",
+   "summary": "Understand-Anything tool settings that fix the knowledge-graph output language to English.",
+   "type": "config"
+  },
+  {
+   "id": "document:README.md",
+   "name": "README.md",
+   "filePath": "README.md",
+   "summary": "Project overview explaining Trident's Lead/worker/cross-check model, workplaces, Ask several, Library and approvals, plus requirements (Node 26, git, Claude/Codex logins), setup, optional OpenRouter keys, folder layout, work flow diagram, status and privacy notes.",
+   "type": "document"
+  },
+  {
+   "id": "document:docs/agent-collab-teardown.md",
+   "name": "agent-collab-teardown.md",
+   "filePath": "docs/agent-collab-teardown.md",
+   "summary": "Research teardown comparing how Band, Coral and PandaOS coordinate AI agents (chat-room @mentions, task board with proof of completion, Director router) and the ideas Trident borrows from each.",
+   "type": "document"
+  },
+  {
+   "id": "document:docs/design.md",
+   "name": "design.md",
+   "filePath": "docs/design.md",
+   "summary": "Design document for Trident: the problem, the Lead-plan-approve-worker-cross-check-merge flow, the engine pieces (SDK adapters, team tools, SQLite board, worktrees, approval gate, state snapshot), the interface sketch, milestones M1-M4 and open questions.",
+   "type": "document"
+  },
+  {
+   "id": "config:package.json",
+   "name": "package.json",
+   "filePath": "package.json",
+   "summary": "npm manifest for the private ES-module Trident package; `npm start` runs src/server.mjs and the only dependencies are the Claude Agent SDK and the Codex SDK.",
+   "type": "config"
+  },
+  {
+   "id": "file:public/ember.css",
+   "name": "ember.css",
+   "filePath": "public/ember.css",
+   "summary": "Ember design-system stylesheet for the web page: dark warm oklch color tokens, radius and glass/shadow variables, and ds-* component styles for buttons, inputs, cards, badges, alerts, switches, tabs, steppers, sliders, tables and chips, with touch, small-screen and hover media rules.",
+   "type": "file"
+  },
+  {
+   "id": "file:public/index.html",
+   "name": "index.html",
+   "filePath": "public/index.html",
+   "summary": "Single-page Trident interface: sidebar of workplaces plus Library and Settings views, a Lead chat, a Needs-you approvals bar, the goal/task board, team talk, activity log and Ask-several comparison columns, all driven by an inline script that consumes the server's /events stream and posts actions back.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/appserver.mjs",
+   "name": "appserver.mjs",
+   "filePath": "spikes/appserver.mjs",
+   "summary": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/claude.mjs",
+   "name": "claude.mjs",
+   "filePath": "spikes/claude.mjs",
+   "summary": "Spike confirming the Claude Agent SDK runs on the existing Claude Code login, sending one isolated prompt with settings, plugins and MCP servers disabled.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/codex.mjs",
+   "name": "codex.mjs",
+   "filePath": "spikes/codex.mjs",
+   "summary": "Spike confirming the Codex SDK runs on the existing Codex login by streaming one read-only turn and printing events and usage.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/e2e-team.mjs",
+   "name": "e2e-team.mjs",
+   "filePath": "spikes/e2e-team.mjs",
+   "summary": "End-to-end script against the running server: sends a request, auto-approves the plan and every approval, and logs board, message, talk, tool and status events from the /events stream until the goal is done.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/or-check.mjs",
+   "name": "or-check.mjs",
+   "filePath": "spikes/or-check.mjs",
+   "summary": "Free check of the configured OpenRouter key and model: runs the config's validity check and prints account tier and usage from the key-info endpoint without generating text.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/or-models.mjs",
+   "name": "or-models.mjs",
+   "filePath": "spikes/or-models.mjs",
+   "summary": "Lists tool-capable coding models from the public OpenRouter catalog with prices, and reports whether given model ids are still listed.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/or-route.mjs",
+   "name": "or-route.mjs",
+   "filePath": "spikes/or-route.mjs",
+   "summary": "Checks the OpenRouter route with a deliberately invalid placeholder key, expecting both the key check and a Claude-session worker turn to be refused, at no cost.",
+   "type": "file"
+  },
+  {
+   "id": "file:spikes/twoturn.mjs",
+   "name": "twoturn.mjs",
+   "filePath": "spikes/twoturn.mjs",
+   "summary": "Spike measuring whether SDK slowness is a one-time startup cost or per-message, using one streaming Claude session with two messages or two Codex runs on one thread.",
+   "type": "file"
+  }
+ ],
+ "layers": [
+  {
+   "id": "layer:server",
+   "name": "Server and Workplaces",
+   "description": "The local 127.0.0.1 HTTP entry point plus the workplace manager and Trident-wide settings store that wire each workplace's board, Lead, team and compare node together."
+  },
+  {
+   "id": "layer:orchestration",
+   "name": "Agent Orchestration",
+   "description": "The Lead agent session, the cross-vendor worker team that builds in git worktrees and cross-checks work, the side-by-side compare node, and the approval gate that holds risky tool calls for the user."
+  },
+  {
+   "id": "layer:providers",
+   "name": "Model Providers",
+   "description": "Adapters that turn the Claude Agent SDK, the long-lived Codex app-server and the OpenRouter route into message-at-a-time worker sessions."
+  },
+  {
+   "id": "layer:agent-tools",
+   "name": "Agent Tool Servers",
+   "description": "In-process MCP servers that give agents board actions (plans, tasks, assignment), team-talk messaging and Library read/write tools."
+  },
+  {
+   "id": "layer:storage",
+   "name": "Storage and Workspace State",
+   "description": "Persistent state behind the agents: the SQLite board of goals, tasks and talk, the draft-then-approve Markdown Library folder, and git worktree plumbing for worker workspaces."
+  },
+  {
+   "id": "layer:ui",
+   "name": "Web Interface",
+   "description": "The single-page Trident UI (workplaces sidebar, Lead chat, approvals bar, task board, Library and Settings) styled by the Ember design-system stylesheet."
+  },
+  {
+   "id": "layer:spikes",
+   "name": "Spikes and Probes",
+   "description": "Standalone experiment and check scripts that confirm SDK logins, Codex app-server behaviour, OpenRouter keys and models, timing, and an end-to-end team run against the live server."
+  },
+  {
+   "id": "layer:project-support",
+   "name": "Docs and Configuration",
+   "description": "The README, the design document and agent-collaboration teardown, plus the npm manifest, Claude Code launch config and tooling settings that start and describe Trident."
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:src/claude.mjs",
+   "target": "function:src/claude.mjs:subscriptionEnv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/claude.mjs",
+   "target": "function:src/claude.mjs:subscriptionEnv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/claude.mjs",
+   "target": "function:src/claude.mjs:claudeSession",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/claude.mjs",
+   "target": "function:src/claude.mjs:claudeSession",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/compare.mjs",
+   "target": "function:src/compare.mjs:startCompare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/compare.mjs",
+   "target": "function:src/compare.mjs:startCompare",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/compare.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:git",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:git",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:ensureRepo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:ensureRepo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:createWorktree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:createWorktree",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:changes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:changes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:mergeBranch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:mergeBranch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:removeWorktree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/git.mjs",
+   "target": "function:src/git.mjs:removeWorktree",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/library-tools.mjs",
+   "target": "function:src/library-tools.mjs:libraryTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/library-tools.mjs",
+   "target": "function:src/library-tools.mjs:libraryTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/talk-tools.mjs",
+   "target": "function:src/talk-tools.mjs:talkTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/talk-tools.mjs",
+   "target": "function:src/talk-tools.mjs:talkTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/talk-tools.mjs",
+   "target": "function:src/talk-tools.mjs:talkDigest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/talk-tools.mjs",
+   "target": "function:src/talk-tools.mjs:talkDigest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "function:src/team.mjs:startTeam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "function:src/team.mjs:startTeam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "function:src/team.mjs:worktreeRootFor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "function:src/team.mjs:worktreeRootFor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "file:src/git.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "file:src/library-tools.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/team.mjs",
+   "target": "file:src/talk-tools.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "function:src/workplaces.mjs:openWorkplaces",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "function:src/workplaces.mjs:openWorkplaces",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "file:src/board.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "file:src/compare.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "file:src/git.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "file:src/lead.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/workplaces.mjs",
+   "target": "file:src/team.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "function:src/claude.mjs:claudeSession",
+   "target": "function:src/claude.mjs:subscriptionEnv",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/compare.mjs:startCompare",
+   "target": "function:src/claude.mjs:claudeSession",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:commitAll",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:ensureRepo",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:ensureRepo",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:createWorktree",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:createWorktree",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:changes",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:changes",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:mergeBranch",
+   "target": "function:src/git.mjs:commitAll",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:mergeBranch",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/git.mjs:removeWorktree",
+   "target": "function:src/git.mjs:git",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/claude.mjs:claudeSession",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/talk-tools.mjs:talkTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/talk-tools.mjs:talkDigest",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/library-tools.mjs:libraryTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/git.mjs:createWorktree",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/git.mjs:changes",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/git.mjs:mergeBranch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/team.mjs:startTeam",
+   "target": "function:src/git.mjs:removeWorktree",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/git.mjs:ensureRepo",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/compare.mjs:startCompare",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/team.mjs:startTeam",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/team.mjs:worktreeRootFor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/lead.mjs:startLead",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/workplaces.mjs:openWorkplaces",
+   "target": "function:src/board.mjs:openBoard",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/codex.mjs",
+   "target": "function:src/codex.mjs:startCodex",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/codex.mjs",
+   "target": "function:src/codex.mjs:startCodex",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/library.mjs",
+   "target": "function:src/library.mjs:openLibrary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/library.mjs",
+   "target": "function:src/library.mjs:openLibrary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/openrouter.mjs",
+   "target": "function:src/openrouter.mjs:setting",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/openrouter.mjs",
+   "target": "function:src/openrouter.mjs:openRouterConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/openrouter.mjs",
+   "target": "function:src/openrouter.mjs:openRouterConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/server.mjs:emit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/settings.mjs",
+   "target": "function:src/settings.mjs:openSettings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/settings.mjs",
+   "target": "function:src/settings.mjs:openSettings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/codex.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/gate.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/library.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/openrouter.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/settings.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "file:src/workplaces.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/codex.mjs:startCodex",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/openrouter.mjs:openRouterConfig",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/library.mjs:openLibrary",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/settings.mjs:openSettings",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/gate.mjs:createGate",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/server.mjs",
+   "target": "function:src/workplaces.mjs:openWorkplaces",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/openrouter.mjs:openRouterConfig",
+   "target": "function:src/openrouter.mjs:setting",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/board-tools.mjs",
+   "target": "function:src/board-tools.mjs:boardTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/board.mjs",
+   "target": "function:src/board.mjs:openBoard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/gate.mjs",
+   "target": "function:src/gate.mjs:createGate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "function:src/lead.mjs:LEAD_PROMPT",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "function:src/lead.mjs:startLead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "function:src/lead.mjs:summarize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:src/board-tools.mjs",
+   "target": "function:src/board-tools.mjs:boardTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/board.mjs",
+   "target": "function:src/board.mjs:openBoard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/gate.mjs",
+   "target": "function:src/gate.mjs:createGate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "function:src/lead.mjs:startLead",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "function:src/lead.mjs:summarize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:src/board-tools.mjs",
+   "target": "file:src/board.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/gate.mjs",
+   "target": "file:src/lead.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "file:src/board-tools.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:src/lead.mjs",
+   "target": "file:src/library-tools.mjs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "function:src/lead.mjs:startLead",
+   "target": "function:src/board-tools.mjs:boardTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/lead.mjs:startLead",
+   "target": "function:src/library-tools.mjs:libraryTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/lead.mjs:startLead",
+   "target": "function:src/claude.mjs:subscriptionEnv",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/lead.mjs:startLead",
+   "target": "function:src/lead.mjs:LEAD_PROMPT",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/lead.mjs:startLead",
+   "target": "function:src/lead.mjs:summarize",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:src/gate.mjs:createGate",
+   "target": "function:src/lead.mjs:summarize",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:addMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:addApproval",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:renderNow",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:renderSidebar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:renderLibrary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:showNote",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:editNote",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:renderOldVersions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:addCompare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:fillCompare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:renderBoard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "function:public/index.html:showPlanCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "file:public/ember.css",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:public/index.html",
+   "target": "file:src/server.mjs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:spikes/appserver.mjs",
+   "target": "file:src/codex.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/claude.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/codex.mjs",
+   "target": "file:src/codex.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/twoturn.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/twoturn.mjs",
+   "target": "file:src/codex.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/e2e-team.mjs",
+   "target": "file:src/server.mjs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:spikes/or-check.mjs",
+   "target": "file:src/openrouter.mjs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:spikes/or-check.mjs",
+   "target": "function:src/openrouter.mjs:openRouterConfig",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:spikes/or-models.mjs",
+   "target": "file:src/openrouter.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "file:spikes/or-route.mjs",
+   "target": "file:src/openrouter.mjs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:spikes/or-route.mjs",
+   "target": "file:src/claude.mjs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:spikes/or-route.mjs",
+   "target": "function:src/openrouter.mjs:openRouterConfig",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:spikes/or-route.mjs",
+   "target": "function:src/claude.mjs:claudeSession",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:.claude/launch.json",
+   "target": "file:src/server.mjs",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:package.json",
+   "target": "file:src/server.mjs",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/server.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/lead.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/team.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/board.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/library.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/workplaces.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/compare.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/gate.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:src/openrouter.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:public/index.html",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "document:docs/design.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/lead.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/team.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/board.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/board-tools.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/gate.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/claude.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/codex.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:src/git.mjs",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "file:public/index.html",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/design.md",
+   "target": "document:docs/agent-collab-teardown.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/agent-collab-teardown.md",
+   "target": "file:src/claude.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:docs/agent-collab-teardown.md",
+   "target": "file:src/codex.mjs",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

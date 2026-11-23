@@ -1,0 +1,1483 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-23T19:11:11.326047+00:00",
+  "files": {
+    "README.md": {
+      "overview": "The front page of the project. It explains in plain words what Trident is: a local web page where a Lead agent plans your request and AI workers from different companies build and cross-check it. It also lists what you need installed, how to start it, and where each kind of file lives. This is Step 1 of the tour.",
+      "sections": [
+        {
+          "title": "What Trident is",
+          "lineRange": [
+            1,
+            5
+          ],
+          "explanation": "The one-paragraph pitch: say what you want once, and a team of models plans, builds and checks it. Line 5 notes the address `127.0.0.1:4317`, which means the page is only reachable from your own computer.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Feature list",
+          "lineRange": [
+            7,
+            16
+          ],
+          "explanation": "Each bullet is one feature you will meet later in the tour: the Lead (Step 6), workers in their own git worktree (Step 9), cross-checking, team talk, workplaces (Step 4), Ask several (Step 11), the Library (Step 10) and approvals (Step 7). The Library is marked as still in progress.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Requirements",
+          "lineRange": [
+            18,
+            25
+          ],
+          "explanation": "What must be installed first. Node.js 26 is required because the board uses the SQLite database built into Node. Claude Code must be signed in; Codex and OpenRouter are optional extras.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Starting it and adding OpenRouter",
+          "lineRange": [
+            27,
+            45
+          ],
+          "explanation": "Two commands start Trident: `npm install` then `npm start`. OpenRouter is turned on by setting two environment variables with `setx`; the README stresses that you type the key yourself and Trident never asks for it.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Where things live",
+          "lineRange": [
+            47,
+            58
+          ],
+          "explanation": "A map of the folders. `src/` is the engine and `public/` is the web page. The folders holding your own data (`library/`, `workspace/`, `workplaces/`, `data/`) are not committed to git, so personal work stays private.",
+          "tourOrder": 1
+        },
+        {
+          "title": "How work flows",
+          "lineRange": [
+            60,
+            71
+          ],
+          "explanation": "A small text diagram of the main loop: you ask, the Lead plans, you approve, workers build in separate copies, another vendor checks each one, and the Lead merges and confirms the \"Done when\" line.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Status and privacy",
+          "lineRange": [
+            73,
+            79
+          ],
+          "explanation": "Says what already works and what is still being built (Library screens, Settings page). The privacy note explains that everything runs locally and that Claude traffic always uses your own sign-in.",
+          "tourOrder": 1
+        }
+      ]
+    },
+    "docs/design.md": {
+      "overview": "The original design plan for Trident. It describes the problem being solved, the flow of a piece of work, the three rules that make the team work well, the engine parts, a sketch of the screen, and the build order M1 to M4. Step 2 of the tour uses it to show the intent behind the code.",
+      "sections": [
+        {
+          "title": "The problem",
+          "lineRange": [
+            1,
+            6
+          ],
+          "explanation": "Explains why Trident exists: other apps had agents taking turns rather than building on each other, or had confusing screens. The goal is that you speak once to a Lead, the agents check each other across vendors, and you only hear about decisions and results.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Work flow and three rules",
+          "lineRange": [
+            8,
+            30
+          ],
+          "explanation": "The diagram shows the full loop, including the checker sending problems back to the worker. The three rules are: one owner (only the Lead talks to you), a checkable finish line (\"Done when\"), and cross-checking by the other vendor. Each rule names the outside tool it was borrowed from.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Engine pieces",
+          "lineRange": [
+            32,
+            43
+          ],
+          "explanation": "A table of the parts you will meet in the code: agent adapters, team tools, the board store (SQLite), workspaces (git), the approval gate and the `[state]` snapshot. Note the plan said TypeScript and React, but the actual code is plain JavaScript (`.mjs`) and a single HTML page.",
+          "tourOrder": 2
+        },
+        {
+          "title": "The screen, kept simple",
+          "lineRange": [
+            45,
+            65
+          ],
+          "explanation": "A rough drawing of the interface: chat with the Lead on the left, the board on the right, and a Needs-you bar on top. Raw agent activity is collapsed by default so you are not flooded with terminal text.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Build order",
+          "lineRange": [
+            67,
+            72
+          ],
+          "explanation": "The milestones, each usable on its own: M1 one agent and chat, M2 board and plan, M3 two workers and a cross-check, M4 merge and finish. Building in usable steps means each stage can be tried before the next one starts.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Open questions and checks",
+          "lineRange": [
+            74,
+            83
+          ],
+          "explanation": "Decisions that were still open at design time, such as how much freedom workers get. It also lists what had to be tested before building: that both SDKs work with your existing logins on Windows.",
+          "tourOrder": 2
+        }
+      ]
+    },
+    "docs/agent-collab-teardown.md": {
+      "overview": "A research note comparing three other multi-agent tools (Band, Coral and PandaOS) and how they make agents work together. Every claim is tagged with how it is known. The last part lists the ideas Trident took from each, which Step 2 of the tour points to.",
+      "sections": [
+        {
+          "title": "Sources and evidence labels",
+          "lineRange": [
+            1,
+            8
+          ],
+          "explanation": "Says where the information came from and that nothing was run. The tags [doc], [code] and [inferred] tell you how much to trust each claim: read in docs, read in code, or the author's own guess.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Side-by-side table",
+          "lineRange": [
+            10,
+            18
+          ],
+          "explanation": "Compares the three tools on how they are built, how they drive agents, how agents collaborate, who decides the next step, and how approvals work. It is the quick summary before the detailed sections.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Band",
+          "lineRange": [
+            20,
+            26
+          ],
+          "explanation": "Band is a chat room where agents only hear messages that @mention them. Its smarts live in role prompts. The noted weakness is that nobody owns the overall plan unless you add a manager.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Coral",
+          "lineRange": [
+            28,
+            35
+          ],
+          "explanation": "Coral uses a team board: goals with one \"Done when\" line, tasks with owners and dependencies, and a worker result that is only a candidate until accepted. Its weakness is that it has many concepts to learn.",
+          "tourOrder": 2
+        },
+        {
+          "title": "PandaOS",
+          "lineRange": [
+            37,
+            45
+          ],
+          "explanation": "PandaOS has one Director agent that routes work to sessions and starts every turn with a `[state]` block. It drives agents through vendor SDKs. Its weakness is that workers never review each other.",
+          "tourOrder": 2
+        },
+        {
+          "title": "What Trident borrows",
+          "lineRange": [
+            47,
+            56
+          ],
+          "explanation": "The four ideas taken: a single Lead with a `[state]` snapshot (PandaOS), \"Done when\" plus candidate-and-accept (Coral), the four approval choices (Band), and driving agents with vendor SDKs (PandaOS). You can see each of these in board.mjs, lead.mjs and gate.mjs.",
+          "tourOrder": 2
+        }
+      ]
+    },
+    "src/server.mjs": {
+      "overview": "The front door of Trident: a small web server that only listens on your own computer at port 4317. It creates every other part (gate, Codex, Library, settings, workplaces), streams live events to the web page, and turns button clicks into actions. Step 3 of the tour calls it the switchboard.",
+      "sections": [
+        {
+          "title": "Route map comment",
+          "lineRange": [
+            1,
+            10
+          ],
+          "explanation": "A list of every web address the server answers, with what each one expects. It is a handy table of contents: GET routes serve the page and the live event stream, POST routes are the actions behind buttons.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Imports and setup",
+          "lineRange": [
+            11,
+            25
+          ],
+          "explanation": "Loads Node's built-in web and file tools plus Trident's own parts. It works out the project folder, makes sure `data/` exists, and picks the port (4317 unless the `PORT` environment variable says otherwise).",
+          "tourOrder": 3
+        },
+        {
+          "title": "The emit function",
+          "lineRange": [
+            27,
+            40
+          ],
+          "explanation": "Everything that happens becomes an event passed to `emit`. Each event is stamped with a time, kept in memory for replay, written to `data/transcript.jsonl`, and pushed to every open page. Small text pieces (`delta`) are only pushed live, not stored, so the history stays small.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Connecting the parts",
+          "lineRange": [
+            42,
+            51
+          ],
+          "explanation": "Creates the approval gate, the OpenRouter config, one shared Codex process, the Library and the settings, then hands them all to the workplaces. The OpenRouter key and model are checked once at startup without generating anything, so a bad key shows up as an error early.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Small helpers",
+          "lineRange": [
+            53,
+            59
+          ],
+          "explanation": "`html()` re-reads the page file on every request, so edits to the page show up after a refresh without restarting. `body()` collects the request data and turns it from JSON text into an object.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Page and live events",
+          "lineRange": [
+            61,
+            74
+          ],
+          "explanation": "Serves the page and its stylesheet. The `/events` route keeps the connection open (server-sent events): it first replays all past events so a newly opened page catches up, then adds the page to the list of listeners. A heartbeat every 25 seconds stops idle connections from timing out.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Workplace, Library and settings actions",
+          "lineRange": [
+            75,
+            103
+          ],
+          "explanation": "Each route passes the request on to the matching part and returns its answer. Library actions are picked from the address with one chain of choices. Errors come back as code 400 with a plain-words message the page can show.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Answering approvals",
+          "lineRange": [
+            104,
+            107
+          ],
+          "explanation": "Accepts only the four allowed decisions and passes them to the gate. If the approval id is unknown (for example already answered), it replies 404.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Talking to a Lead",
+          "lineRange": [
+            108,
+            129
+          ],
+          "explanation": "Finds the workplace (default `main`), then either sends your message to its Lead, approves the waiting plan, or interrupts the Lead's current turn. Plan approval first checks a plan is really waiting (409 if not), marks the goal active, and tells the Lead in plain words to start.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Errors and listening",
+          "lineRange": [
+            130,
+            133
+          ],
+          "explanation": "Any crash inside a request becomes a 500 reply instead of stopping the server. The last line starts listening on `127.0.0.1` only, which is what keeps Trident private to your machine.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    "package.json": {
+      "overview": "The project's settings file for Node.js. It names the project, defines the `npm start` command that runs src/server.mjs, and lists the two outside libraries Trident needs: the Claude Agent SDK and the Codex SDK. Step 3 of the tour starts here.",
+      "sections": [
+        {
+          "title": "Project identity",
+          "lineRange": [
+            1,
+            8
+          ],
+          "explanation": "Name, version and description. Most of these are default values from `npm init`; the `main` entry is not used, since Trident is started through the start script instead.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Scripts",
+          "lineRange": [
+            9,
+            12
+          ],
+          "explanation": "`npm start` runs `node src/server.mjs`, which is the only command needed to launch Trident. The `test` script is the default placeholder; there are no automated tests yet.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Module type and privacy",
+          "lineRange": [
+            13,
+            17
+          ],
+          "explanation": "`\"type\": \"module\"` tells Node to use modern `import` syntax. `private` stops the project from being published to the npm registry by accident.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Dependencies",
+          "lineRange": [
+            18,
+            22
+          ],
+          "explanation": "Only two outside libraries: the Claude Agent SDK, used to run Claude agents, and the Codex SDK. Keeping the list this short means fewer things to install and fewer things that can break.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    ".claude/launch.json": {
+      "overview": "A small config file that lets Claude Code start Trident for you. It says to run `node src/server.mjs` and that the page will be at http://127.0.0.1:4317. It is the second way to start the server mentioned in Step 3.",
+      "sections": [
+        {
+          "title": "Launch configuration",
+          "lineRange": [
+            1,
+            6
+          ],
+          "explanation": "One entry named `trident`. It runs the same command as `npm start` and records the port and address, so a tool can start the server and open the right page in a preview.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    "src/workplaces.mjs": {
+      "overview": "Manages workplaces: separate studios, each with its own folder, board, Lead, team and Ask-several helper. The list is saved in data/workplaces.json. Workplaces share the approval gate, the Codex process and the OpenRouter key, but nothing else. Step 4 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Header and imports",
+          "lineRange": [
+            1,
+            15
+          ],
+          "explanation": "The comment explains that the first workplace, Main, keeps the original data files so nothing from earlier versions is lost. `KNOWN_WORKERS` lists the only worker types allowed: claude, codex and openrouter.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Loading the list",
+          "lineRange": [
+            17,
+            27
+          ],
+          "explanation": "Reads the saved list; if it is missing or empty, it creates Main pointing at the `workspace` folder (or `TRIDENT_WORKSPACE` if set). `live` is an in-memory map of workplaces that are currently running.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Starting one workplace",
+          "lineRange": [
+            29,
+            62
+          ],
+          "explanation": "Makes the folders, makes sure the project folder is a git repo, and builds the pieces: board, Ask-several, team and Lead. Every event and approval is tagged with the workplace id, so the page knows where it came from. The team gets a `tellLead` callback, and the Lead is created right after, so they can talk to each other. Earlier team talk is replayed so the screen is filled in.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Sidebar summary",
+          "lineRange": [
+            64,
+            66
+          ],
+          "explanation": "`summary` picks just what the sidebar needs for each workplace. `announce` sends the whole list to the page whenever it changes.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Checking a typed folder",
+          "lineRange": [
+            68,
+            81
+          ],
+          "explanation": "Checks a folder you typed and returns a plain-words problem, or nothing if it is fine. It refuses relative paths, whole drives, Trident's own folders, folders another workplace already uses, files, and folders that already have git history.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Creating a workplace",
+          "lineRange": [
+            83,
+            98
+          ],
+          "explanation": "Cleans up the name (40 characters max, no duplicates), builds an id from the name plus four random characters, and uses `workplaces/<name>` if no folder was given. Unknown worker types are quietly dropped. It then saves, starts the workplace and updates the sidebar.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Removing a workplace",
+          "lineRange": [
+            100,
+            118
+          ],
+          "explanation": "Stops the workers and the Lead, then takes the workplace off the list. Nothing on disk is deleted: an entry goes into `workplaces-archived.json`, and the folder and board stay where they are. Main can never be removed.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Cancelling a goal",
+          "lineRange": [
+            120,
+            128
+          ],
+          "explanation": "Stops all workers and marks the current goal cancelled. A message makes clear that work already merged into the folder stays there.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Startup and public functions",
+          "lineRange": [
+            130,
+            141
+          ],
+          "explanation": "Starts every saved workplace when Trident boots, then returns the small set of functions the server uses: get, all, create, remove, cancelGoal and announce.",
+          "tourOrder": 4
+        }
+      ]
+    },
+    "src/settings.mjs": {
+      "overview": "Holds the few Trident-wide settings, saved in data/settings.json. Right now there is one: the most workers that may work at the same moment in each workplace. Step 4 of the tour covers it alongside workplaces.",
+      "sections": [
+        {
+          "title": "Defaults",
+          "lineRange": [
+            1,
+            4
+          ],
+          "explanation": "`maxAgents` defaults to 3. The default is used whenever the file is missing or does not mention a setting.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Loading saved settings",
+          "lineRange": [
+            6,
+            9
+          ],
+          "explanation": "Starts from the defaults and lays the saved file on top. If the file is missing or broken, the defaults are simply kept. `announce` sends the current settings to the page.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Reading and changing",
+          "lineRange": [
+            10,
+            23
+          ],
+          "explanation": "`get` returns the current settings. `set` checks the new number is a whole number from 1 to 10, and replies in plain words if not. On success it saves to disk and tells the page.",
+          "tourOrder": 4
+        }
+      ]
+    },
+    "src/board.mjs": {
+      "overview": "The board is each workplace's shared memory: a small SQLite database holding goals, their tasks, and team talk messages. It also builds the short [state] summary that is put at the top of every message to the Lead. Step 5 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Statuses and import",
+          "lineRange": [
+            1,
+            8
+          ],
+          "explanation": "The comment lists how a goal moves: proposed, then active, then done (or replaced, or cancelled). Tasks are todo, working, review, blocked or done. `node:sqlite` is the database built into Node 26.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Tables and upgrades",
+          "lineRange": [
+            10,
+            33
+          ],
+          "explanation": "Creates the goals, tasks and talk tables if they do not exist yet. Later columns (branch, worktree, cross-check results) are added only when missing, so an older database is upgraded in place without losing data. On startup, any worker task still marked working is set to blocked, because worker sessions do not survive a restart.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Reading the current goal",
+          "lineRange": [
+            35,
+            46
+          ],
+          "explanation": "`current` finds the newest goal still open (proposed or active). `snapshot` is what the screen shows, which also includes a goal that just finished or was cancelled. `changed` pushes a fresh snapshot to the page.",
+          "tourOrder": 5
+        },
+        {
+          "title": "New plan and goal status",
+          "lineRange": [
+            48,
+            67
+          ],
+          "explanation": "`proposePlan` first closes any open goal: a waiting plan becomes replaced, an active goal becomes cancelled. It then saves the new goal and numbers its tasks 1, 2, 3. `setGoalStatus` changes the current goal and reports whether there was one.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Updating one task",
+          "lineRange": [
+            69,
+            88
+          ],
+          "explanation": "`updateTask` only works on an approved plan, checks the status is valid, and only changes the fields listed in `FIELDS`. It returns an error message in plain words, or nothing on success. `task` returns one task together with its goal and the full task list.",
+          "tourOrder": 5
+        },
+        {
+          "title": "The [state] block",
+          "lineRange": [
+            90,
+            105
+          ],
+          "explanation": "Builds the short text summary the Lead sees at the top of every message: the goal, the \"Done when\" line, each task with its status and owner, any cross-check result, and recent team talk. This lets the Lead know where things stand without calling any tools (an idea taken from PandaOS).",
+          "tourOrder": 5
+        },
+        {
+          "title": "Team talk",
+          "lineRange": [
+            107,
+            121
+          ],
+          "explanation": "`say` stores a message (trimmed to 2000 characters) and sends it to the page. `talkFor` returns what one participant may see: messages to everyone or to them, never their own, oldest first. `talkLine` formats one message as a line of text, flagging warnings.",
+          "tourOrder": 5
+        },
+        {
+          "title": "What the board offers",
+          "lineRange": [
+            123,
+            124
+          ],
+          "explanation": "The list of functions other files may use. Nothing else can touch the database directly, which keeps the rules above in one place.",
+          "tourOrder": 5
+        }
+      ]
+    },
+    "src/lead.mjs": {
+      "overview": "Runs the Lead agent: one long conversation with Claude that stays open between your messages. It sets the Lead's instructions, gives it only the board and Library tools plus read-only tools for free, sends every other risky action through the approval gate, and turns Claude's output into events for the page. Step 6 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Imports",
+          "lineRange": [
+            1,
+            6
+          ],
+          "explanation": "Brings in `query` from the Claude Agent SDK, the board and Library tools, and `subscriptionEnv` from claude.mjs, which keeps Claude on your own subscription login.",
+          "tourOrder": 6
+        },
+        {
+          "title": "The Lead's instructions",
+          "lineRange": [
+            8,
+            30
+          ],
+          "explanation": "The text added to the Lead's system prompt. It tells the Lead to answer small things directly but to propose a plan and wait for approval before bigger work, how to use workers and cross-checks, when to accept or reject, and how to use Ask several and the Library. The worker list, working folder and Library guide are filled in when the Lead starts.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Read-only tools",
+          "lineRange": [
+            32,
+            33
+          ],
+          "explanation": "Tools that only look at things, such as reading or searching files. These are allowed without asking you, since they cannot change anything.",
+          "tourOrder": 6
+        },
+        {
+          "title": "The message queue",
+          "lineRange": [
+            35,
+            47
+          ],
+          "explanation": "Your messages go into `inbox`. The `messages` generator hands them to Claude one by one, then sleeps until `wake` is called. This is what keeps one conversation open across many messages instead of starting fresh each time.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Starting Claude",
+          "lineRange": [
+            49,
+            64
+          ],
+          "explanation": "Opens the Claude session with its options. `settingSources: []` keeps your global Claude Code plugins out (they slowed each start by about 100 seconds). Board and Library tools are attached and pre-allowed, and every other tool goes through `canUseTool`, which asks the approval gate.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Reading Claude's output",
+          "lineRange": [
+            66,
+            74
+          ],
+          "explanation": "A loop that runs in the background, passing each message from Claude to `handle`. If the session fails, an error event is shown, and in any case the Lead is marked stopped at the end.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Turning output into events",
+          "lineRange": [
+            76,
+            95
+          ],
+          "explanation": "Converts Claude's messages into page events: status at startup, small text pieces as they stream in, full text messages, and a short line for each tool used. Board tool calls are left out of Activity because their effect already shows on the board. A `result` message means the turn is over, so the Lead goes back to idle.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Controls for the rest of Trident",
+          "lineRange": [
+            97,
+            114
+          ],
+          "explanation": "`send` adds the current [state] block to the top of your text, queues it and wakes the Lead. `interrupt` stops the current turn, and `close` ends the conversation so the Claude process can exit when a workplace is removed.",
+          "tourOrder": 6
+        },
+        {
+          "title": "One-line tool summary",
+          "lineRange": [
+            116,
+            123
+          ],
+          "explanation": "Picks the most useful detail of a tool call (command, file path, pattern or web address) for the Activity view. The approval gate also uses this line to recognise the exact same operation later.",
+          "tourOrder": 6
+        }
+      ]
+    },
+    "src/board-tools.mjs": {
+      "overview": "The tools the Lead is allowed to use to change the board and steer the team, such as propose_plan, assign_task, accept_task and reject_task. They run inside Trident as an in-process MCP server, so the Lead never edits the board directly. Each tool checks its input first, keeping the board tidy even if the model makes a mistake. Step 6 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Setup and tool names",
+          "lineRange": [
+            1,
+            9
+          ],
+          "explanation": "Imports the SDK helpers and `zod`, a library that describes what each tool's input must look like. `text` wraps a reply in the shape the SDK expects. `BOARD_TOOL_NAMES` lists the full names, which lead.mjs uses to allow these tools without asking.",
+          "tourOrder": 6
+        },
+        {
+          "title": "propose_plan",
+          "lineRange": [
+            11,
+            39
+          ],
+          "explanation": "The Lead's way to put a plan in front of you. The input must have a goal, one \"Done when\" line and 1 to 12 tasks, and each owner must be 'lead' or a real worker. After saving the plan, the reply tells the Lead to stop and wait for your answer.",
+          "tourOrder": 6
+        },
+        {
+          "title": "update_task and finish_goal",
+          "lineRange": [
+            40,
+            67
+          ],
+          "explanation": "`update_task` is only for the Lead's own quick tasks; if a worker owns the task, it points the Lead to accept or reject instead. `finish_goal` refuses unless the goal is approved and every task is done, and it asks for evidence of how \"Done when\" was checked.",
+          "tourOrder": 6
+        },
+        {
+          "title": "team_say and ask_several",
+          "lineRange": [
+            68,
+            92
+          ],
+          "explanation": "`team_say` posts a message in team talk, to one worker or everyone. `ask_several` sends one question to 2 to 4 models, then returns all the answers to the Lead along with the OpenRouter cost.",
+          "tourOrder": 6
+        },
+        {
+          "title": "assign, accept and reject",
+          "lineRange": [
+            93,
+            121
+          ],
+          "explanation": "These hand the real work to the team (team.mjs). `assign_task` gives a task to a worker, `accept_task` merges the result, and `reject_task` sends it back with feedback for another try. Each reply reminds the Lead to end its turn rather than wait, since a [team] message will arrive later.",
+          "tourOrder": 6
+        }
+      ]
+    },
+    "src/gate.mjs": {
+      "overview": "The approval gate. When an agent wants to do something risky, its action waits here until you choose: allow once, deny, always allow, or always deny. The 'always' choices are saved to data/rules.json for that exact operation, so you are not asked twice. Step 7 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Header and imports",
+          "lineRange": [
+            1,
+            7
+          ],
+          "explanation": "The comment states the key rule: an 'always' answer covers one exact operation (tool plus its exact command or path), never a whole tool. `summarize` from lead.mjs is used to build that exact description.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Saved rules",
+          "lineRange": [
+            9,
+            20
+          ],
+          "explanation": "Loads the saved allow and deny lists, starting empty if there is no file. `pending` holds requests waiting for you. `keyOf` makes the text key, such as `Bash: npm test`, that the rules are matched against.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Asking for approval",
+          "lineRange": [
+            22,
+            39
+          ],
+          "explanation": "If the operation is already on the always-deny or always-allow list, it answers at once. Otherwise it creates a short id, stores the request, and sends an `approval` event so the Needs-you bar shows it. The agent's action waits on a promise until you decide. If the agent's turn is stopped meanwhile, the request is cancelled and counts as a deny.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Recording your decision",
+          "lineRange": [
+            41,
+            52
+          ],
+          "explanation": "Finds the waiting request, saves an 'always' rule if you chose one, and releases the agent with allow or deny. It then tells the page the approval is closed so the bar clears.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Listing open requests",
+          "lineRange": [
+            54,
+            57
+          ],
+          "explanation": "`open` lists every request still waiting, in the same shape as the approval events. The gate exposes only three functions: request, decide and open.",
+          "tourOrder": 7
+        }
+      ]
+    },
+    "src/claude.mjs": {
+      "overview": "The Claude adapter. It turns the Claude Agent SDK into a simple object with two methods: `run(text)` sends one message and waits for the reply, and `close()` ends the conversation. The conversation stays open between messages, so Claude remembers earlier turns. Workers, checkers, the Ask-several feature and (through openrouter.mjs) OpenRouter models all use it, as described in tour step 8.",
+      "sections": [
+        {
+          "title": "Purpose and import",
+          "lineRange": [
+            1,
+            3
+          ],
+          "explanation": "The comment states the whole idea: one long-lived Claude conversation, fed one message at a time. The only import is `query` from the Claude Agent SDK, which starts and drives a Claude process.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Stay on your Claude login",
+          "lineRange": [
+            5,
+            11
+          ],
+          "explanation": "`subscriptionEnv()` copies the computer's settings but removes three variables (`ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY`). If any of them were left over, Claude would be billed to an API key or sent to another address instead of using your own sign-in. Removing them keeps Trident on your subscription.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Inbox of waiting messages",
+          "lineRange": [
+            13,
+            24
+          ],
+          "explanation": "`claudeSession` keeps a small `inbox` list. `messages()` is a generator: it hands each queued message to Claude, then pauses on a promise until `wake` is called. This is how one open conversation can be fed new messages over time instead of starting a new process for each one."
+        },
+        {
+          "title": "Starting Claude",
+          "lineRange": [
+            26,
+            39
+          ],
+          "explanation": "This calls `query` with the message stream and the options. `settingSources: []` and `strictMcpConfig: true` keep the worker away from your personal Claude plugins and hooks. The Claude Code system prompt is reused, with Trident's own instructions appended. `canUseTool` is the hook that lets Trident approve or block each tool call. A caller can pass its own `env` (OpenRouter does), otherwise the subscription environment is used."
+        },
+        {
+          "title": "Reading Claude's replies",
+          "lineRange": [
+            41,
+            57
+          ],
+          "explanation": "A background loop reads everything Claude sends. Tool calls are reported through `onToolUse`, which is how the page's Activity list gets filled. When a `result` arrives, the waiting `run()` call is resolved with the reply text, or rejected with an error. Note the gotcha on line 49: a bad key or empty credit can arrive as a 'success' with `is_error` set, so both are checked."
+        },
+        {
+          "title": "The public run and close",
+          "lineRange": [
+            59,
+            73
+          ],
+          "explanation": "`run(text)` stores who is waiting, puts the text in the inbox and wakes the generator. `close()` marks the stream as finished and wakes it one last time, so the generator stops and the Claude process can exit. Only one `run` is expected at a time, since there is a single `waiting` slot."
+        }
+      ]
+    },
+    "src/codex.mjs": {
+      "overview": "The Codex adapter. Instead of starting Codex for every turn (about 70 seconds each), it starts one `codex app-server` program and talks to it with small JSON messages over its input and output (JSON-RPC over stdio). It offers conversations (threads) with a `run(text)` method like the Claude adapter, forwards Codex's permission questions to Trident, and remembers when Codex is out of usage. This is the second vendor in tour step 8.",
+      "sections": [
+        {
+          "title": "Purpose and imports",
+          "lineRange": [
+            1,
+            7
+          ],
+          "explanation": "The comment explains the main design choice: one long-running Codex process saves a large start-up cost on every turn. The imports are Node tools for starting a program, reading its output line by line, and reading the Codex config file.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Keeping Codex isolated",
+          "lineRange": [
+            9,
+            18
+          ],
+          "explanation": "`isolationArgs()` builds command-line flags that switch off Codex's plugins, apps, hooks and memories. It also reads your `config.toml` and turns off every MCP server listed there. The comment gives the reason: those extras added about 35 seconds to each start and some failed to sign in."
+        },
+        {
+          "title": "Short error messages",
+          "lineRange": [
+            20,
+            27
+          ],
+          "explanation": "Codex's error text can be long and full of upgrade offers. `plainError` cuts it to one plain line. If the message is about a usage limit, it also tries to pull out the 'try again at ...' time and marks the error as `outOfUsage`."
+        },
+        {
+          "title": "Starting the Codex program",
+          "lineRange": [
+            29,
+            53
+          ],
+          "explanation": "`startCodex` keeps the shared state: the process, a counter for request ids, `pending` requests waiting for replies, and `threads` mapping each conversation to its handlers. `start()` launches `codex app-server`, ignores its noisy error output, and on exit rejects every waiting request so nothing hangs. It then sends the `initialize` handshake.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Sending requests",
+          "lineRange": [
+            55,
+            62
+          ],
+          "explanation": "`send` writes one JSON message plus a newline to Codex's input. `request` gives each message a new id number and stores a promise for it in `pending`. The reply will carry the same id, which is how answers are matched to questions.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Routing every incoming line",
+          "lineRange": [
+            64,
+            82
+          ],
+          "explanation": "Each line from Codex is one of three kinds. A reply (has `id`, no `method`) settles the matching pending request. A request from Codex (has both) is a permission question; it goes to the thread's `onRequest` handler, and anything unknown is declined. Everything else is an event, passed to the thread's `onEvent`. Declining by default is the safe choice.",
+          "tourOrder": 8
+        },
+        {
+          "title": "One Codex conversation",
+          "lineRange": [
+            84,
+            126
+          ],
+          "explanation": "`thread()` starts a Codex conversation in a folder, with a sandbox (`workspace-write` or `read-only`) and approvals on. It remembers the last agent message and resolves `run()` with it when the turn completes. If a turn fails because Codex is out of usage, it parses the retry time (removing 'st', 'nd', 'rd', 'th' so the date can be read, or waiting 30 minutes if unknown) and tells the page Codex is unavailable. `run` also accepts an `outputSchema`, which team.mjs uses to force a pass/fail JSON verdict."
+        },
+        {
+          "title": "Out-of-usage check and exports",
+          "lineRange": [
+            128,
+            138
+          ],
+          "explanation": "`unavailableReason()` returns why Codex cannot work right now, or null. Once the wait time has passed it clears the flag and tells the page Codex is free again, so it is retried automatically. The module returns `thread`, `unavailableReason` and a `stop` function."
+        }
+      ]
+    },
+    "src/openrouter.mjs": {
+      "overview": "The OpenRouter adapter. It does not have its own conversation code: it reads your OpenRouter key and chosen model and builds an environment that points the normal Claude worker (claude.mjs) at OpenRouter's Anthropic-compatible address. That way an OpenRouter model gets the same tools and the same approval gate as Claude. It also has a free check of the key and model. This is the third vendor in tour step 8.",
+      "sections": [
+        {
+          "title": "Setup notes and default model",
+          "lineRange": [
+            1,
+            9
+          ],
+          "explanation": "The header explains how to set it up: you type your own key with `setx`, Trident never asks for it, and then you restart. If no model is chosen, `qwen/qwen3-coder` is used.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Reading a setting on Windows",
+          "lineRange": [
+            11,
+            21
+          ],
+          "explanation": "`setting(name)` first looks in the running process. On Windows it also asks PowerShell for the user-level variable. This matters because `setx` saves the value for new programs only; reading it directly means it works without a reboot or a fresh terminal. Any failure just returns an empty string."
+        },
+        {
+          "title": "Building the worker environment",
+          "lineRange": [
+            23,
+            43
+          ],
+          "explanation": "`openRouterConfig()` returns null when there is no key, so OpenRouter simply does not appear. Otherwise it returns the model, key and an environment where the Anthropic address points to OpenRouter and the key goes in `ANTHROPIC_AUTH_TOKEN`. `ANTHROPIC_API_KEY` is set to empty on purpose (OpenRouter's guide says so), and every model slot is set to the chosen model so nothing quietly falls back to an Anthropic model.",
+          "tourOrder": 8
+        },
+        {
+          "title": "Free key and model check",
+          "lineRange": [
+            44,
+            57
+          ],
+          "explanation": "`check()` asks OpenRouter about the key and the model list, without generating any text, so it costs nothing. It returns a plain sentence for each problem: rejected key, unknown model, a model that cannot use tools (so it could not edit files), or no credit left. It returns null when everything is fine."
+        }
+      ]
+    },
+    "src/team.mjs": {
+      "overview": "The heart of the work, from tour step 9. `startTeam` builds the team for one workplace: it gives a Lead task to a worker in that task's own git copy, has a worker from a different vendor check the result, reports back to the Lead, and then merges (accept) or sends it back (reject). It also posts automatic team notes when files change, warns when two workers touch the same file, and limits how many workers run at once.",
+      "sections": [
+        {
+          "title": "Flow, imports and constants",
+          "lineRange": [
+            1,
+            21
+          ],
+          "explanation": "The header draws the flow in one line: assign, edit own copy, other vendor checks, Lead decides. It imports the team talk tools, Library tools, the Claude adapter and the git helpers. `EDIT_TOOLS` and `READ_TOOLS` sort Claude's tools into editing and read-only. `VERDICT_SCHEMA` is the exact JSON shape a checker must answer with: pass or fail, plus notes.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Who is on the team",
+          "lineRange": [
+            23,
+            36
+          ],
+          "explanation": "The team starts from Claude, Codex and (only if a key exists) OpenRouter, then keeps only the members this workplace chose. If nothing is left, Claude is added so a team always has a worker. `checkersFor(w)` lists who may check a worker's job: other vendors first, skipping Codex if it is out of usage, and Claude last. A worker never checks its own work.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Automatic team notes",
+          "lineRange": [
+            38,
+            62
+          ],
+          "explanation": "`onEdit` runs whenever a worker edits a file. The first time a worker changes a file, the team talk gets an automatic 'changed file' line. If another active worker has also changed the same file in their own copy, everyone gets one warning to agree on it before merging. The `noted` and `warned` sets make sure each note appears only once."
+        },
+        {
+          "title": "A Claude or OpenRouter worker",
+          "lineRange": [
+            64,
+            91
+          ],
+          "explanation": "`claudeWorker` opens a Claude session in the task's folder, with instructions naming the teammates, the team talk tools and the Library. Tool calls are shown in Activity and edits are reported to `onEdit`. The `canUseTool` rule is the safety line: checkers can never edit, workers may edit freely inside their own folder, and anything else goes to the approval gate (gate.mjs). Passing `provider` turns the same code into an OpenRouter worker."
+        },
+        {
+          "title": "A Codex worker",
+          "lineRange": [
+            93,
+            131
+          ],
+          "explanation": "`codexWorker` opens a Codex thread, read-only for checkers. Command runs and file changes are shown in Activity. When Codex asks permission for a command or edit, the question is passed to the same approval gate and the answer is turned into Codex's 'accept' or 'decline'. `check` runs with the verdict schema so Codex must answer in the right shape. `open` picks the right kind of worker by name."
+        },
+        {
+          "title": "Prompts and reading verdicts",
+          "lineRange": [
+            133,
+            172
+          ],
+          "explanation": "`withTalk` puts new team talk at the start of each instruction, since Codex has no team tools of its own. `workPrompt` tells the worker its task, the goal, to stay in its own folder and to finish with a short summary without committing. `checkPrompt` gives the checker the summary and the git diff (cut at 60,000 characters) and asks for JSON only. `parseVerdict` finds the JSON in the reply; if it cannot be read, it counts as a fail, which is the safe default."
+        },
+        {
+          "title": "One round of work and checking",
+          "lineRange": [
+            174,
+            229
+          ],
+          "explanation": "`round` is the main loop for one task. The worker runs, then git collects its changes, and the task moves to review. Each possible checker is tried in turn; if one fails (for example out of usage) it is skipped and named in the notes. The result is saved on the board, shown to you, and sent to the Lead with a clear instruction to accept or reject. Any error marks the task as blocked and tells the Lead it can reassign it.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Limit on workers at once",
+          "lineRange": [
+            231,
+            251
+          ],
+          "explanation": "The number of workers running at the same time comes from Settings (default 3). `startRound` starts a round if there is room, otherwise it puts it in a queue and notes 'waiting for a free spot' on the task. When a round finishes, the next queued rounds start by themselves."
+        },
+        {
+          "title": "What the Lead can do",
+          "lineRange": [
+            253,
+            302
+          ],
+          "explanation": "These are the actions behind the Lead's `assign_task`, `reject_task` and `accept_task` tools. `assign` checks many things first (known worker, available, approved plan, not done, dependencies finished), then makes a fresh git worktree and starts the round. `reject` sends feedback back to the same worker. `accept` merges the branch; if the merge fails the task is blocked and the error is returned, otherwise the copy is removed and the task is marked done. Each returns null on success or a plain sentence explaining the problem.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Stopping everything",
+          "lineRange": [
+            304,
+            320
+          ],
+          "explanation": "`stopAll` closes every worker session, empties the queue and forgets the file notes. It is used when a goal is cancelled or a workplace removed; the copies stay on disk and nothing is merged. `worktreeRootFor` says where task copies live: a `worktrees` folder inside the data folder."
+        }
+      ]
+    },
+    "src/git.mjs": {
+      "overview": "Small git helpers used by team.mjs (tour step 9). The workplace folder is made into its own git repository, and each task gets a git worktree: a second folder on its own branch. Workers edit their copy, the changes are collected as a diff for the checker, and an accepted task is merged back. Everything is done by calling the `git` program directly.",
+      "sections": [
+        {
+          "title": "Running git as Trident",
+          "lineRange": [
+            1,
+            13
+          ],
+          "explanation": "`ID` adds settings to every git command so commits are signed 'Trident' with a local address, not your name, and line endings are left alone (`core.autocrlf=false`). `git(cwd, ...args)` runs one git command in a folder and returns its trimmed output; it throws if git fails.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Commit all and set up the repo",
+          "lineRange": [
+            15,
+            28
+          ],
+          "explanation": "`commitAll` stages every file and commits, returning false when nothing changed. `ensureRepo` turns a workplace folder into a git repo on a `main` branch the first time, with a starting-point commit (an empty one if the folder has no files yet)."
+        },
+        {
+          "title": "A fresh copy for each task",
+          "lineRange": [
+            30,
+            40
+          ],
+          "explanation": "`createWorktree` first saves a snapshot of the workplace, so the new copy starts from what is there now. It then creates a folder and a branch named `trident/<name>` from the current commit. If the folder already exists (the task is being redone), it is reused and its starting point is looked up again. The returned `base` commit is used later to see what the worker changed.",
+          "tourOrder": 9
+        },
+        {
+          "title": "Collecting the worker's changes",
+          "lineRange": [
+            42,
+            49
+          ],
+          "explanation": "`changes` commits whatever the worker left in its folder, then returns two views of the difference from `base`: a short per-file summary (`stat`) shown to the Lead, and the full diff given to the checker."
+        },
+        {
+          "title": "Merging and cleaning up",
+          "lineRange": [
+            51,
+            65
+          ],
+          "explanation": "`mergeBranch` snapshots the workplace, then merges the task branch with a merge commit (`--no-ff`) so each task stays visible in history. If there is a conflict it aborts the merge so nothing changes, and returns one plain line explaining the problem. `removeWorktree` deletes the task's copy and ignores errors."
+        }
+      ]
+    },
+    "src/talk-tools.mjs": {
+      "overview": "Team talk tools for workers that run through the Claude adapter (Claude and OpenRouter), from tour step 9. It is a tiny in-process MCP server with two tools: `say` to leave a message and `read` to see new ones. Messages never interrupt anyone; they wait until the reader next looks. `talkDigest` gives the same messages as text for Codex, which has no tools for this.",
+      "sections": [
+        {
+          "title": "Design note and helpers",
+          "lineRange": [
+            1,
+            8
+          ],
+          "explanation": "The header gives the key rule: talking never wakes anyone, so no one gets stuck waiting and two agents cannot pull each other into an endless back-and-forth. `text()` wraps a string in the shape MCP tools return. `TALK_TOOL_NAMES` lists the full tool names (`mcp__team__say`, `mcp__team__read`) that team.mjs allows.",
+          "tourOrder": 9
+        },
+        {
+          "title": "The say tool",
+          "lineRange": [
+            10,
+            29
+          ],
+          "explanation": "`talkTools` builds an MCP server named 'team' for one participant (`who`). `say` takes the message and an optional receiver; zod describes the inputs so the model knows what to pass. Sending a message to yourself is refused politely. The message is saved on the board with `board.say`."
+        },
+        {
+          "title": "The read tool",
+          "lineRange": [
+            30,
+            43
+          ],
+          "explanation": "`read` asks the board for up to 20 messages newer than the last one this participant saw. It then records the newest id in `seen`, so the same messages are not shown twice."
+        },
+        {
+          "title": "Digest for Codex",
+          "lineRange": [
+            45,
+            51
+          ],
+          "explanation": "`talkDigest` does the same as `read` (up to 12 messages) but returns a ready-made text block headed '[team talk since you last looked]'. team.mjs puts it in front of the next instruction, so Codex hears the team even without tools."
+        }
+      ]
+    },
+    "src/library.mjs": {
+      "overview": "The Library store from tour step 10. The Library is a plain folder of Markdown notes, sorted into sections, that every agent can read. Any change goes into a `.drafts` folder first and only becomes the real note when you press Save; the version it replaces is copied into `.old`. Because it is just a folder, tools like Obsidian or Joplin can open it too.",
+      "sections": [
+        {
+          "title": "Folder layout and sections",
+          "lineRange": [
+            1,
+            13
+          ],
+          "explanation": "The header maps out the folder: `guide.md` at the top, notes in section folders, drafts waiting for Save, and old versions. It states the main rule: agents can change anything, but only as drafts. `SECTIONS` lists the starting sections.",
+          "tourOrder": 10
+        },
+        {
+          "title": "The welcome guide",
+          "lineRange": [
+            15,
+            31
+          ],
+          "explanation": "`GUIDE` is the default text of `guide.md`, which every model reads when it starts in Trident. It describes four habits (remember, checkpoint, recover, condense) and explains how drafts work. It is written only if the file does not already exist, so your own edits to it are kept."
+        },
+        {
+          "title": "Setup and safe paths",
+          "lineRange": [
+            33,
+            54
+          ],
+          "explanation": "`openLibrary` creates the folders and the guide if missing. The draft list lives in `.drafts/index.json`. `clean(p)` is the safety check for every path: it rejects anything that tries to leave the Library (`..`), hidden files, and odd characters, and adds `.md` if missing. Small helpers read files, find a note's title from its first `#` line, and make a timestamp.",
+          "tourOrder": 10
+        },
+        {
+          "title": "Listing what is there",
+          "lineRange": [
+            56,
+            81
+          ],
+          "explanation": "`walk` lists every `.md` file, skipping hidden folders. `snapshot` builds what the page needs: all notes with titles and a draft flag (including brand-new notes that only exist as drafts), the sections, the drafts, and the old versions sorted newest first. The replace time is read from the file name. `changed()` sends this snapshot to the page as a 'library' event."
+        },
+        {
+          "title": "Keeping old copies and reading",
+          "lineRange": [
+            83,
+            104
+          ],
+          "explanation": "`keepOld` copies the current note into `.old` with a timestamp in its name before it is replaced. The returned object starts with `snapshot`, `changed`, the guide text, a one-line-per-note `list`, and `read`, which returns both the saved text and any draft so the reader can see both."
+        },
+        {
+          "title": "Writing a draft",
+          "lineRange": [
+            106,
+            118
+          ],
+          "explanation": "`draft` is the only way agents change the Library. It writes the text into `.drafts` and records who wrote it, a short reason, and when. It then tells the page, so the draft shows up waiting for you.",
+          "tourOrder": 10
+        },
+        {
+          "title": "Save and discard",
+          "lineRange": [
+            120,
+            144
+          ],
+          "explanation": "`save` runs when you press Save: the current note is copied to `.old`, then the draft file is moved into place and removed from the draft list. `discard` deletes the draft and leaves the real note untouched. Both update the page.",
+          "tourOrder": 10
+        },
+        {
+          "title": "Old versions",
+          "lineRange": [
+            146,
+            168
+          ],
+          "explanation": "`restore` brings an old version back, but as a draft, so it still has to go through Save. `deleteOld` removes one old version, or all of them with 'all'; this one is permanent, which is why the page asks twice before deleting all."
+        }
+      ]
+    },
+    "src/library-tools.mjs": {
+      "overview": "The Library tools that the Lead and the Claude-based workers can call, from tour step 10. Like the board tools in step 6, it is a small in-process MCP server: `list`, `read` and `write`. The write tool never changes a note directly; it saves a draft through library.mjs for you to approve.",
+      "sections": [
+        {
+          "title": "Header and tool names",
+          "lineRange": [
+            1,
+            7
+          ],
+          "explanation": "The comment repeats the rule: agents can read and change anything, but a change becomes a draft. `LIBRARY_TOOL_NAMES` lists the full names (`mcp__library__list` and so on) that other files use to allow these tools.",
+          "tourOrder": 10
+        },
+        {
+          "title": "List and read",
+          "lineRange": [
+            9,
+            27
+          ],
+          "explanation": "`libraryTools(library, who)` builds the server for one agent. `list` returns every note with its title. `read` returns a note's saved text and, if there is one, the unsaved draft below it with the name of who wrote it, so an agent can see pending changes too."
+        },
+        {
+          "title": "Write as a draft",
+          "lineRange": [
+            28,
+            44
+          ],
+          "explanation": "`write` asks for the full note, its path, and one short sentence saying why. It calls `library.draft` with the agent's name and replies that the draft is waiting for the user. Asking for a reason means you always see why a change was suggested.",
+          "tourOrder": 10
+        }
+      ]
+    },
+    "src/compare.mjs": {
+      "overview": "The Ask-several feature from tour step 11. One question goes to two to four models at once: your local Claude, your local Codex, or any OpenRouter model. Each answer is sent to the page as soon as it arrives, with how long it took and, for OpenRouter, what it cost. It reuses the Claude adapter from step 8.",
+      "sections": [
+        {
+          "title": "Sources and limits",
+          "lineRange": [
+            1,
+            12
+          ],
+          "explanation": "The header lists the three kinds of source: 'claude', 'codex', or a 'vendor/model' name for OpenRouter. `DEFAULT_MODELS` is the starting set. At most 4 models are asked, and each OpenRouter answer is capped at 1500 tokens to keep one comparison cheap.",
+          "tourOrder": 11
+        },
+        {
+          "title": "Asking an OpenRouter model",
+          "lineRange": [
+            14,
+            31
+          ],
+          "explanation": "The OpenRouter model list is fetched once and kept (`catalog ??=`). `askOpenRouter` sends a normal chat request with your key, asks OpenRouter to include usage so the cost comes back, and turns any error into a short message."
+        },
+        {
+          "title": "Asking Claude and Codex",
+          "lineRange": [
+            33,
+            53
+          ],
+          "explanation": "`askClaude` opens a Claude session that is told to answer directly and is denied every tool. `askCodex` first checks whether Codex is out of usage, then opens a read-only thread that declines every permission request. Both close their session afterwards in `finally`, even if something fails. `label` gives each column a readable name."
+        },
+        {
+          "title": "Running them side by side",
+          "lineRange": [
+            55,
+            87
+          ],
+          "explanation": "`askSeveral` removes duplicates, keeps at most four, and checks the request first: at least two models, an OpenRouter key if needed, and model names that exist. It then announces the empty columns to the page and runs every model in parallel with `Promise.all`. Each answer (or failure) is sent to the page right away, so a slow model does not hold up the others. Finally it adds up the total cost.",
+          "tourOrder": 11
+        }
+      ]
+    },
+    "public/index.html": {
+      "overview": "The whole web page from tour step 12, in one file: styles, the layout markup and the script. It shows the workplace sidebar, the Lead chat, the Needs-you approvals bar, the task board, team talk, Activity, the Library, Settings and the Ask-several columns. The script listens to the server's event stream (`/events`, from step 3) and sends your clicks back as POST requests. Its look comes from ember.css.",
+      "sections": [
+        {
+          "title": "Head and base layout",
+          "lineRange": [
+            1,
+            18
+          ],
+          "explanation": "The page loads ember.css, then adds its own styles. The first rules keep the kit's colours inside the `.ds` wrapper. The layout is a grid: a 15rem sidebar on the left and the work area on the right, filling the window height.",
+          "tourOrder": 12
+        },
+        {
+          "title": "Page-specific styles",
+          "lineRange": [
+            19,
+            186
+          ],
+          "explanation": "These rules style each area: sidebar, team talk (auto notes greyed, warnings highlighted), dialogs, the 'where we are' line, Ask-several columns that scroll sideways, approvals, chat, board, Library and Settings. Note line 51: the kit has no red button, so a destructive button is made from the kit's own tokens. Two blocks at the end change the layout for screens under 760px wide, stacking the parts in one column."
+        },
+        {
+          "title": "Workplace screen markup",
+          "lineRange": [
+            189,
+            288
+          ],
+          "explanation": "The HTML skeleton: the sidebar with workplaces, Library and Settings links; the New Workplace dialog with a team checklist; the header with status badges for the Lead and each worker; the 'now' sentence; the Needs-you section; the chat with its message box; and the side column with Goal, Team talk, Activity and This workplace. `aria-live` areas let screen readers announce updates.",
+          "tourOrder": 12
+        },
+        {
+          "title": "Library, Settings, remove dialog",
+          "lineRange": [
+            290,
+            336
+          ],
+          "explanation": "Two hidden pages and one dialog. The Library page has a note list and a note view. Settings has the 'agents working at once' choice and the old-versions list. The Remove Workplace dialog explains that files stay on your computer, and puts focus on 'Keep it' as the safe choice."
+        },
+        {
+          "title": "Messages, badges and approvals",
+          "lineRange": [
+            338,
+            443
+          ],
+          "explanation": "`md()` is a tiny Markdown formatter that escapes HTML first, so agent text cannot inject code. `addMessage` and `addActivity` add lines to the chat and Activity (Activity keeps the newest 20). `setWorker` and `setState` update the badges; a waiting approval always shows 'Lead: waiting for you'. `addApproval` builds an approval card with Allow once, Deny, Always allow and Always deny, and shows the file content about to be written.",
+          "tourOrder": 12
+        },
+        {
+          "title": "The 'where we are' sentence",
+          "lineRange": [
+            445,
+            479
+          ],
+          "explanation": "`renderNow` writes one plain sentence from what the page already knows. A waiting plan or approval comes first and is highlighted, because you are needed. Otherwise it says who is working or checking which task, or that the goal is done, cancelled, or all quiet."
+        },
+        {
+          "title": "Workplaces and the event stream",
+          "lineRange": [
+            481,
+            567
+          ],
+          "explanation": "Every event is kept in `allEvents`; only the current workplace's events are drawn. Switching workplaces clears the screen and replays its events. The chosen workplace is remembered in localStorage (wrapped in try/catch). `new EventSource('/events')` is the live connection: streaming Lead text ('delta') is added straight to the current message, other events are de-duplicated (history is replayed on reconnect) and passed to `apply`. The sidebar shows a 'Needs you' count per workplace.",
+          "tourOrder": 12
+        },
+        {
+          "title": "Library and Settings pages",
+          "lineRange": [
+            569,
+            797
+          ],
+          "explanation": "`showView` switches between the workplace, Library and Settings. `renderLibrary` groups notes into 'Waiting for you', 'Start here' and each section. `showNote` shows a draft card with Save and Discard, plus the current saved version folded away. Your own edits are written and saved at once, since you are the approver. Settings saves the worker limit, and the old-versions list offers Bring back and Delete, with a second confirmation before deleting all."
+        },
+        {
+          "title": "Applying events to the screen",
+          "lineRange": [
+            799,
+            949
+          ],
+          "explanation": "`apply` is the switchboard on the page side: each event type (message, tool, status, approval, board, compare, talk) goes to its drawing function. `addTalk` shows team messages (keeping the newest 40). `addCompare` and `fillCompare` draw one column per model and fill each as it answers, with seconds and cost. `renderBoard` draws the goal, a two-step Cancel, and each task with its status and checker verdict. `showPlanCard` puts a proposed plan in Needs you with Approve and Ask for changes.",
+          "tourOrder": 12
+        },
+        {
+          "title": "Sending clicks to the server",
+          "lineRange": [
+            951,
+            1022
+          ],
+          "explanation": "`post()` sends JSON to the server; every button uses it. The message box sends on Enter (Shift+Enter adds a line), and Stop interrupts the Lead. The remove and new-workplace dialogs show errors inline. Creating a workplace shows 'Creating...' because setting up a folder and a Lead takes a few seconds, then waits until the server's new list arrives before switching to it.",
+          "tourOrder": 12
+        }
+      ]
+    },
+    "public/ember.css": {
+      "overview": "The Ember design system from tour step 12, a ready-made kit that gives the page its dark, warm look. It defines colours, corner sizes, shadows and timings once as CSS variables (design tokens) written in oklch, then builds buttons, inputs, cards, badges, tabs and other parts on top of them. index.html only adds layout and a few page-specific rules on top of this file.",
+      "sections": [
+        {
+          "title": "Font and colour tokens",
+          "lineRange": [
+            1,
+            62
+          ],
+          "explanation": "The file loads the Inter font, then sets every token on `:root`: background and text colours, the orange primary colour, success, warning and danger colours, glass fills and borders, shadows, animation speeds and layout sizes. Colours use oklch, where the first number is brightness, so equal steps look like equal changes. Values like `oklch(1 0 0 / 0.06)` are white at 6% opacity, used for the frosted glass look.",
+          "tourOrder": 12
+        },
+        {
+          "title": "Dark theme copy",
+          "lineRange": [
+            63,
+            122
+          ],
+          "explanation": "The `.dark` class repeats exactly the same values as `:root`. Ember is a dark-only theme, so both are identical; this block exists so the kit also works where a page switches themes with a `dark` class."
+        },
+        {
+          "title": "Font stack, radius and shadows",
+          "lineRange": [
+            123,
+            156
+          ],
+          "explanation": "These blocks set the font list, a scale of corner sizes all worked out from one `--radius` value, and the shadows written out across several lines. Lines 154 to 156 then apply those corner sizes to buttons, inputs and cards. Changing `--radius` once would round every part consistently."
+        },
+        {
+          "title": "Base text styles",
+          "lineRange": [
+            157,
+            170
+          ],
+          "explanation": "Everything inside a `.ds` wrapper gets the kit's font, colours and line height. Headings, display text and supporting text get their sizes here. The comment on lines 165 to 167 records a fixed bug: links styled as buttons skip the link colour, so a primary button keeps its light label instead of getting dark text."
+        },
+        {
+          "title": "Core components",
+          "lineRange": [
+            172,
+            237
+          ],
+          "explanation": "The building blocks the page uses: buttons in primary, secondary, outline and ghost styles plus small and large sizes; labels, inputs and text areas with a coloured focus ring; cards with header, body and footer; badges in several colours (used for task and worker status); alerts, avatars, rows, switches, tabs and progress bars. Each rule gives a fallback colour in case a token is missing."
+        },
+        {
+          "title": "Stepper, slider, table, chip",
+          "lineRange": [
+            239,
+            266
+          ],
+          "explanation": "More parts, each with a comment on how it should behave. The slider keeps a real, invisible range input on top of the drawn track, so keyboard and screen reader support still work. Also here: tables with small uppercase headers, chips that look pressed when selected, and a keyboard-key style."
+        },
+        {
+          "title": "Touch, small screens, hover",
+          "lineRange": [
+            268,
+            290
+          ],
+          "explanation": "On touch screens, buttons, tabs and inputs become at least 44px tall so they are easy to tap, and inputs use 16px text so phones do not zoom in. On narrow screens, control rows stack. Hover effects only apply with a mouse, and are a quiet change rather than a second colour. Selected text uses the primary colour."
+        },
+        {
+          "title": "Ember glass overrides",
+          "lineRange": [
+            291,
+            312
+          ],
+          "explanation": "The final rules give Ember its own character on top of the general kit: gradient switches, fully round badges, and frosted-glass badges and secondary buttons using `backdrop-filter` blur. The long `--tw-...` lines come from Tailwind-style output and set up the focus ring and small press effect (buttons move down 1px when clicked). Because they come last, these rules win over the earlier, plainer ones."
+        }
+      ]
+    },
+    "spikes/e2e-team.mjs": {
+      "overview": "A full end-to-end test from tour step 13. It connects to the running Trident server, sends one request to the Lead, approves the plan and allows every approval automatically, and prints every event (board changes, messages, team talk, tool calls, status, errors) with a running time. It stops a minute after the goal is done, or after 30 minutes.",
+      "sections": [
+        {
+          "title": "Setup and first message",
+          "lineRange": [
+            1,
+            17
+          ],
+          "explanation": "The usage line shows how to run it: a request text and an optional workplace id (default 'main'). `post` sends a click to the server for that workplace. It opens the `/events` stream, ignores the first 1.5 seconds (the server replays history on connect), and sends the request after 2 seconds. A 30-minute deadline keeps it from running forever.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Reading and answering events",
+          "lineRange": [
+            18,
+            40
+          ],
+          "explanation": "The loop reads the event stream by hand: messages are separated by a blank line and start with 'data: '. Streaming text and other workplaces are skipped. Each event type gets a short printed line. Two events get an automatic answer: a proposed plan is approved once, and every approval request is answered 'allow'. When the goal is done, the script waits 60 seconds to catch the last messages and exits.",
+          "tourOrder": 13
+        }
+      ]
+    },
+    "spikes/claude.mjs": {
+      "overview": "A tiny test script that checks the Claude Agent SDK works with your existing Claude Code login. It asks Claude to reply with the single word \"pong\" and prints what comes back and how long it took. It was written before claude.mjs in src was built (Step 8), to prove the idea works. It belongs to the spikes folder covered in Step 13.",
+      "sections": [
+        {
+          "title": "Import and start timer",
+          "lineRange": [
+            1,
+            4
+          ],
+          "explanation": "The first comment says what the script is for. It imports `query`, the one function from the Claude Agent SDK that sends a prompt and streams back replies. `started` records the current time so the script can report how long the whole call took.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Send one isolated prompt",
+          "lineRange": [
+            5,
+            10
+          ],
+          "explanation": "This sends the prompt \"Reply with exactly the word: pong\". The options keep the test small and clean: one turn only, no tools, and no settings, plugins, hooks or MCP servers loaded from your global Claude Code setup. The comment explains why: loading those made the first run take about 170 seconds. `for await` means the script handles each message as it arrives, instead of waiting for all of them.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Print each kind of message",
+          "lineRange": [
+            11,
+            19
+          ],
+          "explanation": "The SDK sends a few kinds of messages, and the script prints a line for three of them. The `init` message shows which model is used and where the login came from (`apiKeySource`), which is how you confirm it uses your subscription and not an API key. The `assistant` message holds the reply text, and the `result` message marks the end, printed with the total time in milliseconds.",
+          "tourOrder": 13
+        }
+      ]
+    },
+    "spikes/or-check.mjs": {
+      "overview": "A free check for your OpenRouter setup. It confirms that a key is saved, that the chosen model exists and can use tools, and shows how much of your credit is left. It never asks a model to write anything, so it costs nothing. It reuses openrouter.mjs from Step 8 and is one of the probe scripts in Step 13.",
+      "sections": [
+        {
+          "title": "Load the OpenRouter settings",
+          "lineRange": [
+            1,
+            5
+          ],
+          "explanation": "The script loads `openRouterConfig` from src/openrouter.mjs, the same code Trident itself uses, so the test matches the real app. If no key is found, it prints a clear message and stops with an error code. Otherwise it prints the model name it will check.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Check key and model",
+          "lineRange": [
+            6,
+            6
+          ],
+          "explanation": "`cfg.check()` runs the checks built into openrouter.mjs. If it returns nothing, everything passed and the script prints \"OK\". If it returns a message, that message describes what is wrong. The `??` means \"use the right-hand text when the left side is empty\".",
+          "tourOrder": 13
+        },
+        {
+          "title": "Show credit and usage",
+          "lineRange": [
+            7,
+            11
+          ],
+          "explanation": "The script calls OpenRouter's key-info address, sending the saved key as a Bearer token. If the call works, it prints whether the key is on the free tier, its spending limit, how much is left, and how much has been spent so far. Missing values are shown as \"none\", \"n/a\" or 0 instead of blank. This call only reads account information, so it costs nothing.",
+          "tourOrder": 13
+        }
+      ]
+    },
+    ".claude/autoharness/requests": {
+      "overview": "Tiny runtime counter file used by the autoharness Claude Code plugin to queue skill-learning requests; it holds a single character and no project logic.",
+      "sections": []
+    },
+    ".ua/config.json": {
+      "overview": "Understand-Anything tool settings that fix the knowledge-graph output language to English.",
+      "sections": []
+    },
+    "spikes/appserver.mjs": {
+      "overview": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests.",
+      "sections": []
+    },
+    "spikes/codex.mjs": {
+      "overview": "Spike confirming the Codex SDK runs on the existing Codex login by streaming one read-only turn and printing events and usage.",
+      "sections": []
+    },
+    "spikes/or-models.mjs": {
+      "overview": "Lists tool-capable coding models from the public OpenRouter catalog with prices, and reports whether given model ids are still listed.",
+      "sections": []
+    },
+    "spikes/or-route.mjs": {
+      "overview": "Checks the OpenRouter route with a deliberately invalid placeholder key, expecting both the key check and a Claude-session worker turn to be refused, at no cost.",
+      "sections": []
+    },
+    "spikes/twoturn.mjs": {
+      "overview": "Spike measuring whether SDK slowness is a one-time startup cost or per-message, using one streaming Claude session with two messages or two Codex runs on one thread.",
+      "sections": []
+    }
+  }
+}

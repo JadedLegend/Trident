@@ -1,0 +1,49 @@
+{
+ "projectRoot": "C:/Users/aLLIEDiNTENT/Desktop/TridentIGuess/Trident",
+ "batchFiles": [
+  {
+   "path": "src/codex.mjs",
+   "language": "javascript",
+   "sizeLines": 138,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/library.mjs",
+   "language": "javascript",
+   "sizeLines": 168,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/openrouter.mjs",
+   "language": "javascript",
+   "sizeLines": 57,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/server.mjs",
+   "language": "javascript",
+   "sizeLines": 133,
+   "fileCategory": "code"
+  },
+  {
+   "path": "src/settings.mjs",
+   "language": "javascript",
+   "sizeLines": 24,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "src/codex.mjs": [],
+  "src/library.mjs": [],
+  "src/openrouter.mjs": [],
+  "src/server.mjs": [
+   "src/codex.mjs",
+   "src/gate.mjs",
+   "src/library.mjs",
+   "src/openrouter.mjs",
+   "src/settings.mjs",
+   "src/workplaces.mjs"
+  ],
+  "src/settings.mjs": []
+ }
+}

@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-23T00:00:00Z",
+  "files": {
+    "spikes/claude.mjs": {
+      "overview": "A tiny test script that checks the Claude Agent SDK works with your existing Claude Code login. It asks Claude to reply with the single word \"pong\" and prints what comes back and how long it took. It was written before claude.mjs in src was built (Step 8), to prove the idea works. It belongs to the spikes folder covered in Step 13.",
+      "sections": [
+        {
+          "title": "Import and start timer",
+          "lineRange": [1, 4],
+          "explanation": "The first comment says what the script is for. It imports `query`, the one function from the Claude Agent SDK that sends a prompt and streams back replies. `started` records the current time so the script can report how long the whole call took.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Send one isolated prompt",
+          "lineRange": [5, 10],
+          "explanation": "This sends the prompt \"Reply with exactly the word: pong\". The options keep the test small and clean: one turn only, no tools, and no settings, plugins, hooks or MCP servers loaded from your global Claude Code setup. The comment explains why: loading those made the first run take about 170 seconds. `for await` means the script handles each message as it arrives, instead of waiting for all of them.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Print each kind of message",
+          "lineRange": [11, 19],
+          "explanation": "The SDK sends a few kinds of messages, and the script prints a line for three of them. The `init` message shows which model is used and where the login came from (`apiKeySource`), which is how you confirm it uses your subscription and not an API key. The `assistant` message holds the reply text, and the `result` message marks the end, printed with the total time in milliseconds.",
+          "tourOrder": 13
+        }
+      ]
+    },
+    "spikes/or-check.mjs": {
+      "overview": "A free check for your OpenRouter setup. It confirms that a key is saved, that the chosen model exists and can use tools, and shows how much of your credit is left. It never asks a model to write anything, so it costs nothing. It reuses openrouter.mjs from Step 8 and is one of the probe scripts in Step 13.",
+      "sections": [
+        {
+          "title": "Load the OpenRouter settings",
+          "lineRange": [1, 5],
+          "explanation": "The script loads `openRouterConfig` from src/openrouter.mjs, the same code Trident itself uses, so the test matches the real app. If no key is found, it prints a clear message and stops with an error code. Otherwise it prints the model name it will check.",
+          "tourOrder": 13
+        },
+        {
+          "title": "Check key and model",
+          "lineRange": [6, 6],
+          "explanation": "`cfg.check()` runs the checks built into openrouter.mjs. If it returns nothing, everything passed and the script prints \"OK\". If it returns a message, that message describes what is wrong. The `??` means \"use the right-hand text when the left side is empty\".",
+          "tourOrder": 13
+        },
+        {
+          "title": "Show credit and usage",
+          "lineRange": [7, 11],
+          "explanation": "The script calls OpenRouter's key-info address, sending the saved key as a Bearer token. If the call works, it prints whether the key is on the free tier, its spending limit, how much is left, and how much has been spent so far. Missing values are shown as \"none\", \"n/a\" or 0 instead of blank. This call only reads account information, so it costs nothing.",
+          "tourOrder": 13
+        }
+      ]
+    }
+  }
+}

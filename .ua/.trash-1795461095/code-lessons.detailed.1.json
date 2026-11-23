@@ -1,0 +1,504 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-23T12:00:00Z",
+  "files": {
+    "README.md": {
+      "overview": "The front page of the project. It explains in plain words what Trident is: a local web page where a Lead agent plans your request and AI workers from different companies build and cross-check it. It also lists what you need installed, how to start it, and where each kind of file lives. This is Step 1 of the tour.",
+      "sections": [
+        {
+          "title": "What Trident is",
+          "lineRange": [1, 5],
+          "explanation": "The one-paragraph pitch: say what you want once, and a team of models plans, builds and checks it. Line 5 notes the address `127.0.0.1:4317`, which means the page is only reachable from your own computer.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Feature list",
+          "lineRange": [7, 16],
+          "explanation": "Each bullet is one feature you will meet later in the tour: the Lead (Step 6), workers in their own git worktree (Step 9), cross-checking, team talk, workplaces (Step 4), Ask several (Step 11), the Library (Step 10) and approvals (Step 7). The Library is marked as still in progress.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Requirements",
+          "lineRange": [18, 25],
+          "explanation": "What must be installed first. Node.js 26 is required because the board uses the SQLite database built into Node. Claude Code must be signed in; Codex and OpenRouter are optional extras.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Starting it and adding OpenRouter",
+          "lineRange": [27, 45],
+          "explanation": "Two commands start Trident: `npm install` then `npm start`. OpenRouter is turned on by setting two environment variables with `setx`; the README stresses that you type the key yourself and Trident never asks for it.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Where things live",
+          "lineRange": [47, 58],
+          "explanation": "A map of the folders. `src/` is the engine and `public/` is the web page. The folders holding your own data (`library/`, `workspace/`, `workplaces/`, `data/`) are not committed to git, so personal work stays private.",
+          "tourOrder": 1
+        },
+        {
+          "title": "How work flows",
+          "lineRange": [60, 71],
+          "explanation": "A small text diagram of the main loop: you ask, the Lead plans, you approve, workers build in separate copies, another vendor checks each one, and the Lead merges and confirms the \"Done when\" line.",
+          "tourOrder": 1
+        },
+        {
+          "title": "Status and privacy",
+          "lineRange": [73, 79],
+          "explanation": "Says what already works and what is still being built (Library screens, Settings page). The privacy note explains that everything runs locally and that Claude traffic always uses your own sign-in.",
+          "tourOrder": 1
+        }
+      ]
+    },
+    "docs/design.md": {
+      "overview": "The original design plan for Trident. It describes the problem being solved, the flow of a piece of work, the three rules that make the team work well, the engine parts, a sketch of the screen, and the build order M1 to M4. Step 2 of the tour uses it to show the intent behind the code.",
+      "sections": [
+        {
+          "title": "The problem",
+          "lineRange": [1, 6],
+          "explanation": "Explains why Trident exists: other apps had agents taking turns rather than building on each other, or had confusing screens. The goal is that you speak once to a Lead, the agents check each other across vendors, and you only hear about decisions and results.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Work flow and three rules",
+          "lineRange": [8, 30],
+          "explanation": "The diagram shows the full loop, including the checker sending problems back to the worker. The three rules are: one owner (only the Lead talks to you), a checkable finish line (\"Done when\"), and cross-checking by the other vendor. Each rule names the outside tool it was borrowed from.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Engine pieces",
+          "lineRange": [32, 43],
+          "explanation": "A table of the parts you will meet in the code: agent adapters, team tools, the board store (SQLite), workspaces (git), the approval gate and the `[state]` snapshot. Note the plan said TypeScript and React, but the actual code is plain JavaScript (`.mjs`) and a single HTML page.",
+          "tourOrder": 2
+        },
+        {
+          "title": "The screen, kept simple",
+          "lineRange": [45, 65],
+          "explanation": "A rough drawing of the interface: chat with the Lead on the left, the board on the right, and a Needs-you bar on top. Raw agent activity is collapsed by default so you are not flooded with terminal text.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Build order",
+          "lineRange": [67, 72],
+          "explanation": "The milestones, each usable on its own: M1 one agent and chat, M2 board and plan, M3 two workers and a cross-check, M4 merge and finish. Building in usable steps means each stage can be tried before the next one starts.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Open questions and checks",
+          "lineRange": [74, 83],
+          "explanation": "Decisions that were still open at design time, such as how much freedom workers get. It also lists what had to be tested before building: that both SDKs work with your existing logins on Windows.",
+          "tourOrder": 2
+        }
+      ]
+    },
+    "docs/agent-collab-teardown.md": {
+      "overview": "A research note comparing three other multi-agent tools (Band, Coral and PandaOS) and how they make agents work together. Every claim is tagged with how it is known. The last part lists the ideas Trident took from each, which Step 2 of the tour points to.",
+      "sections": [
+        {
+          "title": "Sources and evidence labels",
+          "lineRange": [1, 8],
+          "explanation": "Says where the information came from and that nothing was run. The tags [doc], [code] and [inferred] tell you how much to trust each claim: read in docs, read in code, or the author's own guess.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Side-by-side table",
+          "lineRange": [10, 18],
+          "explanation": "Compares the three tools on how they are built, how they drive agents, how agents collaborate, who decides the next step, and how approvals work. It is the quick summary before the detailed sections.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Band",
+          "lineRange": [20, 26],
+          "explanation": "Band is a chat room where agents only hear messages that @mention them. Its smarts live in role prompts. The noted weakness is that nobody owns the overall plan unless you add a manager.",
+          "tourOrder": 2
+        },
+        {
+          "title": "Coral",
+          "lineRange": [28, 35],
+          "explanation": "Coral uses a team board: goals with one \"Done when\" line, tasks with owners and dependencies, and a worker result that is only a candidate until accepted. Its weakness is that it has many concepts to learn.",
+          "tourOrder": 2
+        },
+        {
+          "title": "PandaOS",
+          "lineRange": [37, 45],
+          "explanation": "PandaOS has one Director agent that routes work to sessions and starts every turn with a `[state]` block. It drives agents through vendor SDKs. Its weakness is that workers never review each other.",
+          "tourOrder": 2
+        },
+        {
+          "title": "What Trident borrows",
+          "lineRange": [47, 56],
+          "explanation": "The four ideas taken: a single Lead with a `[state]` snapshot (PandaOS), \"Done when\" plus candidate-and-accept (Coral), the four approval choices (Band), and driving agents with vendor SDKs (PandaOS). You can see each of these in board.mjs, lead.mjs and gate.mjs.",
+          "tourOrder": 2
+        }
+      ]
+    },
+    "src/server.mjs": {
+      "overview": "The front door of Trident: a small web server that only listens on your own computer at port 4317. It creates every other part (gate, Codex, Library, settings, workplaces), streams live events to the web page, and turns button clicks into actions. Step 3 of the tour calls it the switchboard.",
+      "sections": [
+        {
+          "title": "Route map comment",
+          "lineRange": [1, 10],
+          "explanation": "A list of every web address the server answers, with what each one expects. It is a handy table of contents: GET routes serve the page and the live event stream, POST routes are the actions behind buttons.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Imports and setup",
+          "lineRange": [11, 25],
+          "explanation": "Loads Node's built-in web and file tools plus Trident's own parts. It works out the project folder, makes sure `data/` exists, and picks the port (4317 unless the `PORT` environment variable says otherwise).",
+          "tourOrder": 3
+        },
+        {
+          "title": "The emit function",
+          "lineRange": [27, 40],
+          "explanation": "Everything that happens becomes an event passed to `emit`. Each event is stamped with a time, kept in memory for replay, written to `data/transcript.jsonl`, and pushed to every open page. Small text pieces (`delta`) are only pushed live, not stored, so the history stays small.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Connecting the parts",
+          "lineRange": [42, 51],
+          "explanation": "Creates the approval gate, the OpenRouter config, one shared Codex process, the Library and the settings, then hands them all to the workplaces. The OpenRouter key and model are checked once at startup without generating anything, so a bad key shows up as an error early.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Small helpers",
+          "lineRange": [53, 59],
+          "explanation": "`html()` re-reads the page file on every request, so edits to the page show up after a refresh without restarting. `body()` collects the request data and turns it from JSON text into an object.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Page and live events",
+          "lineRange": [61, 74],
+          "explanation": "Serves the page and its stylesheet. The `/events` route keeps the connection open (server-sent events): it first replays all past events so a newly opened page catches up, then adds the page to the list of listeners. A heartbeat every 25 seconds stops idle connections from timing out.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Workplace, Library and settings actions",
+          "lineRange": [75, 103],
+          "explanation": "Each route passes the request on to the matching part and returns its answer. Library actions are picked from the address with one chain of choices. Errors come back as code 400 with a plain-words message the page can show.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Answering approvals",
+          "lineRange": [104, 107],
+          "explanation": "Accepts only the four allowed decisions and passes them to the gate. If the approval id is unknown (for example already answered), it replies 404.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Talking to a Lead",
+          "lineRange": [108, 129],
+          "explanation": "Finds the workplace (default `main`), then either sends your message to its Lead, approves the waiting plan, or interrupts the Lead's current turn. Plan approval first checks a plan is really waiting (409 if not), marks the goal active, and tells the Lead in plain words to start.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Errors and listening",
+          "lineRange": [130, 133],
+          "explanation": "Any crash inside a request becomes a 500 reply instead of stopping the server. The last line starts listening on `127.0.0.1` only, which is what keeps Trident private to your machine.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    "package.json": {
+      "overview": "The project's settings file for Node.js. It names the project, defines the `npm start` command that runs src/server.mjs, and lists the two outside libraries Trident needs: the Claude Agent SDK and the Codex SDK. Step 3 of the tour starts here.",
+      "sections": [
+        {
+          "title": "Project identity",
+          "lineRange": [1, 8],
+          "explanation": "Name, version and description. Most of these are default values from `npm init`; the `main` entry is not used, since Trident is started through the start script instead.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Scripts",
+          "lineRange": [9, 12],
+          "explanation": "`npm start` runs `node src/server.mjs`, which is the only command needed to launch Trident. The `test` script is the default placeholder; there are no automated tests yet.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Module type and privacy",
+          "lineRange": [13, 17],
+          "explanation": "`\"type\": \"module\"` tells Node to use modern `import` syntax. `private` stops the project from being published to the npm registry by accident.",
+          "tourOrder": 3
+        },
+        {
+          "title": "Dependencies",
+          "lineRange": [18, 22],
+          "explanation": "Only two outside libraries: the Claude Agent SDK, used to run Claude agents, and the Codex SDK. Keeping the list this short means fewer things to install and fewer things that can break.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    ".claude/launch.json": {
+      "overview": "A small config file that lets Claude Code start Trident for you. It says to run `node src/server.mjs` and that the page will be at http://127.0.0.1:4317. It is the second way to start the server mentioned in Step 3.",
+      "sections": [
+        {
+          "title": "Launch configuration",
+          "lineRange": [1, 6],
+          "explanation": "One entry named `trident`. It runs the same command as `npm start` and records the port and address, so a tool can start the server and open the right page in a preview.",
+          "tourOrder": 3
+        }
+      ]
+    },
+    "src/workplaces.mjs": {
+      "overview": "Manages workplaces: separate studios, each with its own folder, board, Lead, team and Ask-several helper. The list is saved in data/workplaces.json. Workplaces share the approval gate, the Codex process and the OpenRouter key, but nothing else. Step 4 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Header and imports",
+          "lineRange": [1, 15],
+          "explanation": "The comment explains that the first workplace, Main, keeps the original data files so nothing from earlier versions is lost. `KNOWN_WORKERS` lists the only worker types allowed: claude, codex and openrouter.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Loading the list",
+          "lineRange": [17, 27],
+          "explanation": "Reads the saved list; if it is missing or empty, it creates Main pointing at the `workspace` folder (or `TRIDENT_WORKSPACE` if set). `live` is an in-memory map of workplaces that are currently running.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Starting one workplace",
+          "lineRange": [29, 62],
+          "explanation": "Makes the folders, makes sure the project folder is a git repo, and builds the pieces: board, Ask-several, team and Lead. Every event and approval is tagged with the workplace id, so the page knows where it came from. The team gets a `tellLead` callback, and the Lead is created right after, so they can talk to each other. Earlier team talk is replayed so the screen is filled in.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Sidebar summary",
+          "lineRange": [64, 66],
+          "explanation": "`summary` picks just what the sidebar needs for each workplace. `announce` sends the whole list to the page whenever it changes.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Checking a typed folder",
+          "lineRange": [68, 81],
+          "explanation": "Checks a folder you typed and returns a plain-words problem, or nothing if it is fine. It refuses relative paths, whole drives, Trident's own folders, folders another workplace already uses, files, and folders that already have git history.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Creating a workplace",
+          "lineRange": [83, 98],
+          "explanation": "Cleans up the name (40 characters max, no duplicates), builds an id from the name plus four random characters, and uses `workplaces/<name>` if no folder was given. Unknown worker types are quietly dropped. It then saves, starts the workplace and updates the sidebar.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Removing a workplace",
+          "lineRange": [100, 118],
+          "explanation": "Stops the workers and the Lead, then takes the workplace off the list. Nothing on disk is deleted: an entry goes into `workplaces-archived.json`, and the folder and board stay where they are. Main can never be removed.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Cancelling a goal",
+          "lineRange": [120, 128],
+          "explanation": "Stops all workers and marks the current goal cancelled. A message makes clear that work already merged into the folder stays there.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Startup and public functions",
+          "lineRange": [130, 141],
+          "explanation": "Starts every saved workplace when Trident boots, then returns the small set of functions the server uses: get, all, create, remove, cancelGoal and announce.",
+          "tourOrder": 4
+        }
+      ]
+    },
+    "src/settings.mjs": {
+      "overview": "Holds the few Trident-wide settings, saved in data/settings.json. Right now there is one: the most workers that may work at the same moment in each workplace. Step 4 of the tour covers it alongside workplaces.",
+      "sections": [
+        {
+          "title": "Defaults",
+          "lineRange": [1, 4],
+          "explanation": "`maxAgents` defaults to 3. The default is used whenever the file is missing or does not mention a setting.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Loading saved settings",
+          "lineRange": [6, 9],
+          "explanation": "Starts from the defaults and lays the saved file on top. If the file is missing or broken, the defaults are simply kept. `announce` sends the current settings to the page.",
+          "tourOrder": 4
+        },
+        {
+          "title": "Reading and changing",
+          "lineRange": [10, 23],
+          "explanation": "`get` returns the current settings. `set` checks the new number is a whole number from 1 to 10, and replies in plain words if not. On success it saves to disk and tells the page.",
+          "tourOrder": 4
+        }
+      ]
+    },
+    "src/board.mjs": {
+      "overview": "The board is each workplace's shared memory: a small SQLite database holding goals, their tasks, and team talk messages. It also builds the short [state] summary that is put at the top of every message to the Lead. Step 5 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Statuses and import",
+          "lineRange": [1, 8],
+          "explanation": "The comment lists how a goal moves: proposed, then active, then done (or replaced, or cancelled). Tasks are todo, working, review, blocked or done. `node:sqlite` is the database built into Node 26.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Tables and upgrades",
+          "lineRange": [10, 33],
+          "explanation": "Creates the goals, tasks and talk tables if they do not exist yet. Later columns (branch, worktree, cross-check results) are added only when missing, so an older database is upgraded in place without losing data. On startup, any worker task still marked working is set to blocked, because worker sessions do not survive a restart.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Reading the current goal",
+          "lineRange": [35, 46],
+          "explanation": "`current` finds the newest goal still open (proposed or active). `snapshot` is what the screen shows, which also includes a goal that just finished or was cancelled. `changed` pushes a fresh snapshot to the page.",
+          "tourOrder": 5
+        },
+        {
+          "title": "New plan and goal status",
+          "lineRange": [48, 67],
+          "explanation": "`proposePlan` first closes any open goal: a waiting plan becomes replaced, an active goal becomes cancelled. It then saves the new goal and numbers its tasks 1, 2, 3. `setGoalStatus` changes the current goal and reports whether there was one.",
+          "tourOrder": 5
+        },
+        {
+          "title": "Updating one task",
+          "lineRange": [69, 88],
+          "explanation": "`updateTask` only works on an approved plan, checks the status is valid, and only changes the fields listed in `FIELDS`. It returns an error message in plain words, or nothing on success. `task` returns one task together with its goal and the full task list.",
+          "tourOrder": 5
+        },
+        {
+          "title": "The [state] block",
+          "lineRange": [90, 105],
+          "explanation": "Builds the short text summary the Lead sees at the top of every message: the goal, the \"Done when\" line, each task with its status and owner, any cross-check result, and recent team talk. This lets the Lead know where things stand without calling any tools (an idea taken from PandaOS).",
+          "tourOrder": 5
+        },
+        {
+          "title": "Team talk",
+          "lineRange": [107, 121],
+          "explanation": "`say` stores a message (trimmed to 2000 characters) and sends it to the page. `talkFor` returns what one participant may see: messages to everyone or to them, never their own, oldest first. `talkLine` formats one message as a line of text, flagging warnings.",
+          "tourOrder": 5
+        },
+        {
+          "title": "What the board offers",
+          "lineRange": [123, 124],
+          "explanation": "The list of functions other files may use. Nothing else can touch the database directly, which keeps the rules above in one place.",
+          "tourOrder": 5
+        }
+      ]
+    },
+    "src/lead.mjs": {
+      "overview": "Runs the Lead agent: one long conversation with Claude that stays open between your messages. It sets the Lead's instructions, gives it only the board and Library tools plus read-only tools for free, sends every other risky action through the approval gate, and turns Claude's output into events for the page. Step 6 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Imports",
+          "lineRange": [1, 6],
+          "explanation": "Brings in `query` from the Claude Agent SDK, the board and Library tools, and `subscriptionEnv` from claude.mjs, which keeps Claude on your own subscription login.",
+          "tourOrder": 6
+        },
+        {
+          "title": "The Lead's instructions",
+          "lineRange": [8, 30],
+          "explanation": "The text added to the Lead's system prompt. It tells the Lead to answer small things directly but to propose a plan and wait for approval before bigger work, how to use workers and cross-checks, when to accept or reject, and how to use Ask several and the Library. The worker list, working folder and Library guide are filled in when the Lead starts.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Read-only tools",
+          "lineRange": [32, 33],
+          "explanation": "Tools that only look at things, such as reading or searching files. These are allowed without asking you, since they cannot change anything.",
+          "tourOrder": 6
+        },
+        {
+          "title": "The message queue",
+          "lineRange": [35, 47],
+          "explanation": "Your messages go into `inbox`. The `messages` generator hands them to Claude one by one, then sleeps until `wake` is called. This is what keeps one conversation open across many messages instead of starting fresh each time.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Starting Claude",
+          "lineRange": [49, 64],
+          "explanation": "Opens the Claude session with its options. `settingSources: []` keeps your global Claude Code plugins out (they slowed each start by about 100 seconds). Board and Library tools are attached and pre-allowed, and every other tool goes through `canUseTool`, which asks the approval gate.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Reading Claude's output",
+          "lineRange": [66, 74],
+          "explanation": "A loop that runs in the background, passing each message from Claude to `handle`. If the session fails, an error event is shown, and in any case the Lead is marked stopped at the end.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Turning output into events",
+          "lineRange": [76, 95],
+          "explanation": "Converts Claude's messages into page events: status at startup, small text pieces as they stream in, full text messages, and a short line for each tool used. Board tool calls are left out of Activity because their effect already shows on the board. A `result` message means the turn is over, so the Lead goes back to idle.",
+          "tourOrder": 6
+        },
+        {
+          "title": "Controls for the rest of Trident",
+          "lineRange": [97, 114],
+          "explanation": "`send` adds the current [state] block to the top of your text, queues it and wakes the Lead. `interrupt` stops the current turn, and `close` ends the conversation so the Claude process can exit when a workplace is removed.",
+          "tourOrder": 6
+        },
+        {
+          "title": "One-line tool summary",
+          "lineRange": [116, 123],
+          "explanation": "Picks the most useful detail of a tool call (command, file path, pattern or web address) for the Activity view. The approval gate also uses this line to recognise the exact same operation later.",
+          "tourOrder": 6
+        }
+      ]
+    },
+    "src/board-tools.mjs": {
+      "overview": "The tools the Lead is allowed to use to change the board and steer the team, such as propose_plan, assign_task, accept_task and reject_task. They run inside Trident as an in-process MCP server, so the Lead never edits the board directly. Each tool checks its input first, keeping the board tidy even if the model makes a mistake. Step 6 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Setup and tool names",
+          "lineRange": [1, 9],
+          "explanation": "Imports the SDK helpers and `zod`, a library that describes what each tool's input must look like. `text` wraps a reply in the shape the SDK expects. `BOARD_TOOL_NAMES` lists the full names, which lead.mjs uses to allow these tools without asking.",
+          "tourOrder": 6
+        },
+        {
+          "title": "propose_plan",
+          "lineRange": [11, 39],
+          "explanation": "The Lead's way to put a plan in front of you. The input must have a goal, one \"Done when\" line and 1 to 12 tasks, and each owner must be 'lead' or a real worker. After saving the plan, the reply tells the Lead to stop and wait for your answer.",
+          "tourOrder": 6
+        },
+        {
+          "title": "update_task and finish_goal",
+          "lineRange": [40, 67],
+          "explanation": "`update_task` is only for the Lead's own quick tasks; if a worker owns the task, it points the Lead to accept or reject instead. `finish_goal` refuses unless the goal is approved and every task is done, and it asks for evidence of how \"Done when\" was checked.",
+          "tourOrder": 6
+        },
+        {
+          "title": "team_say and ask_several",
+          "lineRange": [68, 92],
+          "explanation": "`team_say` posts a message in team talk, to one worker or everyone. `ask_several` sends one question to 2 to 4 models, then returns all the answers to the Lead along with the OpenRouter cost.",
+          "tourOrder": 6
+        },
+        {
+          "title": "assign, accept and reject",
+          "lineRange": [93, 121],
+          "explanation": "These hand the real work to the team (team.mjs). `assign_task` gives a task to a worker, `accept_task` merges the result, and `reject_task` sends it back with feedback for another try. Each reply reminds the Lead to end its turn rather than wait, since a [team] message will arrive later.",
+          "tourOrder": 6
+        }
+      ]
+    },
+    "src/gate.mjs": {
+      "overview": "The approval gate. When an agent wants to do something risky, its action waits here until you choose: allow once, deny, always allow, or always deny. The 'always' choices are saved to data/rules.json for that exact operation, so you are not asked twice. Step 7 of the tour covers it.",
+      "sections": [
+        {
+          "title": "Header and imports",
+          "lineRange": [1, 7],
+          "explanation": "The comment states the key rule: an 'always' answer covers one exact operation (tool plus its exact command or path), never a whole tool. `summarize` from lead.mjs is used to build that exact description.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Saved rules",
+          "lineRange": [9, 20],
+          "explanation": "Loads the saved allow and deny lists, starting empty if there is no file. `pending` holds requests waiting for you. `keyOf` makes the text key, such as `Bash: npm test`, that the rules are matched against.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Asking for approval",
+          "lineRange": [22, 39],
+          "explanation": "If the operation is already on the always-deny or always-allow list, it answers at once. Otherwise it creates a short id, stores the request, and sends an `approval` event so the Needs-you bar shows it. The agent's action waits on a promise until you decide. If the agent's turn is stopped meanwhile, the request is cancelled and counts as a deny.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Recording your decision",
+          "lineRange": [41, 52],
+          "explanation": "Finds the waiting request, saves an 'always' rule if you chose one, and releases the agent with allow or deny. It then tells the page the approval is closed so the bar clears.",
+          "tourOrder": 7
+        },
+        {
+          "title": "Listing open requests",
+          "lineRange": [54, 57],
+          "explanation": "`open` lists every request still waiting, in the same shape as the approval events. The gate exposes only three functions: request, decide and open.",
+          "tourOrder": 7
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1387 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 4,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 4,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/board-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 121,
+      "nonEmptyLines": 118,
+      "functions": [
+        {
+          "name": "text",
+          "startLine": 7,
+          "endLine": 7,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "boardTools",
+          "startLine": 11,
+          "endLine": 121,
+          "params": [
+            "board",
+            "team",
+            "askSeveral"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "BOARD_TOOL_NAMES",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "boardTools",
+          "line": 11,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "boardTools",
+          "callee": "createSdkMcpServer",
+          "lineNumber": 12
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 16
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 21
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 21
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 22
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 22
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z\r\n            .array(\r\n              z.object({\r\n                title: z.string().describe(\"Short task name, a few words.\"),\r\n                detail: z.string().optional().describe(\"What to do and what it produces, one or two sentences.\"),\r\n                owner: z.enum([\"lead\", ...team.workers]).optional().describe(\"Who should do it: a worker, or 'lead' for quick work you do yourself.\"),\r\n                depends_on: z.array(z.number().int()).optional().describe(\"Numbers (1-based) of tasks that must finish first.\"),\r\n              }),\r\n            )\r\n            .min(1)\r\n            .max",
+          "lineNumber": 23
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z\r\n            .array(\r\n              z.object({\r\n                title: z.string().describe(\"Short task name, a few words.\"),\r\n                detail: z.string().optional().describe(\"What to do and what it produces, one or two sentences.\"),\r\n                owner: z.enum([\"lead\", ...team.workers]).optional().describe(\"Who should do it: a worker, or 'lead' for quick work you do yourself.\"),\r\n                depends_on: z.array(z.number().int()).optional().describe(\"Numbers (1-based) of tasks that must finish first.\"),\r\n              }),\r\n            )\r\n            .min",
+          "lineNumber": 23
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z\r\n            .array",
+          "lineNumber": 23
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.object",
+          "lineNumber": 25
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 26
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 26
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional().describe",
+          "lineNumber": 27
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional",
+          "lineNumber": 27
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 27
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum([\"lead\", ...team.workers]).optional().describe",
+          "lineNumber": 28
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum([\"lead\", ...team.workers]).optional",
+          "lineNumber": 28
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum",
+          "lineNumber": 28
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.number().int()).optional().describe",
+          "lineNumber": 29
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.number().int()).optional",
+          "lineNumber": 29
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array",
+          "lineNumber": 29
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int",
+          "lineNumber": 29
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number",
+          "lineNumber": 29
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.proposePlan",
+          "lineNumber": 36
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 37
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 40
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int().describe",
+          "lineNumber": 44
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int",
+          "lineNumber": 44
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number",
+          "lineNumber": 44
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum",
+          "lineNumber": 45
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional().describe",
+          "lineNumber": 46
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional",
+          "lineNumber": 46
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 46
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.task",
+          "lineNumber": 49
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 50
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.updateTask",
+          "lineNumber": 51
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 52
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 55
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 58
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 58
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.snapshot",
+          "lineNumber": 60
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 61
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tasks.filter",
+          "lineNumber": 62
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 63
+        },
+        {
+          "caller": "boardTools",
+          "callee": "open.map((t) => t.num).join",
+          "lineNumber": 63
+        },
+        {
+          "caller": "boardTools",
+          "callee": "open.map",
+          "lineNumber": 63
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.setGoalStatus",
+          "lineNumber": 64
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 65
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 68
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 72
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum([\"claude\", \"codex\", \"openrouter\"]).optional",
+          "lineNumber": 73
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum",
+          "lineNumber": 73
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 75
+        },
+        {
+          "caller": "boardTools",
+          "callee": "board.say",
+          "lineNumber": 75
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 77
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 82
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 82
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.string()).min(2).max(4).optional()\r\n            .describe",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.string()).min(2).max(4).optional",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.string()).min(2).max",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array(z.string()).min",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.array",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 83
+        },
+        {
+          "caller": "boardTools",
+          "callee": "askSeveral",
+          "lineNumber": 87
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 88
+        },
+        {
+          "caller": "boardTools",
+          "callee": "r.answers.map",
+          "lineNumber": 89
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 90
+        },
+        {
+          "caller": "boardTools",
+          "callee": "parts.join",
+          "lineNumber": 90
+        },
+        {
+          "caller": "boardTools",
+          "callee": "r.cost.toFixed",
+          "lineNumber": 90
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 93
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int().describe",
+          "lineNumber": 98
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int",
+          "lineNumber": 98
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number",
+          "lineNumber": 98
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.enum",
+          "lineNumber": 99
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional().describe",
+          "lineNumber": 100
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional",
+          "lineNumber": 100
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 100
+        },
+        {
+          "caller": "boardTools",
+          "callee": "team.assign",
+          "lineNumber": 103
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 104
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 107
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int",
+          "lineNumber": 110
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number",
+          "lineNumber": 110
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional().describe",
+          "lineNumber": 110
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().optional",
+          "lineNumber": 110
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 110
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 111
+        },
+        {
+          "caller": "boardTools",
+          "callee": "team.accept",
+          "lineNumber": 111
+        },
+        {
+          "caller": "boardTools",
+          "callee": "tool",
+          "lineNumber": 113
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number().int",
+          "lineNumber": 116
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.number",
+          "lineNumber": 116
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string().describe",
+          "lineNumber": 116
+        },
+        {
+          "caller": "boardTools",
+          "callee": "z.string",
+          "lineNumber": 116
+        },
+        {
+          "caller": "boardTools",
+          "callee": "text",
+          "lineNumber": 117
+        },
+        {
+          "caller": "boardTools",
+          "callee": "team.reject",
+          "lineNumber": 117
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/board.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 124,
+      "nonEmptyLines": 113,
+      "functions": [
+        {
+          "name": "openBoard",
+          "startLine": 10,
+          "endLine": 124,
+          "params": [
+            "file",
+            "emit"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TASK_STATUSES",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "openBoard",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "openBoard",
+          "callee": "db.exec",
+          "lineNumber": 12
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.prepare(`PRAGMA table_info(tasks)`).all().map",
+          "lineNumber": 23
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.prepare(`PRAGMA table_info(tasks)`).all",
+          "lineNumber": 23
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.prepare",
+          "lineNumber": 23
+        },
+        {
+          "caller": "openBoard",
+          "callee": "have.has",
+          "lineNumber": 25
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.exec",
+          "lineNumber": 25
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.exec",
+          "lineNumber": 29
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.prepare(`UPDATE tasks SET status = 'blocked', note = 'Stopped when Trident restarted. Assign it again.' WHERE status = 'working' AND owner != 'lead'`).run",
+          "lineNumber": 33
+        },
+        {
+          "caller": "openBoard",
+          "callee": "db.prepare",
+          "lineNumber": 33
+        },
+        {
+          "caller": "now",
+          "callee": "Date.now",
+          "lineNumber": 35
+        },
+        {
+          "caller": "current",
+          "callee": "db.prepare(`SELECT * FROM goals WHERE status IN ('proposed','active') ORDER BY id DESC LIMIT 1`).get",
+          "lineNumber": 37
+        },
+        {
+          "caller": "current",
+          "callee": "db.prepare",
+          "lineNumber": 37
+        },
+        {
+          "caller": "tasksOf",
+          "callee": "db.prepare(`SELECT * FROM tasks WHERE goal_id = ? ORDER BY num`).all(goalId).map",
+          "lineNumber": 39
+        },
+        {
+          "caller": "tasksOf",
+          "callee": "db.prepare(`SELECT * FROM tasks WHERE goal_id = ? ORDER BY num`).all",
+          "lineNumber": 39
+        },
+        {
+          "caller": "tasksOf",
+          "callee": "db.prepare",
+          "lineNumber": 39
+        },
+        {
+          "caller": "tasksOf",
+          "callee": "JSON.parse",
+          "lineNumber": 39
+        },
+        {
+          "caller": "snapshot",
+          "callee": "db.prepare(`SELECT * FROM goals WHERE status IN ('proposed','active','done','cancelled') ORDER BY id DESC LIMIT 1`).get",
+          "lineNumber": 43
+        },
+        {
+          "caller": "snapshot",
+          "callee": "db.prepare",
+          "lineNumber": 43
+        },
+        {
+          "caller": "snapshot",
+          "callee": "tasksOf",
+          "lineNumber": 44
+        },
+        {
+          "caller": "changed",
+          "callee": "emit",
+          "lineNumber": 46
+        },
+        {
+          "caller": "changed",
+          "callee": "snapshot",
+          "lineNumber": 46
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "current",
+          "lineNumber": 50
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "db.prepare(`UPDATE goals SET status = ?, updated_at = ? WHERE id = ?`).run",
+          "lineNumber": 51
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "db.prepare",
+          "lineNumber": 51
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "now",
+          "lineNumber": 51
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "db\r\n      .prepare(`INSERT INTO goals (title, done_when, status, created_at, updated_at) VALUES (?, ?, 'proposed', ?, ?)`)\r\n      .run",
+          "lineNumber": 52
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "db\r\n      .prepare",
+          "lineNumber": 52
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "now",
+          "lineNumber": 54
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "now",
+          "lineNumber": 54
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "db.prepare",
+          "lineNumber": 55
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "tasks.forEach",
+          "lineNumber": 56
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "ins.run",
+          "lineNumber": 56
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "JSON.stringify",
+          "lineNumber": 56
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "now",
+          "lineNumber": 56
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "changed",
+          "lineNumber": 57
+        },
+        {
+          "caller": "proposePlan",
+          "callee": "Number",
+          "lineNumber": 58
+        },
+        {
+          "caller": "setGoalStatus",
+          "callee": "current",
+          "lineNumber": 62
+        },
+        {
+          "caller": "setGoalStatus",
+          "callee": "db.prepare(`UPDATE goals SET status = ?, updated_at = ? WHERE id = ?`).run",
+          "lineNumber": 64
+        },
+        {
+          "caller": "setGoalStatus",
+          "callee": "db.prepare",
+          "lineNumber": 64
+        },
+        {
+          "caller": "setGoalStatus",
+          "callee": "now",
+          "lineNumber": 64
+        },
+        {
+          "caller": "setGoalStatus",
+          "callee": "changed",
+          "lineNumber": 65
+        },
+        {
+          "caller": "updateTask",
+          "callee": "current",
+          "lineNumber": 71
+        },
+        {
+          "caller": "updateTask",
+          "callee": "TASK_STATUSES.includes",
+          "lineNumber": 73
+        },
+        {
+          "caller": "updateTask",
+          "callee": "db.prepare(`SELECT * FROM tasks WHERE goal_id = ? AND num = ?`).get",
+          "lineNumber": 74
+        },
+        {
+          "caller": "updateTask",
+          "callee": "db.prepare",
+          "lineNumber": 74
+        },
+        {
+          "caller": "updateTask",
+          "callee": "FIELDS.filter",
+          "lineNumber": 76
+        },
+        {
+          "caller": "updateTask",
+          "callee": "db.prepare(`UPDATE tasks SET ${set.map((f) => `${f} = ?`).join(\", \")}, updated_at = ? WHERE id = ?`).run",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "db.prepare",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "set.map((f) => `${f} = ?`).join",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "set.map",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "set.map",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "String",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "now",
+          "lineNumber": 77
+        },
+        {
+          "caller": "updateTask",
+          "callee": "changed",
+          "lineNumber": 78
+        },
+        {
+          "caller": "task",
+          "callee": "current",
+          "lineNumber": 84
+        },
+        {
+          "caller": "task",
+          "callee": "tasksOf(g.id).find",
+          "lineNumber": 86
+        },
+        {
+          "caller": "task",
+          "callee": "tasksOf",
+          "lineNumber": 86
+        },
+        {
+          "caller": "task",
+          "callee": "tasksOf",
+          "lineNumber": 87
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "snapshot",
+          "lineNumber": 92
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "lines.push",
+          "lineNumber": 100
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "talkFor",
+          "lineNumber": 102
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "lines.push",
+          "lineNumber": 103
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "recent.map",
+          "lineNumber": 103
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "talkLine",
+          "lineNumber": 103
+        },
+        {
+          "caller": "stateBlock",
+          "callee": "lines.join",
+          "lineNumber": 104
+        },
+        {
+          "caller": "say",
+          "callee": "String(text ?? \"\").trim().slice",
+          "lineNumber": 109
+        },
+        {
+          "caller": "say",
+          "callee": "String(text ?? \"\").trim",
+          "lineNumber": 109
+        },
+        {
+          "caller": "say",
+          "callee": "String",
+          "lineNumber": 109
+        },
+        {
+          "caller": "say",
+          "callee": "db.prepare(`INSERT INTO talk (from_who, to_who, kind, text, created_at) VALUES (?, ?, ?, ?, ?)`).run",
+          "lineNumber": 111
+        },
+        {
+          "caller": "say",
+          "callee": "db.prepare",
+          "lineNumber": 111
+        },
+        {
+          "caller": "say",
+          "callee": "now",
+          "lineNumber": 111
+        },
+        {
+          "caller": "say",
+          "callee": "Number",
+          "lineNumber": 112
+        },
+        {
+          "caller": "say",
+          "callee": "now",
+          "lineNumber": 112
+        },
+        {
+          "caller": "say",
+          "callee": "emit",
+          "lineNumber": 113
+        },
+        {
+          "caller": "talkFor",
+          "callee": "db.prepare(`SELECT * FROM talk WHERE id > ? AND from_who != ? AND (to_who = '' OR to_who = ?) ORDER BY id DESC LIMIT ?`)\r\n      .all(afterId, who, who, limit).reverse",
+          "lineNumber": 118
+        },
+        {
+          "caller": "talkFor",
+          "callee": "db.prepare(`SELECT * FROM talk WHERE id > ? AND from_who != ? AND (to_who = '' OR to_who = ?) ORDER BY id DESC LIMIT ?`)\r\n      .all",
+          "lineNumber": 118
+        },
+        {
+          "caller": "talkFor",
+          "callee": "db.prepare",
+          "lineNumber": 118
+        },
+        {
+          "caller": "recentTalk",
+          "callee": "db.prepare(`SELECT * FROM talk ORDER BY id DESC LIMIT ?`).all(limit).reverse",
+          "lineNumber": 121
+        },
+        {
+          "caller": "recentTalk",
+          "callee": "db.prepare(`SELECT * FROM talk ORDER BY id DESC LIMIT ?`).all",
+          "lineNumber": 121
+        },
+        {
+          "caller": "recentTalk",
+          "callee": "db.prepare",
+          "lineNumber": 121
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/gate.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 50,
+      "functions": [
+        {
+          "name": "createGate",
+          "startLine": 9,
+          "endLine": 57,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "createGate",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "createGate",
+          "callee": "JSON.parse",
+          "lineNumber": 12
+        },
+        {
+          "caller": "createGate",
+          "callee": "readFileSync",
+          "lineNumber": 12
+        },
+        {
+          "caller": "save",
+          "callee": "mkdirSync",
+          "lineNumber": 15
+        },
+        {
+          "caller": "save",
+          "callee": "dirname",
+          "lineNumber": 15
+        },
+        {
+          "caller": "save",
+          "callee": "writeFileSync",
+          "lineNumber": 16
+        },
+        {
+          "caller": "save",
+          "callee": "JSON.stringify",
+          "lineNumber": 16
+        },
+        {
+          "caller": "keyOf",
+          "callee": "summarize",
+          "lineNumber": 20
+        },
+        {
+          "caller": "request",
+          "callee": "keyOf",
+          "lineNumber": 24
+        },
+        {
+          "caller": "request",
+          "callee": "rules.deny.includes",
+          "lineNumber": 25
+        },
+        {
+          "caller": "request",
+          "callee": "Promise.resolve",
+          "lineNumber": 25
+        },
+        {
+          "caller": "request",
+          "callee": "rules.allow.includes",
+          "lineNumber": 26
+        },
+        {
+          "caller": "request",
+          "callee": "Promise.resolve",
+          "lineNumber": 26
+        },
+        {
+          "caller": "request",
+          "callee": "randomUUID().slice",
+          "lineNumber": 28
+        },
+        {
+          "caller": "request",
+          "callee": "randomUUID",
+          "lineNumber": 28
+        },
+        {
+          "caller": "request",
+          "callee": "pending.set",
+          "lineNumber": 30
+        },
+        {
+          "caller": "request",
+          "callee": "emit",
+          "lineNumber": 31
+        },
+        {
+          "caller": "request",
+          "callee": "summarize",
+          "lineNumber": 31
+        },
+        {
+          "caller": "request",
+          "callee": "signal?.addEventListener",
+          "lineNumber": 32
+        },
+        {
+          "caller": "request",
+          "callee": "pending.delete",
+          "lineNumber": 33
+        },
+        {
+          "caller": "request",
+          "callee": "emit",
+          "lineNumber": 34
+        },
+        {
+          "caller": "request",
+          "callee": "resolve",
+          "lineNumber": 35
+        },
+        {
+          "caller": "decide",
+          "callee": "pending.get",
+          "lineNumber": 43
+        },
+        {
+          "caller": "decide",
+          "callee": "pending.delete",
+          "lineNumber": 45
+        },
+        {
+          "caller": "decide",
+          "callee": "rules.allow.push",
+          "lineNumber": 46
+        },
+        {
+          "caller": "decide",
+          "callee": "save",
+          "lineNumber": 46
+        },
+        {
+          "caller": "decide",
+          "callee": "rules.deny.push",
+          "lineNumber": 47
+        },
+        {
+          "caller": "decide",
+          "callee": "save",
+          "lineNumber": 47
+        },
+        {
+          "caller": "decide",
+          "callee": "p.resolve",
+          "lineNumber": 49
+        },
+        {
+          "caller": "decide",
+          "callee": "emit",
+          "lineNumber": 50
+        },
+        {
+          "caller": "open",
+          "callee": "[...pending.entries()].map",
+          "lineNumber": 54
+        },
+        {
+          "caller": "open",
+          "callee": "pending.entries",
+          "lineNumber": 54
+        },
+        {
+          "caller": "open",
+          "callee": "summarize",
+          "lineNumber": 54
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lead.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 123,
+      "nonEmptyLines": 110,
+      "functions": [
+        {
+          "name": "LEAD_PROMPT",
+          "startLine": 8,
+          "endLine": 30,
+          "params": [
+            "cwd",
+            "team",
+            "guide"
+          ]
+        },
+        {
+          "name": "startLead",
+          "startLine": 35,
+          "endLine": 114,
+          "params": []
+        },
+        {
+          "name": "summarize",
+          "startLine": 117,
+          "endLine": 123,
+          "params": [
+            "toolName"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "startLead",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "summarize",
+          "line": 117,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LEAD_PROMPT",
+          "callee": "team.workers.map((w) => `'${w}' (${team.names[w]})`).join",
+          "lineNumber": 16
+        },
+        {
+          "caller": "LEAD_PROMPT",
+          "callee": "team.workers.map",
+          "lineNumber": 16
+        },
+        {
+          "caller": "startLead",
+          "callee": "inbox.shift",
+          "lineNumber": 43
+        },
+        {
+          "caller": "startLead",
+          "callee": "query",
+          "lineNumber": 49
+        },
+        {
+          "caller": "startLead",
+          "callee": "messages",
+          "lineNumber": 50
+        },
+        {
+          "caller": "startLead",
+          "callee": "subscriptionEnv",
+          "lineNumber": 53
+        },
+        {
+          "caller": "startLead",
+          "callee": "boardTools",
+          "lineNumber": 56
+        },
+        {
+          "caller": "startLead",
+          "callee": "libraryTools",
+          "lineNumber": 56
+        },
+        {
+          "caller": "startLead",
+          "callee": "LEAD_PROMPT",
+          "lineNumber": 61
+        },
+        {
+          "caller": "startLead",
+          "callee": "library?.guide",
+          "lineNumber": 61
+        },
+        {
+          "caller": "startLead",
+          "callee": "gate.request",
+          "lineNumber": 62
+        },
+        {
+          "caller": "startLead",
+          "callee": "(async () => {\r\n    try {\r\n      for await (const m of q) handle(m);\r\n    } catch (err) {\r\n      emit({ type: \"error\", agent: \"lead\", text: String(err?.message ?? err) });\r\n    }\r\n    emit({ type: \"status\", agent: \"lead\", state: \"stopped\" });\r\n  })",
+          "lineNumber": 67
+        },
+        {
+          "caller": "startLead",
+          "callee": "handle",
+          "lineNumber": 69
+        },
+        {
+          "caller": "startLead",
+          "callee": "emit",
+          "lineNumber": 71
+        },
+        {
+          "caller": "startLead",
+          "callee": "String",
+          "lineNumber": 71
+        },
+        {
+          "caller": "startLead",
+          "callee": "emit",
+          "lineNumber": 73
+        },
+        {
+          "caller": "handle",
+          "callee": "emit",
+          "lineNumber": 79
+        },
+        {
+          "caller": "handle",
+          "callee": "emit",
+          "lineNumber": 83
+        },
+        {
+          "caller": "handle",
+          "callee": "emit",
+          "lineNumber": 87
+        },
+        {
+          "caller": "handle",
+          "callee": "block.name.startsWith",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handle",
+          "callee": "[\"ToolSearch\", \"mcp__library__list\", \"mcp__library__read\"].includes",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handle",
+          "callee": "emit",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handle",
+          "callee": "summarize",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handle",
+          "callee": "emit",
+          "lineNumber": 93
+        },
+        {
+          "caller": "send",
+          "callee": "inbox.push",
+          "lineNumber": 99
+        },
+        {
+          "caller": "send",
+          "callee": "board.stateBlock",
+          "lineNumber": 99
+        },
+        {
+          "caller": "send",
+          "callee": "emit",
+          "lineNumber": 101
+        },
+        {
+          "caller": "send",
+          "callee": "wake",
+          "lineNumber": 102
+        },
+        {
+          "caller": "startLead",
+          "callee": "q.interrupt",
+          "lineNumber": 104
+        },
+        {
+          "caller": "close",
+          "callee": "wake",
+          "lineNumber": 108
+        },
+        {
+          "caller": "summarize",
+          "callee": "String(input.command).slice",
+          "lineNumber": 118
+        },
+        {
+          "caller": "summarize",
+          "callee": "String",
+          "lineNumber": 118
+        },
+        {
+          "caller": "summarize",
+          "callee": "JSON.stringify(input).slice",
+          "lineNumber": 122
+        },
+        {
+          "caller": "summarize",
+          "callee": "JSON.stringify",
+          "lineNumber": 122
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    }
+  ]
+}

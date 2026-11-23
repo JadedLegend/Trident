@@ -1,0 +1,1137 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "64cf7c4cee87f07114c1b13cf1f94f04541deec0",
+  "generatedAt": "2026-11-23T19:11:20.556Z",
+  "files": {
+    ".claude/autoharness/requests": {
+      "filePath": ".claude/autoharness/requests",
+      "contentHash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    ".claude/launch.json": {
+      "filePath": ".claude/launch.json",
+      "contentHash": "809a6562c8ce15a0e69f64a39d6ad922b4805842176b4458e9b695fa0f7a3230",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    ".ua/config.json": {
+      "filePath": ".ua/config.json",
+      "contentHash": "4b66f98f8a815dfeb2d3a29eeb73418e07c40ed020a1498c07e908b2254f0c8c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "7eab7331aa38177ccae0c50c591e6f4b08f638c363662c11dd9ce015d5d80da3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": false
+    },
+    "docs/agent-collab-teardown.md": {
+      "filePath": "docs/agent-collab-teardown.md",
+      "contentHash": "866800d5b2ef30bd684722f6cb75a06386fd7cb9dc01f2aa719f7926ccf832da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 57,
+      "hasStructuralAnalysis": false
+    },
+    "docs/design.md": {
+      "filePath": "docs/design.md",
+      "contentHash": "12a47fb789f0ae3747a87ee250a95d314f90ed65f650997901f07fcb13760674",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 84,
+      "hasStructuralAnalysis": false
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "4a0fcc06df07a8cbb2cbd31ba066da2449c2ecd439376cf04acc38b1eafbcf05",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": false
+    },
+    "public/ember.css": {
+      "filePath": "public/ember.css",
+      "contentHash": "9f56eb476ccd2293d8970c3f88bbdb2eed17245132c96cf6b1bba843669b64de",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 313,
+      "hasStructuralAnalysis": false
+    },
+    "public/index.html": {
+      "filePath": "public/index.html",
+      "contentHash": "3c8d5bf48e1ccc4639221b2f70665a0bf8eb5d39ea3487ec3ddb839affdb661b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1026,
+      "hasStructuralAnalysis": false
+    },
+    "spikes/appserver.mjs": {
+      "filePath": "spikes/appserver.mjs",
+      "contentHash": "be686cdba6138989dae6af077c2eebd658910f83fdfef850eac1216928265e66",
+      "functions": [
+        {
+          "name": "call",
+          "params": [
+            "method",
+            "params"
+          ],
+          "exported": false,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "specifiers": [
+            "spawn"
+          ]
+        },
+        {
+          "source": "node:readline",
+          "specifiers": [
+            "createInterface"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/claude.mjs": {
+      "filePath": "spikes/claude.mjs",
+      "contentHash": "6ea85f6b5189a5559c15924cd69e2d5c6c375418bf7d1e0f7e7bf0667e61b95d",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "query"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/codex.mjs": {
+      "filePath": "spikes/codex.mjs",
+      "contentHash": "35a6a352e9b472a060c0f13972aed7903c0539aa6f085180744b07607f289b10",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@openai/codex-sdk",
+          "specifiers": [
+            "Codex"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/e2e-team.mjs": {
+      "filePath": "spikes/e2e-team.mjs",
+      "contentHash": "22059f0da670ff4085a96dd0b4414cbabf8c0367e37ee30d6ae3497c53e1d6b1",
+      "functions": [
+        {
+          "name": "post",
+          "params": [
+            "p",
+            "d"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "t",
+          "params": [],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 41,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/or-check.mjs": {
+      "filePath": "spikes/or-check.mjs",
+      "contentHash": "7ce869941a3b436025487dd7368818532674bb56c7d34a8feba16d0f15c378cc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/or-models.mjs": {
+      "filePath": "spikes/or-models.mjs",
+      "contentHash": "6b77ab16007399564857069bede34ff3f57e1f01829d24eb1e7e1aebdcd68e8f",
+      "functions": [
+        {
+          "name": "price",
+          "params": [
+            "x"
+          ],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/or-route.mjs": {
+      "filePath": "spikes/or-route.mjs",
+      "contentHash": "0ee1a3db169c02546cabc24b11d2d6ffa946a98bef36aa7d67fef2f6b1133c73",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    "spikes/twoturn.mjs": {
+      "filePath": "spikes/twoturn.mjs",
+      "contentHash": "35c005af0957f17c31dc399df58ca0a22866f2cdc85b8c952c139467dae895e9",
+      "functions": [
+        {
+          "name": "stamp",
+          "params": [
+            "label"
+          ],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "query"
+          ]
+        },
+        {
+          "source": "@openai/codex-sdk",
+          "specifiers": [
+            "Codex"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/board-tools.mjs": {
+      "filePath": "src/board-tools.mjs",
+      "contentHash": "36f1f96208cffccbe62898af174f4b498042c5263603795dc7c84a0925bada82",
+      "functions": [
+        {
+          "name": "text",
+          "params": [
+            "t"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "boardTools",
+          "params": [
+            "board",
+            "team",
+            "askSeveral"
+          ],
+          "exported": true,
+          "lineCount": 111
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "createSdkMcpServer",
+            "tool"
+          ]
+        },
+        {
+          "source": "zod",
+          "specifiers": [
+            "z"
+          ]
+        },
+        {
+          "source": "./board.mjs",
+          "specifiers": [
+            "TASK_STATUSES"
+          ]
+        }
+      ],
+      "exports": [
+        "BOARD_TOOL_NAMES",
+        "boardTools"
+      ],
+      "totalLines": 122,
+      "hasStructuralAnalysis": true
+    },
+    "src/board.mjs": {
+      "filePath": "src/board.mjs",
+      "contentHash": "60d72b5016bff16662e7e9f60b10b784f28e3a59e5b8043bcd02de429cd66b56",
+      "functions": [
+        {
+          "name": "openBoard",
+          "params": [
+            "file",
+            "emit"
+          ],
+          "exported": true,
+          "lineCount": 115
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:sqlite",
+          "specifiers": [
+            "DatabaseSync"
+          ]
+        }
+      ],
+      "exports": [
+        "TASK_STATUSES",
+        "openBoard"
+      ],
+      "totalLines": 125,
+      "hasStructuralAnalysis": true
+    },
+    "src/claude.mjs": {
+      "filePath": "src/claude.mjs",
+      "contentHash": "6b2995d1534682165a49872a35d6d18d5d3fdee0942128e1270ccf0ed42b0793",
+      "functions": [
+        {
+          "name": "subscriptionEnv",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "claudeSession",
+          "params": [],
+          "exported": true,
+          "lineCount": 61
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "query"
+          ]
+        }
+      ],
+      "exports": [
+        "subscriptionEnv",
+        "claudeSession"
+      ],
+      "totalLines": 74,
+      "hasStructuralAnalysis": true
+    },
+    "src/codex.mjs": {
+      "filePath": "src/codex.mjs",
+      "contentHash": "76466a84bf5a08c4ff588edf7ce90995dcd5611e47a73aedd4c9ea5042a2b4b9",
+      "functions": [
+        {
+          "name": "isolationArgs",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "plainError",
+          "params": [
+            "msg"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "startCodex",
+          "params": [],
+          "exported": true,
+          "lineCount": 110
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "specifiers": [
+            "spawn"
+          ]
+        },
+        {
+          "source": "node:readline",
+          "specifiers": [
+            "createInterface"
+          ]
+        },
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync"
+          ]
+        },
+        {
+          "source": "node:os",
+          "specifiers": [
+            "homedir"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "join"
+          ]
+        }
+      ],
+      "exports": [
+        "startCodex"
+      ],
+      "totalLines": 139,
+      "hasStructuralAnalysis": true
+    },
+    "src/compare.mjs": {
+      "filePath": "src/compare.mjs",
+      "contentHash": "74ca87c8fb2756166f86bee00920c207f76ba9d1b1026577ff62b0ded707e342",
+      "functions": [
+        {
+          "name": "startCompare",
+          "params": [],
+          "exported": true,
+          "lineCount": 74
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:crypto",
+          "specifiers": [
+            "randomUUID"
+          ]
+        },
+        {
+          "source": "./claude.mjs",
+          "specifiers": [
+            "claudeSession"
+          ]
+        }
+      ],
+      "exports": [
+        "DEFAULT_MODELS",
+        "startCompare"
+      ],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "src/gate.mjs": {
+      "filePath": "src/gate.mjs",
+      "contentHash": "64807ac56392a3827466267468b4e3dbeec858a0a784881fc43f7e1fa419f1b5",
+      "functions": [
+        {
+          "name": "createGate",
+          "params": [],
+          "exported": true,
+          "lineCount": 49
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "writeFileSync",
+            "mkdirSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "dirname"
+          ]
+        },
+        {
+          "source": "node:crypto",
+          "specifiers": [
+            "randomUUID"
+          ]
+        },
+        {
+          "source": "./lead.mjs",
+          "specifiers": [
+            "summarize"
+          ]
+        }
+      ],
+      "exports": [
+        "createGate"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "src/git.mjs": {
+      "filePath": "src/git.mjs",
+      "contentHash": "f72a059a1d33275122975335a0649a5beaee3fd63d5370c77ab47bba1f8b56ac",
+      "functions": [
+        {
+          "name": "git",
+          "params": [
+            "cwd",
+            "...args"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "commitAll",
+          "params": [
+            "cwd",
+            "message"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "ensureRepo",
+          "params": [
+            "workspace"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "createWorktree",
+          "params": [
+            "workspace",
+            "root",
+            "name"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "changes",
+          "params": [
+            "dir",
+            "base"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "mergeBranch",
+          "params": [
+            "workspace",
+            "branch",
+            "message"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "removeWorktree",
+          "params": [
+            "workspace",
+            "dir"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "specifiers": [
+            "execFileSync"
+          ]
+        },
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "existsSync",
+            "mkdirSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "join"
+          ]
+        }
+      ],
+      "exports": [
+        "git",
+        "commitAll",
+        "ensureRepo",
+        "createWorktree",
+        "changes",
+        "mergeBranch",
+        "removeWorktree"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "src/lead.mjs": {
+      "filePath": "src/lead.mjs",
+      "contentHash": "92a0d4143df55a05a795c028f781cd7a35a21d339a5bd0b263b204cab111fc8d",
+      "functions": [
+        {
+          "name": "LEAD_PROMPT",
+          "params": [
+            "cwd",
+            "team",
+            "guide"
+          ],
+          "exported": false,
+          "lineCount": 23
+        },
+        {
+          "name": "startLead",
+          "params": [],
+          "exported": true,
+          "lineCount": 80
+        },
+        {
+          "name": "summarize",
+          "params": [
+            "toolName"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "query"
+          ]
+        },
+        {
+          "source": "./board-tools.mjs",
+          "specifiers": [
+            "boardTools",
+            "BOARD_TOOL_NAMES"
+          ]
+        },
+        {
+          "source": "./library-tools.mjs",
+          "specifiers": [
+            "libraryTools",
+            "LIBRARY_TOOL_NAMES"
+          ]
+        },
+        {
+          "source": "./claude.mjs",
+          "specifiers": [
+            "subscriptionEnv"
+          ]
+        }
+      ],
+      "exports": [
+        "startLead",
+        "summarize"
+      ],
+      "totalLines": 124,
+      "hasStructuralAnalysis": true
+    },
+    "src/library-tools.mjs": {
+      "filePath": "src/library-tools.mjs",
+      "contentHash": "6dd29d8711ab79f6c8e43a8108347d15402e44d4fcc0bc7dcc08bb712266eef2",
+      "functions": [
+        {
+          "name": "text",
+          "params": [
+            "t"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "libraryTools",
+          "params": [
+            "library",
+            "who"
+          ],
+          "exported": true,
+          "lineCount": 36
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "createSdkMcpServer",
+            "tool"
+          ]
+        },
+        {
+          "source": "zod",
+          "specifiers": [
+            "z"
+          ]
+        }
+      ],
+      "exports": [
+        "LIBRARY_TOOL_NAMES",
+        "libraryTools"
+      ],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "src/library.mjs": {
+      "filePath": "src/library.mjs",
+      "contentHash": "2aed20929c1f9f7ffde2d0b39a00e5a42c803aa60b86197aafcad0181349c953",
+      "functions": [
+        {
+          "name": "openLibrary",
+          "params": [],
+          "exported": true,
+          "lineCount": 136
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "writeFileSync",
+            "mkdirSync",
+            "existsSync",
+            "readdirSync",
+            "rmSync",
+            "renameSync",
+            "copyFileSync",
+            "statSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "join",
+            "dirname",
+            "normalize",
+            "sep"
+          ]
+        }
+      ],
+      "exports": [
+        "openLibrary"
+      ],
+      "totalLines": 169,
+      "hasStructuralAnalysis": true
+    },
+    "src/openrouter.mjs": {
+      "filePath": "src/openrouter.mjs",
+      "contentHash": "1971edf5993f949364f0b0da99b517328348db0682a2d65af1003f28299e993d",
+      "functions": [
+        {
+          "name": "setting",
+          "params": [
+            "name"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "openRouterConfig",
+          "params": [],
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "specifiers": [
+            "execFileSync"
+          ]
+        }
+      ],
+      "exports": [
+        "DEFAULT_MODEL",
+        "openRouterConfig"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "src/server.mjs": {
+      "filePath": "src/server.mjs",
+      "contentHash": "9be11c1a6d0077686ff0b4fbdab1a00f98a904e585580735d48e49c4bb812a21",
+      "functions": [
+        {
+          "name": "emit",
+          "params": [
+            "event"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "html",
+          "params": [],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "body",
+          "params": [
+            "req"
+          ],
+          "exported": false,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:http",
+          "specifiers": [
+            "createServer"
+          ]
+        },
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "appendFileSync",
+            "mkdirSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "join",
+            "dirname"
+          ]
+        },
+        {
+          "source": "node:url",
+          "specifiers": [
+            "fileURLToPath"
+          ]
+        },
+        {
+          "source": "./gate.mjs",
+          "specifiers": [
+            "createGate"
+          ]
+        },
+        {
+          "source": "./codex.mjs",
+          "specifiers": [
+            "startCodex"
+          ]
+        },
+        {
+          "source": "./openrouter.mjs",
+          "specifiers": [
+            "openRouterConfig"
+          ]
+        },
+        {
+          "source": "./workplaces.mjs",
+          "specifiers": [
+            "openWorkplaces"
+          ]
+        },
+        {
+          "source": "./library.mjs",
+          "specifiers": [
+            "openLibrary"
+          ]
+        },
+        {
+          "source": "./settings.mjs",
+          "specifiers": [
+            "openSettings"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 134,
+      "hasStructuralAnalysis": true
+    },
+    "src/settings.mjs": {
+      "filePath": "src/settings.mjs",
+      "contentHash": "8dc20590f5a7553d87fd746a42ddd6a02f6e06770f650127018d2799aafb9024",
+      "functions": [
+        {
+          "name": "openSettings",
+          "params": [],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "writeFileSync"
+          ]
+        }
+      ],
+      "exports": [
+        "openSettings"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/talk-tools.mjs": {
+      "filePath": "src/talk-tools.mjs",
+      "contentHash": "82a2aa715498b767ee39e3248926f7b958d7f6abf7a59c2c500a0cba814130db",
+      "functions": [
+        {
+          "name": "text",
+          "params": [
+            "t"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "talkTools",
+          "params": [
+            "board",
+            "who",
+            "seen"
+          ],
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "talkDigest",
+          "params": [
+            "board",
+            "who",
+            "seen"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@anthropic-ai/claude-agent-sdk",
+          "specifiers": [
+            "createSdkMcpServer",
+            "tool"
+          ]
+        },
+        {
+          "source": "zod",
+          "specifiers": [
+            "z"
+          ]
+        }
+      ],
+      "exports": [
+        "TALK_TOOL_NAMES",
+        "talkTools",
+        "talkDigest"
+      ],
+      "totalLines": 52,
+      "hasStructuralAnalysis": true
+    },
+    "src/team.mjs": {
+      "filePath": "src/team.mjs",
+      "contentHash": "5c7627db7b4b648566e1b5b10f8a3050f75a7b524f26636836338aa9e64605b9",
+      "functions": [
+        {
+          "name": "startTeam",
+          "params": [],
+          "exported": true,
+          "lineCount": 296
+        },
+        {
+          "name": "worktreeRootFor",
+          "params": [
+            "dataDir"
+          ],
+          "exported": true,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:path",
+          "specifiers": [
+            "resolve",
+            "sep",
+            "join",
+            "relative"
+          ]
+        },
+        {
+          "source": "./talk-tools.mjs",
+          "specifiers": [
+            "talkTools",
+            "talkDigest",
+            "TALK_TOOL_NAMES"
+          ]
+        },
+        {
+          "source": "./library-tools.mjs",
+          "specifiers": [
+            "libraryTools",
+            "LIBRARY_TOOL_NAMES"
+          ]
+        },
+        {
+          "source": "./claude.mjs",
+          "specifiers": [
+            "claudeSession"
+          ]
+        },
+        {
+          "source": "./git.mjs",
+          "specifiers": [
+            "createWorktree",
+            "changes",
+            "mergeBranch",
+            "removeWorktree"
+          ]
+        }
+      ],
+      "exports": [
+        "NAMES",
+        "startTeam",
+        "worktreeRootFor"
+      ],
+      "totalLines": 321,
+      "hasStructuralAnalysis": true
+    },
+    "src/workplaces.mjs": {
+      "filePath": "src/workplaces.mjs",
+      "contentHash": "070659c064c350c3fbd33c0ca030b1ed54560940eb4c4d0a7f1de063ad6cdfd2",
+      "functions": [
+        {
+          "name": "openWorkplaces",
+          "params": [],
+          "exported": true,
+          "lineCount": 125
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "writeFileSync",
+            "mkdirSync",
+            "existsSync",
+            "statSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "join",
+            "resolve",
+            "parse",
+            "isAbsolute",
+            "sep"
+          ]
+        },
+        {
+          "source": "node:crypto",
+          "specifiers": [
+            "randomUUID"
+          ]
+        },
+        {
+          "source": "./lead.mjs",
+          "specifiers": [
+            "startLead"
+          ]
+        },
+        {
+          "source": "./board.mjs",
+          "specifiers": [
+            "openBoard"
+          ]
+        },
+        {
+          "source": "./team.mjs",
+          "specifiers": [
+            "startTeam",
+            "worktreeRootFor"
+          ]
+        },
+        {
+          "source": "./git.mjs",
+          "specifiers": [
+            "ensureRepo"
+          ]
+        },
+        {
+          "source": "./compare.mjs",
+          "specifiers": [
+            "startCompare"
+          ]
+        }
+      ],
+      "exports": [
+        "openWorkplaces"
+      ],
+      "totalLines": 142,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

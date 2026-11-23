@@ -1,0 +1,91 @@
+[
+  {
+    "id": "layer:server",
+    "name": "Server and Workplaces",
+    "description": "The local 127.0.0.1 HTTP entry point plus the workplace manager and Trident-wide settings store that wire each workplace's board, Lead, team and compare node together.",
+    "nodeIds": [
+      "file:src/server.mjs",
+      "file:src/workplaces.mjs",
+      "file:src/settings.mjs"
+    ]
+  },
+  {
+    "id": "layer:orchestration",
+    "name": "Agent Orchestration",
+    "description": "The Lead agent session, the cross-vendor worker team that builds in git worktrees and cross-checks work, the side-by-side compare node, and the approval gate that holds risky tool calls for the user.",
+    "nodeIds": [
+      "file:src/lead.mjs",
+      "file:src/team.mjs",
+      "file:src/compare.mjs",
+      "file:src/gate.mjs"
+    ]
+  },
+  {
+    "id": "layer:providers",
+    "name": "Model Providers",
+    "description": "Adapters that turn the Claude Agent SDK, the long-lived Codex app-server and the OpenRouter route into message-at-a-time worker sessions.",
+    "nodeIds": [
+      "file:src/claude.mjs",
+      "file:src/codex.mjs",
+      "file:src/openrouter.mjs"
+    ]
+  },
+  {
+    "id": "layer:agent-tools",
+    "name": "Agent Tool Servers",
+    "description": "In-process MCP servers that give agents board actions (plans, tasks, assignment), team-talk messaging and Library read/write tools.",
+    "nodeIds": [
+      "file:src/board-tools.mjs",
+      "file:src/talk-tools.mjs",
+      "file:src/library-tools.mjs"
+    ]
+  },
+  {
+    "id": "layer:storage",
+    "name": "Storage and Workspace State",
+    "description": "Persistent state behind the agents: the SQLite board of goals, tasks and talk, the draft-then-approve Markdown Library folder, and git worktree plumbing for worker workspaces.",
+    "nodeIds": [
+      "file:src/board.mjs",
+      "file:src/library.mjs",
+      "file:src/git.mjs"
+    ]
+  },
+  {
+    "id": "layer:ui",
+    "name": "Web Interface",
+    "description": "The single-page Trident UI (workplaces sidebar, Lead chat, approvals bar, task board, Library and Settings) styled by the Ember design-system stylesheet.",
+    "nodeIds": [
+      "file:public/index.html",
+      "file:public/ember.css"
+    ]
+  },
+  {
+    "id": "layer:spikes",
+    "name": "Spikes and Probes",
+    "description": "Standalone experiment and check scripts that confirm SDK logins, Codex app-server behaviour, OpenRouter keys and models, timing, and an end-to-end team run against the live server.",
+    "nodeIds": [
+      "file:spikes/appserver.mjs",
+      "file:spikes/claude.mjs",
+      "file:spikes/codex.mjs",
+      "file:spikes/e2e-team.mjs",
+      "file:spikes/or-check.mjs",
+      "file:spikes/or-models.mjs",
+      "file:spikes/or-route.mjs",
+      "file:spikes/twoturn.mjs"
+    ]
+  },
+  {
+    "id": "layer:project-support",
+    "name": "Docs and Configuration",
+    "description": "The README, the design document and agent-collaboration teardown, plus the npm manifest, Claude Code launch config and tooling settings that start and describe Trident.",
+    "nodeIds": [
+      "document:README.md",
+      "document:docs/design.md",
+      "document:docs/agent-collab-teardown.md",
+      "config:package.json",
+      "config:.claude/launch.json",
+      "config:.ua/config.json",
+      "file:.claude/autoharness/requests"
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 33,
+    "filesWithImports": 7,
+    "totalEdges": 21
+  },
+  "failures": [],
+  "importMap": {
+    ".claude/autoharness/requests": [],
+    ".claude/launch.json": [],
+    ".ua/config.json": [],
+    "README.md": [],
+    "docs/agent-collab-teardown.md": [],
+    "docs/design.md": [],
+    "package.json": [],
+    "public/ember.css": [],
+    "public/index.html": [],
+    "spikes/appserver.mjs": [],
+    "spikes/claude.mjs": [],
+    "spikes/codex.mjs": [],
+    "spikes/e2e-team.mjs": [],
+    "spikes/or-check.mjs": [],
+    "spikes/or-models.mjs": [],
+    "spikes/or-route.mjs": [],
+    "spikes/twoturn.mjs": [],
+    "src/board-tools.mjs": [
+      "src/board.mjs"
+    ],
+    "src/board.mjs": [],
+    "src/claude.mjs": [],
+    "src/codex.mjs": [],
+    "src/compare.mjs": [
+      "src/claude.mjs"
+    ],
+    "src/gate.mjs": [
+      "src/lead.mjs"
+    ],
+    "src/git.mjs": [],
+    "src/lead.mjs": [
+      "src/board-tools.mjs",
+      "src/claude.mjs",
+      "src/library-tools.mjs"
+    ],
+    "src/library-tools.mjs": [],
+    "src/library.mjs": [],
+    "src/openrouter.mjs": [],
+    "src/server.mjs": [
+      "src/codex.mjs",
+      "src/gate.mjs",
+      "src/library.mjs",
+      "src/openrouter.mjs",
+      "src/settings.mjs",
+      "src/workplaces.mjs"
+    ],
+    "src/settings.mjs": [],
+    "src/talk-tools.mjs": [],
+    "src/team.mjs": [
+      "src/claude.mjs",
+      "src/git.mjs",
+      "src/library-tools.mjs",
+      "src/talk-tools.mjs"
+    ],
+    "src/workplaces.mjs": [
+      "src/board.mjs",
+      "src/compare.mjs",
+      "src/git.mjs",
+      "src/lead.mjs",
+      "src/team.mjs"
+    ]
+  }
+}

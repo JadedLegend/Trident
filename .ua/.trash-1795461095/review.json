@@ -1,0 +1,29 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'file:.claude/autoharness/requests' has no edges (orphan)",
+    "Node 'config:.ua/config.json' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 74,
+    "totalEdges": 166,
+    "totalLayers": 8,
+    "tourSteps": 13,
+    "nodeTypes": {
+      "file": 27,
+      "function": 41,
+      "config": 3,
+      "document": 3
+    },
+    "edgeTypes": {
+      "contains": 41,
+      "exports": 25,
+      "imports": 21,
+      "calls": 42,
+      "depends_on": 6,
+      "related": 10,
+      "configures": 2,
+      "documents": 19
+    }
+  }
+}

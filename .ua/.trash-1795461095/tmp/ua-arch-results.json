@@ -1,0 +1,337 @@
+{
+ "scriptCompleted": true,
+ "commonPrefix": "",
+ "directoryGroups": {
+  "src": [
+   "file:src/claude.mjs",
+   "file:src/compare.mjs",
+   "file:src/git.mjs",
+   "file:src/library-tools.mjs",
+   "file:src/talk-tools.mjs",
+   "file:src/team.mjs",
+   "file:src/workplaces.mjs",
+   "file:src/codex.mjs",
+   "file:src/library.mjs",
+   "file:src/openrouter.mjs",
+   "file:src/server.mjs",
+   "file:src/settings.mjs",
+   "file:src/board-tools.mjs",
+   "file:src/board.mjs",
+   "file:src/gate.mjs",
+   "file:src/lead.mjs"
+  ],
+  ".claude": [
+   "file:.claude/autoharness/requests",
+   "config:.claude/launch.json"
+  ],
+  ".ua": [
+   "config:.ua/config.json"
+  ],
+  "root": [
+   "document:README.md",
+   "config:package.json"
+  ],
+  "docs": [
+   "document:docs/agent-collab-teardown.md",
+   "document:docs/design.md"
+  ],
+  "public": [
+   "file:public/ember.css",
+   "file:public/index.html"
+  ],
+  "spikes": [
+   "file:spikes/appserver.mjs",
+   "file:spikes/claude.mjs",
+   "file:spikes/codex.mjs",
+   "file:spikes/e2e-team.mjs",
+   "file:spikes/or-check.mjs",
+   "file:spikes/or-models.mjs",
+   "file:spikes/or-route.mjs",
+   "file:spikes/twoturn.mjs"
+  ]
+ },
+ "nodeTypeGroups": {
+  "file": [
+   "file:src/claude.mjs",
+   "file:src/compare.mjs",
+   "file:src/git.mjs",
+   "file:src/library-tools.mjs",
+   "file:src/talk-tools.mjs",
+   "file:src/team.mjs",
+   "file:src/workplaces.mjs",
+   "file:src/codex.mjs",
+   "file:src/library.mjs",
+   "file:src/openrouter.mjs",
+   "file:src/server.mjs",
+   "file:src/settings.mjs",
+   "file:src/board-tools.mjs",
+   "file:src/board.mjs",
+   "file:src/gate.mjs",
+   "file:src/lead.mjs",
+   "file:.claude/autoharness/requests",
+   "file:public/ember.css",
+   "file:public/index.html",
+   "file:spikes/appserver.mjs",
+   "file:spikes/claude.mjs",
+   "file:spikes/codex.mjs",
+   "file:spikes/e2e-team.mjs",
+   "file:spikes/or-check.mjs",
+   "file:spikes/or-models.mjs",
+   "file:spikes/or-route.mjs",
+   "file:spikes/twoturn.mjs"
+  ],
+  "config": [
+   "config:.claude/launch.json",
+   "config:.ua/config.json",
+   "config:package.json"
+  ],
+  "document": [
+   "document:README.md",
+   "document:docs/agent-collab-teardown.md",
+   "document:docs/design.md"
+  ]
+ },
+ "crossCategoryEdges": [
+  {
+   "fromType": "file",
+   "toType": "file",
+   "edgeType": "imports",
+   "count": 21
+  },
+  {
+   "fromType": "file",
+   "toType": "file",
+   "edgeType": "depends_on",
+   "count": 6
+  },
+  {
+   "fromType": "file",
+   "toType": "file",
+   "edgeType": "related",
+   "count": 6
+  },
+  {
+   "fromType": "config",
+   "toType": "file",
+   "edgeType": "configures",
+   "count": 2
+  },
+  {
+   "fromType": "document",
+   "toType": "file",
+   "edgeType": "documents",
+   "count": 19
+  },
+  {
+   "fromType": "document",
+   "toType": "document",
+   "edgeType": "related",
+   "count": 2
+  },
+  {
+   "fromType": "document",
+   "toType": "file",
+   "edgeType": "related",
+   "count": 2
+  }
+ ],
+ "interGroupImports": [],
+ "intraGroupDensity": {
+  "src": {
+   "internalEdges": 21,
+   "totalEdges": 21,
+   "density": 1
+  },
+  ".claude": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  },
+  ".ua": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  },
+  "root": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  },
+  "docs": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  },
+  "public": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  },
+  "spikes": {
+   "internalEdges": 0,
+   "totalEdges": 0,
+   "density": 0
+  }
+ },
+ "patternMatches": {
+  "docs": "documentation",
+  "public": "assets"
+ },
+ "filePatterns": {
+  "document:README.md": "documentation",
+  "document:docs/agent-collab-teardown.md": "documentation",
+  "document:docs/design.md": "documentation"
+ },
+ "deploymentTopology": {
+  "hasDockerfile": false,
+  "hasCompose": false,
+  "hasK8s": false,
+  "hasTerraform": false,
+  "hasCI": false,
+  "infraFiles": []
+ },
+ "dataPipeline": {
+  "schemaFiles": [],
+  "migrationFiles": [],
+  "dataModelFiles": [
+   "src/workplaces.mjs",
+   "src/settings.mjs",
+   "src/board.mjs",
+   "src/gate.mjs",
+   "docs/design.md"
+  ],
+  "apiHandlerFiles": [
+   "src/server.mjs"
+  ]
+ },
+ "docCoverage": {
+  "groupsWithDocs": 4,
+  "totalGroups": 7,
+  "coverageRatio": 0.57,
+  "undocumentedGroups": [
+   ".claude",
+   ".ua",
+   "spikes"
+  ]
+ },
+ "dependencyDirection": [],
+ "fileStats": {
+  "totalFileNodes": 33,
+  "filesPerGroup": {
+   "src": 16,
+   ".claude": 2,
+   ".ua": 1,
+   "root": 2,
+   "docs": 2,
+   "public": 2,
+   "spikes": 8
+  },
+  "nodeTypeCounts": {
+   "file": 27,
+   "config": 3,
+   "document": 3
+  }
+ },
+ "fileFanIn": {
+  "file:src/claude.mjs": 3,
+  "file:src/git.mjs": 2,
+  "file:src/library-tools.mjs": 2,
+  "file:src/talk-tools.mjs": 1,
+  "file:src/board.mjs": 2,
+  "file:src/compare.mjs": 1,
+  "file:src/lead.mjs": 2,
+  "file:src/team.mjs": 1,
+  "file:src/codex.mjs": 1,
+  "file:src/gate.mjs": 1,
+  "file:src/library.mjs": 1,
+  "file:src/openrouter.mjs": 1,
+  "file:src/settings.mjs": 1,
+  "file:src/workplaces.mjs": 1,
+  "file:src/board-tools.mjs": 1
+ },
+ "fileFanOut": {
+  "file:src/compare.mjs": 1,
+  "file:src/team.mjs": 4,
+  "file:src/workplaces.mjs": 5,
+  "file:src/server.mjs": 6,
+  "file:src/board-tools.mjs": 1,
+  "file:src/gate.mjs": 1,
+  "file:src/lead.mjs": 3
+ },
+ "importAdjacency": {
+  "file:src/compare.mjs": [
+   "file:src/claude.mjs"
+  ],
+  "file:src/team.mjs": [
+   "file:src/claude.mjs",
+   "file:src/git.mjs",
+   "file:src/library-tools.mjs",
+   "file:src/talk-tools.mjs"
+  ],
+  "file:src/workplaces.mjs": [
+   "file:src/board.mjs",
+   "file:src/compare.mjs",
+   "file:src/git.mjs",
+   "file:src/lead.mjs",
+   "file:src/team.mjs"
+  ],
+  "file:src/server.mjs": [
+   "file:src/codex.mjs",
+   "file:src/gate.mjs",
+   "file:src/library.mjs",
+   "file:src/openrouter.mjs",
+   "file:src/settings.mjs",
+   "file:src/workplaces.mjs"
+  ],
+  "file:src/board-tools.mjs": [
+   "file:src/board.mjs"
+  ],
+  "file:src/gate.mjs": [
+   "file:src/lead.mjs"
+  ],
+  "file:src/lead.mjs": [
+   "file:src/board-tools.mjs",
+   "file:src/claude.mjs",
+   "file:src/library-tools.mjs"
+  ]
+ },
+ "nonImportEdges": [
+  "file:public/index.html -depends_on-> file:public/ember.css",
+  "file:public/index.html -depends_on-> file:src/server.mjs",
+  "file:spikes/appserver.mjs -related-> file:src/codex.mjs",
+  "file:spikes/claude.mjs -related-> file:src/claude.mjs",
+  "file:spikes/codex.mjs -related-> file:src/codex.mjs",
+  "file:spikes/twoturn.mjs -related-> file:src/claude.mjs",
+  "file:spikes/twoturn.mjs -related-> file:src/codex.mjs",
+  "file:spikes/e2e-team.mjs -depends_on-> file:src/server.mjs",
+  "file:spikes/or-check.mjs -depends_on-> file:src/openrouter.mjs",
+  "file:spikes/or-models.mjs -related-> file:src/openrouter.mjs",
+  "file:spikes/or-route.mjs -depends_on-> file:src/openrouter.mjs",
+  "file:spikes/or-route.mjs -depends_on-> file:src/claude.mjs",
+  "config:.claude/launch.json -configures-> file:src/server.mjs",
+  "config:package.json -configures-> file:src/server.mjs",
+  "document:README.md -documents-> file:src/server.mjs",
+  "document:README.md -documents-> file:src/lead.mjs",
+  "document:README.md -documents-> file:src/team.mjs",
+  "document:README.md -documents-> file:src/board.mjs",
+  "document:README.md -documents-> file:src/library.mjs",
+  "document:README.md -documents-> file:src/workplaces.mjs",
+  "document:README.md -documents-> file:src/compare.mjs",
+  "document:README.md -documents-> file:src/gate.mjs",
+  "document:README.md -documents-> file:src/openrouter.mjs",
+  "document:README.md -documents-> file:public/index.html",
+  "document:README.md -related-> document:docs/design.md",
+  "document:docs/design.md -documents-> file:src/lead.mjs",
+  "document:docs/design.md -documents-> file:src/team.mjs",
+  "document:docs/design.md -documents-> file:src/board.mjs",
+  "document:docs/design.md -documents-> file:src/board-tools.mjs",
+  "document:docs/design.md -documents-> file:src/gate.mjs",
+  "document:docs/design.md -documents-> file:src/claude.mjs",
+  "document:docs/design.md -documents-> file:src/codex.mjs",
+  "document:docs/design.md -documents-> file:src/git.mjs",
+  "document:docs/design.md -documents-> file:public/index.html",
+  "document:docs/design.md -related-> document:docs/agent-collab-teardown.md",
+  "document:docs/agent-collab-teardown.md -related-> file:src/claude.mjs",
+  "document:docs/agent-collab-teardown.md -related-> file:src/codex.mjs"
+ ]
+}

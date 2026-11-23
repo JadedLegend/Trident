@@ -1,0 +1,2607 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "trident",
+    "languages": [
+      "css",
+      "html",
+      "javascript",
+      "json",
+      "markdown"
+    ],
+    "frameworks": [],
+    "description": "A personal multi-agent workspace that runs locally as a small web page, where a Lead agent plans work and AI workers from different vendors (Claude, Codex, OpenRouter) build it in separate git worktrees and cross-check each other. It also offers shared Markdown notes (the Library), side-by-side model comparison, and approvals for risky commands.",
+    "analyzedAt": "2026-11-23T19:02:52.444735+00:00",
+    "gitCommitHash": "64cf7c4cee87f07114c1b13cf1f94f04541deec0"
+  },
+  "nodes": [
+    {
+      "id": "file:src/claude.mjs",
+      "type": "file",
+      "name": "claude.mjs",
+      "filePath": "src/claude.mjs",
+      "summary": "Wraps the Claude Agent SDK query() into a long-lived, message-at-a-time Claude worker session whose run(text) resolves with the final reply; also builds a subscription-only environment that strips stray Anthropic API overrides.",
+      "tags": [
+        "service",
+        "agent-session",
+        "claude-sdk",
+        "async-generator"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses an async generator as a streaming input queue so one SDK query stays open across many run() calls."
+    },
+    {
+      "id": "function:src/claude.mjs:subscriptionEnv",
+      "type": "function",
+      "name": "subscriptionEnv",
+      "filePath": "src/claude.mjs",
+      "lineRange": [
+        7,
+        11
+      ],
+      "summary": "Returns a copy of process.env with the Anthropic base URL, auth token and API key removed so Claude uses the user's own sign-in.",
+      "tags": [
+        "utility",
+        "environment",
+        "auth"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/claude.mjs:claudeSession",
+      "type": "function",
+      "name": "claudeSession",
+      "filePath": "src/claude.mjs",
+      "lineRange": [
+        13,
+        73
+      ],
+      "summary": "Creates a persistent Claude SDK session fed by an internal inbox; run() queues a message and resolves or rejects on the matching result, reporting tool uses via a callback.",
+      "tags": [
+        "agent-session",
+        "async",
+        "claude-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/compare.mjs",
+      "type": "file",
+      "name": "compare.mjs",
+      "filePath": "src/compare.mjs",
+      "summary": "Side-by-side model comparison node: sends one question to up to four sources (local Claude, local Codex, or any OpenRouter model) in parallel and emits their answers with timing and cost.",
+      "tags": [
+        "service",
+        "model-comparison",
+        "openrouter",
+        "fan-out"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/compare.mjs:startCompare",
+      "type": "function",
+      "name": "startCompare",
+      "filePath": "src/compare.mjs",
+      "lineRange": [
+        14,
+        87
+      ],
+      "summary": "Factory returning a compare runner that validates requested models against the OpenRouter catalog and fans one question out to Claude, Codex and OpenRouter, emitting answers with duration and cost.",
+      "tags": [
+        "fan-out",
+        "openrouter",
+        "model-comparison"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/git.mjs",
+      "type": "file",
+      "name": "git.mjs",
+      "filePath": "src/git.mjs",
+      "summary": "Git plumbing for worker workspaces: initializes the workspace repo, creates per-task worktrees on their own branches, reports diffs, merges accepted branches, and removes worktrees, all committed under a local Trident identity.",
+      "tags": [
+        "utility",
+        "git",
+        "worktree",
+        "version-control"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/git.mjs:git",
+      "type": "function",
+      "name": "git",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        11,
+        13
+      ],
+      "summary": "Runs a git command synchronously in a directory with Trident's commit identity and returns trimmed output.",
+      "tags": [
+        "utility",
+        "git",
+        "child-process"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:commitAll",
+      "type": "function",
+      "name": "commitAll",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        16,
+        21
+      ],
+      "summary": "Stages everything and commits with the given message when there are changes.",
+      "tags": [
+        "git",
+        "commit",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:ensureRepo",
+      "type": "function",
+      "name": "ensureRepo",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        23,
+        28
+      ],
+      "summary": "Initializes the workspace as a git repo with an initial commit if it is not one already.",
+      "tags": [
+        "git",
+        "initialization",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:createWorktree",
+      "type": "function",
+      "name": "createWorktree",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        31,
+        40
+      ],
+      "summary": "Creates a fresh worktree and branch for a task under the worktree root, replacing any stale one.",
+      "tags": [
+        "git",
+        "worktree",
+        "isolation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:changes",
+      "type": "function",
+      "name": "changes",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        43,
+        49
+      ],
+      "summary": "Commits pending worktree edits and returns the diff against the base branch.",
+      "tags": [
+        "git",
+        "diff",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:mergeBranch",
+      "type": "function",
+      "name": "mergeBranch",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        52,
+        61
+      ],
+      "summary": "Merges a task branch into the workspace, aborting and reporting conflicting files on failure.",
+      "tags": [
+        "git",
+        "merge",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/git.mjs:removeWorktree",
+      "type": "function",
+      "name": "removeWorktree",
+      "filePath": "src/git.mjs",
+      "lineRange": [
+        63,
+        65
+      ],
+      "summary": "Force-removes a task worktree.",
+      "tags": [
+        "git",
+        "worktree",
+        "cleanup"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/library-tools.mjs",
+      "type": "file",
+      "name": "library-tools.mjs",
+      "filePath": "src/library-tools.mjs",
+      "summary": "Builds an in-process MCP server exposing list/read/write tools over the shared Markdown Library to Claude-harness agents, where writes become unsaved drafts the user approves.",
+      "tags": [
+        "mcp-tools",
+        "library",
+        "factory",
+        "agent-tools"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/library-tools.mjs:libraryTools",
+      "type": "function",
+      "name": "libraryTools",
+      "filePath": "src/library-tools.mjs",
+      "lineRange": [
+        9,
+        44
+      ],
+      "summary": "Creates the 'library' MCP server with list, read (including drafts) and write-as-draft tools bound to a participant name.",
+      "tags": [
+        "mcp-tools",
+        "library",
+        "factory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/talk-tools.mjs",
+      "type": "file",
+      "name": "talk-tools.mjs",
+      "filePath": "src/talk-tools.mjs",
+      "summary": "Builds an in-process MCP server with say/read team-talk tools for Claude-harness workers, plus a digest helper that surfaces unread board messages without ever waking other agents.",
+      "tags": [
+        "mcp-tools",
+        "team-chat",
+        "factory",
+        "agent-tools"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/talk-tools.mjs:talkTools",
+      "type": "function",
+      "name": "talkTools",
+      "filePath": "src/talk-tools.mjs",
+      "lineRange": [
+        12,
+        43
+      ],
+      "summary": "Creates the 'team' MCP server with say and read tools that post to, and read unseen messages from, the board's team talk.",
+      "tags": [
+        "mcp-tools",
+        "team-chat",
+        "factory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/talk-tools.mjs:talkDigest",
+      "type": "function",
+      "name": "talkDigest",
+      "filePath": "src/talk-tools.mjs",
+      "lineRange": [
+        46,
+        51
+      ],
+      "summary": "Returns the unseen team-talk lines for a participant and marks them as seen, for prepending to prompts.",
+      "tags": [
+        "team-chat",
+        "utility",
+        "digest"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/team.mjs",
+      "type": "file",
+      "name": "team.mjs",
+      "filePath": "src/team.mjs",
+      "summary": "Core worker-team orchestrator: assigns Lead tasks to Claude, Codex, or OpenRouter workers in isolated git worktrees, gates risky edits, broadcasts file-edit notes and clash warnings, runs cross-vendor review rounds, and merges or rejects results.",
+      "tags": [
+        "service",
+        "orchestration",
+        "multi-agent",
+        "cross-check",
+        "worktree"
+      ],
+      "complexity": "complex",
+      "languageNotes": "A single large closure-based factory holds all team state (jobs, queues, seen maps) in Maps instead of classes."
+    },
+    {
+      "id": "function:src/team.mjs:startTeam",
+      "type": "function",
+      "name": "startTeam",
+      "filePath": "src/team.mjs",
+      "lineRange": [
+        23,
+        318
+      ],
+      "summary": "Builds the team controller: worker sessions (Claude/Codex), edit gating and notes, work and check prompts, verdict parsing, review rounds with concurrency limits, and assign/reject/accept/stopAll actions.",
+      "tags": [
+        "orchestration",
+        "multi-agent",
+        "cross-check",
+        "factory"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/team.mjs:worktreeRootFor",
+      "type": "function",
+      "name": "worktreeRootFor",
+      "filePath": "src/team.mjs",
+      "lineRange": [
+        320,
+        320
+      ],
+      "summary": "Returns the worktrees directory path inside a data directory.",
+      "tags": [
+        "utility",
+        "path"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/workplaces.mjs",
+      "type": "file",
+      "name": "workplaces.mjs",
+      "filePath": "src/workplaces.mjs",
+      "summary": "Manages multiple isolated workplaces (each with its own folder, board, Lead, team and compare node) persisted in data/workplaces.json, handling create, remove/archive, goal cancellation and folder validation.",
+      "tags": [
+        "service",
+        "workspace-management",
+        "persistence",
+        "factory"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/workplaces.mjs:openWorkplaces",
+      "type": "function",
+      "name": "openWorkplaces",
+      "filePath": "src/workplaces.mjs",
+      "lineRange": [
+        17,
+        141
+      ],
+      "summary": "Loads or seeds the workplace list, starts each workplace's board, Lead, team and compare node, and returns create/remove/cancelGoal/get/list operations.",
+      "tags": [
+        "workspace-management",
+        "factory",
+        "persistence"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/codex.mjs",
+      "type": "file",
+      "name": "codex.mjs",
+      "filePath": "src/codex.mjs",
+      "summary": "Codex worker adapter that keeps one long-lived codex app-server process running and talks to it over JSON-RPC on stdio, giving the rest of Trident per-thread conversations, approval forwarding and out-of-usage tracking.",
+      "tags": [
+        "service",
+        "agent-adapter",
+        "json-rpc",
+        "child-process",
+        "codex"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses a closure-based module (a factory function returning methods) instead of a class, with a Map of pending request promises keyed by JSON-RPC id."
+    },
+    {
+      "id": "function:src/codex.mjs:startCodex",
+      "type": "function",
+      "name": "startCodex",
+      "filePath": "src/codex.mjs",
+      "lineRange": [
+        29,
+        138
+      ],
+      "summary": "Factory that lazily spawns the Codex app-server in isolation mode (global plugins and MCP servers disabled), routes JSON-RPC replies, events and permission requests to per-thread handlers, and exposes thread(), unavailableReason() and stop().",
+      "tags": [
+        "factory",
+        "agent-adapter",
+        "json-rpc",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/library.mjs",
+      "type": "file",
+      "name": "library.mjs",
+      "filePath": "src/library.mjs",
+      "summary": "The shared Markdown Library: a plain folder of notes in sections that every agent can read, where every change is first stored as a draft and only becomes the real note when the user saves it, with replaced versions kept under .old.",
+      "tags": [
+        "service",
+        "storage",
+        "markdown",
+        "drafts",
+        "versioning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/library.mjs:openLibrary",
+      "type": "function",
+      "name": "openLibrary",
+      "filePath": "src/library.mjs",
+      "lineRange": [
+        33,
+        168
+      ],
+      "summary": "Creates the Library folders and default guide, then returns snapshot, list, read, draft, save, discard, restore and deleteOld operations; paths are cleaned to stay inside the Library, and every change emits a library update event.",
+      "tags": [
+        "factory",
+        "storage",
+        "validation",
+        "versioning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/openrouter.mjs",
+      "type": "file",
+      "name": "openrouter.mjs",
+      "filePath": "src/openrouter.mjs",
+      "summary": "OpenRouter integration that reads the API key and model from the process or Windows user environment and builds the environment that points the Claude Agent SDK worker at OpenRouter's Anthropic-compatible endpoint, plus a no-cost key and model check.",
+      "tags": [
+        "config",
+        "integration",
+        "openrouter",
+        "environment"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/openrouter.mjs:setting",
+      "type": "function",
+      "name": "setting",
+      "filePath": "src/openrouter.mjs",
+      "lineRange": [
+        12,
+        21
+      ],
+      "summary": "Reads a named setting from process.env, falling back to the Windows user environment through PowerShell so values set with setx work without a reboot.",
+      "tags": [
+        "utility",
+        "environment",
+        "windows"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "function",
+      "name": "openRouterConfig",
+      "filePath": "src/openrouter.mjs",
+      "lineRange": [
+        23,
+        57
+      ],
+      "summary": "Returns null when no OpenRouter key is set; otherwise returns the model, key, an env override mapping every Anthropic model slot to the chosen model, and check(), which verifies the key, model existence, tool support and remaining credit.",
+      "tags": [
+        "factory",
+        "config",
+        "validation",
+        "integration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/server.mjs",
+      "type": "file",
+      "name": "server.mjs",
+      "filePath": "src/server.mjs",
+      "summary": "Trident's entry point: a local HTTP server bound to 127.0.0.1 that wires together the gate, Codex, OpenRouter, Library, settings and workplaces, streams every event to the page over server-sent events, and handles the POST routes for workplaces, messages, approvals, plans, interrupts, Library actions and settings.",
+      "tags": [
+        "entry-point",
+        "api-handler",
+        "http-server",
+        "server-sent-events",
+        "composition-root"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Node's built-in http module with a hand-written if/else router instead of a framework, and an in-memory history array replayed to each new SSE client."
+    },
+    {
+      "id": "function:src/server.mjs:emit",
+      "type": "function",
+      "name": "emit",
+      "filePath": "src/server.mjs",
+      "lineRange": [
+        32,
+        40
+      ],
+      "summary": "Central event bus: timestamps an event, keeps non-delta events in history and the JSONL transcript, and pushes it to every connected server-sent-events client.",
+      "tags": [
+        "event-handler",
+        "logging",
+        "server-sent-events"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/settings.mjs",
+      "type": "file",
+      "name": "settings.mjs",
+      "filePath": "src/settings.mjs",
+      "summary": "Trident-wide settings store kept in data/settings.json, currently holding the maximum number of workers per workplace, with validation and a settings event on every change.",
+      "tags": [
+        "config",
+        "storage",
+        "settings",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/settings.mjs:openSettings",
+      "type": "function",
+      "name": "openSettings",
+      "filePath": "src/settings.mjs",
+      "lineRange": [
+        6,
+        24
+      ],
+      "summary": "Loads settings over defaults from the JSON file and returns get, announce and set; set checks that maxAgents is between 1 and 10, writes the file and emits the new settings.",
+      "tags": [
+        "factory",
+        "config",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/board-tools.mjs",
+      "type": "file",
+      "name": "board-tools.mjs",
+      "filePath": "src/board-tools.mjs",
+      "summary": "Defines the in-process MCP server of board tools the Lead agent calls (propose_plan, update_task, finish_goal, assign_task, accept_task, reject_task, ask_several, team_say), so the Lead changes the board and team only through validated tool calls.",
+      "tags": [
+        "mcp-server",
+        "agent-tools",
+        "validation",
+        "service",
+        "board"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses zod schemas inside the Claude Agent SDK's tool() helper so each tool's arguments are validated and self-described to the model."
+    },
+    {
+      "id": "file:src/board.mjs",
+      "type": "file",
+      "name": "board.mjs",
+      "filePath": "src/board.mjs",
+      "summary": "SQLite-backed board store (via node:sqlite) holding goals, their tasks and team talk; handles schema creation and column migrations, plan proposal, task updates, and renders the [state] block fed to the Lead.",
+      "tags": [
+        "data-model",
+        "persistence",
+        "sqlite",
+        "board",
+        "service"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Node's built-in DatabaseSync and adds missing columns at startup with PRAGMA table_info, a lightweight in-code migration pattern."
+    },
+    {
+      "id": "file:src/gate.mjs",
+      "type": "file",
+      "name": "gate.mjs",
+      "filePath": "src/gate.mjs",
+      "summary": "Approval gate that holds an agent's risky tool calls until the user allows or denies them, persisting 'always allow' and 'always deny' rules per exact operation to a JSON file.",
+      "tags": [
+        "security",
+        "approval",
+        "permissions",
+        "event-handler",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/lead.mjs",
+      "type": "file",
+      "name": "lead.mjs",
+      "filePath": "src/lead.mjs",
+      "summary": "Runs the Lead agent as one long-lived Claude Agent SDK session fed by an async message queue, wiring in board and library MCP tools and the approval gate, and streaming its output as UI events; also exports a one-line tool-call summarizer.",
+      "tags": [
+        "agent",
+        "orchestration",
+        "claude-sdk",
+        "event-stream",
+        "service"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Feeds the SDK an async generator that parks on a Promise until send() wakes it, turning a push-style inbox into a pull-style prompt stream."
+    },
+    {
+      "id": "function:src/board-tools.mjs:boardTools",
+      "type": "function",
+      "name": "boardTools",
+      "filePath": "src/board-tools.mjs",
+      "lineRange": [
+        11,
+        121
+      ],
+      "summary": "Builds the 'board' MCP server with eight tools that propose plans, update and assign tasks, accept or reject worker results via the team, run multi-model comparisons, and post team talk.",
+      "tags": [
+        "factory",
+        "mcp-server",
+        "agent-tools",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/board.mjs:openBoard",
+      "type": "function",
+      "name": "openBoard",
+      "filePath": "src/board.mjs",
+      "lineRange": [
+        10,
+        124
+      ],
+      "summary": "Opens or creates the board database, migrates columns, marks interrupted worker tasks as blocked, and returns the board API (snapshot, proposePlan, setGoalStatus, updateTask, task, stateBlock, say and talk queries).",
+      "tags": [
+        "factory",
+        "persistence",
+        "sqlite",
+        "data-model"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/gate.mjs:createGate",
+      "type": "function",
+      "name": "createGate",
+      "filePath": "src/gate.mjs",
+      "lineRange": [
+        9,
+        57
+      ],
+      "summary": "Creates the approval gate with request/decide/open: checks saved rules, otherwise emits an approval event and waits for a decision or abort, saving permanent rules when asked.",
+      "tags": [
+        "factory",
+        "approval",
+        "security",
+        "promise"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "function",
+      "name": "LEAD_PROMPT",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        8,
+        30
+      ],
+      "summary": "Template that builds the Lead's appended system prompt, describing the plan-then-approve workflow, worker assignment and cross-checks, model comparison, and the Library.",
+      "tags": [
+        "prompt",
+        "template",
+        "agent-instructions"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/lead.mjs:startLead",
+      "type": "function",
+      "name": "startLead",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        35,
+        114
+      ],
+      "summary": "Starts the Lead's Claude session with board and library tools, auto-allowed read-only tools and a gate-backed canUseTool, translates SDK messages into status/delta/message/tool events, and returns send/interrupt/close controls.",
+      "tags": [
+        "orchestration",
+        "agent",
+        "event-stream",
+        "claude-sdk"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/lead.mjs:summarize",
+      "type": "function",
+      "name": "summarize",
+      "filePath": "src/lead.mjs",
+      "lineRange": [
+        117,
+        123
+      ],
+      "summary": "Produces a short one-line description of a tool call from its command, file path, pattern, URL or JSON input, used for the activity view and approval rule keys.",
+      "tags": [
+        "utility",
+        "formatting",
+        "logging"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.claude/autoharness/requests",
+      "type": "file",
+      "name": "requests",
+      "filePath": ".claude/autoharness/requests",
+      "summary": "Tiny runtime counter file used by the autoharness Claude Code plugin to queue skill-learning requests; it holds a single character and no project logic.",
+      "tags": [
+        "tooling-state",
+        "generated",
+        "claude-code",
+        "plugin-data"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.claude/launch.json",
+      "type": "config",
+      "name": "launch.json",
+      "filePath": ".claude/launch.json",
+      "summary": "Claude Code launch configuration that starts the Trident engine with `node src/server.mjs` and points the preview at http://127.0.0.1:4317.",
+      "tags": [
+        "configuration",
+        "launch",
+        "dev-server",
+        "claude-code"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.ua/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".ua/config.json",
+      "summary": "Understand-Anything tool settings that fix the knowledge-graph output language to English.",
+      "tags": [
+        "configuration",
+        "tooling",
+        "knowledge-graph"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Project overview explaining Trident's Lead/worker/cross-check model, workplaces, Ask several, Library and approvals, plus requirements (Node 26, git, Claude/Codex logins), setup, optional OpenRouter keys, folder layout, work flow diagram, status and privacy notes.",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "overview",
+        "getting-started"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/agent-collab-teardown.md",
+      "type": "document",
+      "name": "agent-collab-teardown.md",
+      "filePath": "docs/agent-collab-teardown.md",
+      "summary": "Research teardown comparing how Band, Coral and PandaOS coordinate AI agents (chat-room @mentions, task board with proof of completion, Director router) and the ideas Trident borrows from each.",
+      "tags": [
+        "documentation",
+        "research",
+        "multi-agent",
+        "competitive-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/design.md",
+      "type": "document",
+      "name": "design.md",
+      "filePath": "docs/design.md",
+      "summary": "Design document for Trident: the problem, the Lead-plan-approve-worker-cross-check-merge flow, the engine pieces (SDK adapters, team tools, SQLite board, worktrees, approval gate, state snapshot), the interface sketch, milestones M1-M4 and open questions.",
+      "tags": [
+        "documentation",
+        "architecture",
+        "design-doc",
+        "roadmap"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "npm manifest for the private ES-module Trident package; `npm start` runs src/server.mjs and the only dependencies are the Claude Agent SDK and the Codex SDK.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies",
+        "npm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/ember.css",
+      "type": "file",
+      "name": "ember.css",
+      "filePath": "public/ember.css",
+      "summary": "Ember design-system stylesheet for the web page: dark warm oklch color tokens, radius and glass/shadow variables, and ds-* component styles for buttons, inputs, cards, badges, alerts, switches, tabs, steppers, sliders, tables and chips, with touch, small-screen and hover media rules.",
+      "tags": [
+        "stylesheet",
+        "design-system",
+        "design-tokens",
+        "ui",
+        "theming"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Colors are defined in the oklch() color space as CSS custom properties, so every component derives from a small token set."
+    },
+    {
+      "id": "file:public/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "public/index.html",
+      "summary": "Single-page Trident interface: sidebar of workplaces plus Library and Settings views, a Lead chat, a Needs-you approvals bar, the goal/task board, team talk, activity log and Ask-several comparison columns, all driven by an inline script that consumes the server's /events stream and posts actions back.",
+      "tags": [
+        "entry-point",
+        "ui",
+        "single-page-app",
+        "event-handler",
+        "component"
+      ],
+      "complexity": "complex",
+      "languageNotes": "No framework or build step: plain DOM helpers render server-sent events, and dialogs use the native <dialog> element."
+    },
+    {
+      "id": "function:public/index.html:addMessage",
+      "type": "function",
+      "name": "addMessage",
+      "filePath": "public/index.html",
+      "lineRange": [
+        354,
+        365
+      ],
+      "summary": "Appends a chat bubble for the user, Lead or a worker to the conversation log, rendering its text as Markdown.",
+      "tags": [
+        "ui",
+        "chat",
+        "rendering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:addApproval",
+      "type": "function",
+      "name": "addApproval",
+      "filePath": "public/index.html",
+      "lineRange": [
+        411,
+        438
+      ],
+      "summary": "Renders a pending approval card in the Needs-you bar with allow-once, deny, always-allow and always-deny buttons that post the decision to /approval.",
+      "tags": [
+        "ui",
+        "approval",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:renderNow",
+      "type": "function",
+      "name": "renderNow",
+      "filePath": "public/index.html",
+      "lineRange": [
+        453,
+        479
+      ],
+      "summary": "Builds the one-line 'now' status sentence summarizing what the Lead and workers are doing and what is waiting on the user.",
+      "tags": [
+        "ui",
+        "status",
+        "rendering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:renderSidebar",
+      "type": "function",
+      "name": "renderSidebar",
+      "filePath": "public/index.html",
+      "lineRange": [
+        492,
+        517
+      ],
+      "summary": "Redraws the workplace list in the sidebar, marking the active workplace and showing how many items need the user's attention in each.",
+      "tags": [
+        "ui",
+        "navigation",
+        "workplaces"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:renderLibrary",
+      "type": "function",
+      "name": "renderLibrary",
+      "filePath": "public/index.html",
+      "lineRange": [
+        600,
+        629
+      ],
+      "summary": "Renders the Library note list grouped by section, separating notes with pending agent drafts from saved notes.",
+      "tags": [
+        "ui",
+        "library",
+        "rendering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:showNote",
+      "type": "function",
+      "name": "showNote",
+      "filePath": "public/index.html",
+      "lineRange": [
+        631,
+        680
+      ],
+      "summary": "Loads one Library note via /library/read and shows it with its pending draft, offering save, discard, edit and restore actions.",
+      "tags": [
+        "ui",
+        "library",
+        "async"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:public/index.html:editNote",
+      "type": "function",
+      "name": "editNote",
+      "filePath": "public/index.html",
+      "lineRange": [
+        683,
+        713
+      ],
+      "summary": "Opens an inline editor for a new or existing Library note and writes the result through /library/write or /library/save.",
+      "tags": [
+        "ui",
+        "library",
+        "form"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:renderOldVersions",
+      "type": "function",
+      "name": "renderOldVersions",
+      "filePath": "public/index.html",
+      "lineRange": [
+        759,
+        797
+      ],
+      "summary": "Lists archived old versions of Library notes in Settings, with restore and confirmed delete-one or delete-all actions.",
+      "tags": [
+        "ui",
+        "settings",
+        "versioning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:public/index.html:apply",
+      "type": "function",
+      "name": "apply",
+      "filePath": "public/index.html",
+      "lineRange": [
+        799,
+        813
+      ],
+      "summary": "Central dispatcher for server-sent events: routes message, tool, status, approval, board, compare and talk events to the matching render function.",
+      "tags": [
+        "event-handler",
+        "dispatcher",
+        "server-sent-events"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:addCompare",
+      "type": "function",
+      "name": "addCompare",
+      "filePath": "public/index.html",
+      "lineRange": [
+        833,
+        851
+      ],
+      "summary": "Creates an Ask-several comparison block with one column per model for a question put to several models.",
+      "tags": [
+        "ui",
+        "comparison",
+        "rendering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:fillCompare",
+      "type": "function",
+      "name": "fillCompare",
+      "filePath": "public/index.html",
+      "lineRange": [
+        852,
+        862
+      ],
+      "summary": "Fills one model's column in an Ask-several block with its answer, state, time taken and cost.",
+      "tags": [
+        "ui",
+        "comparison",
+        "rendering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:public/index.html:renderBoard",
+      "type": "function",
+      "name": "renderBoard",
+      "filePath": "public/index.html",
+      "lineRange": [
+        886,
+        932
+      ],
+      "summary": "Renders the goal, its 'Done when' line and each task with owner, status and cross-check verdict badges, plus plan approval or cancel controls.",
+      "tags": [
+        "ui",
+        "board",
+        "rendering"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:public/index.html:showPlanCard",
+      "type": "function",
+      "name": "showPlanCard",
+      "filePath": "public/index.html",
+      "lineRange": [
+        935,
+        949
+      ],
+      "summary": "Shows the Lead's proposed plan as a card in the chat so the user can approve it before any work starts.",
+      "tags": [
+        "ui",
+        "plan",
+        "approval"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/appserver.mjs",
+      "type": "file",
+      "name": "appserver.mjs",
+      "filePath": "spikes/appserver.mjs",
+      "summary": "Spike that drives `codex app-server` over stdio JSON-RPC with a long-lived thread, timing startup and two turns and declining any server approval requests.",
+      "tags": [
+        "spike",
+        "codex",
+        "json-rpc",
+        "benchmark"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:spikes/claude.mjs",
+      "type": "file",
+      "name": "claude.mjs",
+      "filePath": "spikes/claude.mjs",
+      "summary": "Spike confirming the Claude Agent SDK runs on the existing Claude Code login, sending one isolated prompt with settings, plugins and MCP servers disabled.",
+      "tags": [
+        "spike",
+        "claude-agent-sdk",
+        "smoke-test",
+        "authentication"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/codex.mjs",
+      "type": "file",
+      "name": "codex.mjs",
+      "filePath": "spikes/codex.mjs",
+      "summary": "Spike confirming the Codex SDK runs on the existing Codex login by streaming one read-only turn and printing events and usage.",
+      "tags": [
+        "spike",
+        "codex-sdk",
+        "smoke-test",
+        "authentication"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/e2e-team.mjs",
+      "type": "file",
+      "name": "e2e-team.mjs",
+      "filePath": "spikes/e2e-team.mjs",
+      "summary": "End-to-end script against the running server: sends a request, auto-approves the plan and every approval, and logs board, message, talk, tool and status events from the /events stream until the goal is done.",
+      "tags": [
+        "test",
+        "end-to-end",
+        "server-sent-events",
+        "automation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/or-check.mjs",
+      "type": "file",
+      "name": "or-check.mjs",
+      "filePath": "spikes/or-check.mjs",
+      "summary": "Free check of the configured OpenRouter key and model: runs the config's validity check and prints account tier and usage from the key-info endpoint without generating text.",
+      "tags": [
+        "spike",
+        "openrouter",
+        "validation",
+        "diagnostics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/or-models.mjs",
+      "type": "file",
+      "name": "or-models.mjs",
+      "filePath": "spikes/or-models.mjs",
+      "summary": "Lists tool-capable coding models from the public OpenRouter catalog with prices, and reports whether given model ids are still listed.",
+      "tags": [
+        "spike",
+        "openrouter",
+        "model-catalog",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/or-route.mjs",
+      "type": "file",
+      "name": "or-route.mjs",
+      "filePath": "spikes/or-route.mjs",
+      "summary": "Checks the OpenRouter route with a deliberately invalid placeholder key, expecting both the key check and a Claude-session worker turn to be refused, at no cost.",
+      "tags": [
+        "spike",
+        "openrouter",
+        "negative-test",
+        "routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:spikes/twoturn.mjs",
+      "type": "file",
+      "name": "twoturn.mjs",
+      "filePath": "spikes/twoturn.mjs",
+      "summary": "Spike measuring whether SDK slowness is a one-time startup cost or per-message, using one streaming Claude session with two messages or two Codex runs on one thread.",
+      "tags": [
+        "spike",
+        "benchmark",
+        "claude-agent-sdk",
+        "codex-sdk"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/claude.mjs",
+      "target": "function:src/claude.mjs:subscriptionEnv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/claude.mjs",
+      "target": "function:src/claude.mjs:subscriptionEnv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/claude.mjs",
+      "target": "function:src/claude.mjs:claudeSession",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/claude.mjs",
+      "target": "function:src/claude.mjs:claudeSession",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/compare.mjs",
+      "target": "function:src/compare.mjs:startCompare",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/compare.mjs",
+      "target": "function:src/compare.mjs:startCompare",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/compare.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:git",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:git",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:ensureRepo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:ensureRepo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:createWorktree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:createWorktree",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:changes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:changes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:mergeBranch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:mergeBranch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:removeWorktree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/git.mjs",
+      "target": "function:src/git.mjs:removeWorktree",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/library-tools.mjs",
+      "target": "function:src/library-tools.mjs:libraryTools",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/library-tools.mjs",
+      "target": "function:src/library-tools.mjs:libraryTools",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/talk-tools.mjs",
+      "target": "function:src/talk-tools.mjs:talkTools",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/talk-tools.mjs",
+      "target": "function:src/talk-tools.mjs:talkTools",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/talk-tools.mjs",
+      "target": "function:src/talk-tools.mjs:talkDigest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/talk-tools.mjs",
+      "target": "function:src/talk-tools.mjs:talkDigest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "function:src/team.mjs:startTeam",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "function:src/team.mjs:startTeam",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "function:src/team.mjs:worktreeRootFor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "function:src/team.mjs:worktreeRootFor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "file:src/git.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "file:src/library-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/team.mjs",
+      "target": "file:src/talk-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "function:src/workplaces.mjs:openWorkplaces",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "function:src/workplaces.mjs:openWorkplaces",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "file:src/board.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "file:src/compare.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "file:src/git.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "file:src/lead.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/workplaces.mjs",
+      "target": "file:src/team.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/claude.mjs:claudeSession",
+      "target": "function:src/claude.mjs:subscriptionEnv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/compare.mjs:startCompare",
+      "target": "function:src/claude.mjs:claudeSession",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:commitAll",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:ensureRepo",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:ensureRepo",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:createWorktree",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:createWorktree",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:changes",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:changes",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:mergeBranch",
+      "target": "function:src/git.mjs:commitAll",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:mergeBranch",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/git.mjs:removeWorktree",
+      "target": "function:src/git.mjs:git",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/claude.mjs:claudeSession",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/talk-tools.mjs:talkTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/talk-tools.mjs:talkDigest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/library-tools.mjs:libraryTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/git.mjs:createWorktree",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/git.mjs:changes",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/git.mjs:mergeBranch",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/team.mjs:startTeam",
+      "target": "function:src/git.mjs:removeWorktree",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/git.mjs:ensureRepo",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/compare.mjs:startCompare",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/team.mjs:startTeam",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/team.mjs:worktreeRootFor",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/lead.mjs:startLead",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/workplaces.mjs:openWorkplaces",
+      "target": "function:src/board.mjs:openBoard",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/codex.mjs",
+      "target": "function:src/codex.mjs:startCodex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/codex.mjs",
+      "target": "function:src/codex.mjs:startCodex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/library.mjs",
+      "target": "function:src/library.mjs:openLibrary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/library.mjs",
+      "target": "function:src/library.mjs:openLibrary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/openrouter.mjs",
+      "target": "function:src/openrouter.mjs:setting",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/openrouter.mjs",
+      "target": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/openrouter.mjs",
+      "target": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/server.mjs:emit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/settings.mjs",
+      "target": "function:src/settings.mjs:openSettings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/settings.mjs",
+      "target": "function:src/settings.mjs:openSettings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/codex.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/gate.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/library.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/openrouter.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/settings.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "file:src/workplaces.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/codex.mjs:startCodex",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/library.mjs:openLibrary",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/settings.mjs:openSettings",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/gate.mjs:createGate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/server.mjs",
+      "target": "function:src/workplaces.mjs:openWorkplaces",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/openrouter.mjs:openRouterConfig",
+      "target": "function:src/openrouter.mjs:setting",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/board.mjs",
+      "target": "function:src/board.mjs:openBoard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "function:src/gate.mjs:createGate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:startLead",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/board.mjs",
+      "target": "function:src/board.mjs:openBoard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "function:src/gate.mjs:createGate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:startLead",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/board-tools.mjs",
+      "target": "file:src/board.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/gate.mjs",
+      "target": "file:src/lead.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/board-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lead.mjs",
+      "target": "file:src/library-tools.mjs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/board-tools.mjs:boardTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/library-tools.mjs:libraryTools",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/claude.mjs:subscriptionEnv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/lead.mjs:LEAD_PROMPT",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/lead.mjs:startLead",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/gate.mjs:createGate",
+      "target": "function:src/lead.mjs:summarize",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:addMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:addApproval",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:renderNow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:renderSidebar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:renderLibrary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:showNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:editNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:renderOldVersions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:apply",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:addCompare",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:fillCompare",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:renderBoard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "function:public/index.html:showPlanCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "file:public/ember.css",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "file:src/server.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:spikes/appserver.mjs",
+      "target": "file:src/codex.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/claude.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/codex.mjs",
+      "target": "file:src/codex.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/twoturn.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/twoturn.mjs",
+      "target": "file:src/codex.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/e2e-team.mjs",
+      "target": "file:src/server.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:spikes/or-check.mjs",
+      "target": "file:src/openrouter.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:spikes/or-check.mjs",
+      "target": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:spikes/or-models.mjs",
+      "target": "file:src/openrouter.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:spikes/or-route.mjs",
+      "target": "file:src/openrouter.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:spikes/or-route.mjs",
+      "target": "file:src/claude.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:spikes/or-route.mjs",
+      "target": "function:src/openrouter.mjs:openRouterConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:spikes/or-route.mjs",
+      "target": "function:src/claude.mjs:claudeSession",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:.claude/launch.json",
+      "target": "file:src/server.mjs",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/server.mjs",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/server.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/lead.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/team.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/board.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/library.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/workplaces.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/compare.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/gate.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/openrouter.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:public/index.html",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:docs/design.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/lead.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/team.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/board.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/board-tools.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/gate.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/claude.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/codex.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:src/git.mjs",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "file:public/index.html",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/design.md",
+      "target": "document:docs/agent-collab-teardown.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/agent-collab-teardown.md",
+      "target": "file:src/claude.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/agent-collab-teardown.md",
+      "target": "file:src/codex.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:server",
+      "name": "Server and Workplaces",
+      "description": "The local 127.0.0.1 HTTP entry point plus the workplace manager and Trident-wide settings store that wire each workplace's board, Lead, team and compare node together.",
+      "nodeIds": [
+        "file:src/server.mjs",
+        "file:src/workplaces.mjs",
+        "file:src/settings.mjs"
+      ]
+    },
+    {
+      "id": "layer:orchestration",
+      "name": "Agent Orchestration",
+      "description": "The Lead agent session, the cross-vendor worker team that builds in git worktrees and cross-checks work, the side-by-side compare node, and the approval gate that holds risky tool calls for the user.",
+      "nodeIds": [
+        "file:src/lead.mjs",
+        "file:src/team.mjs",
+        "file:src/compare.mjs",
+        "file:src/gate.mjs"
+      ]
+    },
+    {
+      "id": "layer:providers",
+      "name": "Model Providers",
+      "description": "Adapters that turn the Claude Agent SDK, the long-lived Codex app-server and the OpenRouter route into message-at-a-time worker sessions.",
+      "nodeIds": [
+        "file:src/claude.mjs",
+        "file:src/codex.mjs",
+        "file:src/openrouter.mjs"
+      ]
+    },
+    {
+      "id": "layer:agent-tools",
+      "name": "Agent Tool Servers",
+      "description": "In-process MCP servers that give agents board actions (plans, tasks, assignment), team-talk messaging and Library read/write tools.",
+      "nodeIds": [
+        "file:src/board-tools.mjs",
+        "file:src/talk-tools.mjs",
+        "file:src/library-tools.mjs"
+      ]
+    },
+    {
+      "id": "layer:storage",
+      "name": "Storage and Workspace State",
+      "description": "Persistent state behind the agents: the SQLite board of goals, tasks and talk, the draft-then-approve Markdown Library folder, and git worktree plumbing for worker workspaces.",
+      "nodeIds": [
+        "file:src/board.mjs",
+        "file:src/library.mjs",
+        "file:src/git.mjs"
+      ]
+    },
+    {
+      "id": "layer:ui",
+      "name": "Web Interface",
+      "description": "The single-page Trident UI (workplaces sidebar, Lead chat, approvals bar, task board, Library and Settings) styled by the Ember design-system stylesheet.",
+      "nodeIds": [
+        "file:public/index.html",
+        "file:public/ember.css"
+      ]
+    },
+    {
+      "id": "layer:spikes",
+      "name": "Spikes and Probes",
+      "description": "Standalone experiment and check scripts that confirm SDK logins, Codex app-server behaviour, OpenRouter keys and models, timing, and an end-to-end team run against the live server.",
+      "nodeIds": [
+        "file:spikes/appserver.mjs",
+        "file:spikes/claude.mjs",
+        "file:spikes/codex.mjs",
+        "file:spikes/e2e-team.mjs",
+        "file:spikes/or-check.mjs",
+        "file:spikes/or-models.mjs",
+        "file:spikes/or-route.mjs",
+        "file:spikes/twoturn.mjs"
+      ],
+      "containerLabels": [
+        {
+          "name": "Claude SDK probes",
+          "nodeIds": [
+            "file:spikes/claude.mjs",
+            "file:spikes/twoturn.mjs"
+          ]
+        },
+        {
+          "name": "Codex SDK probes",
+          "nodeIds": [
+            "file:spikes/appserver.mjs",
+            "file:spikes/codex.mjs"
+          ]
+        },
+        {
+          "name": "OpenRouter checks",
+          "nodeIds": [
+            "file:spikes/or-check.mjs",
+            "file:spikes/or-models.mjs",
+            "file:spikes/or-route.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layer:project-support",
+      "name": "Docs and Configuration",
+      "description": "The README, the design document and agent-collaboration teardown, plus the npm manifest, Claude Code launch config and tooling settings that start and describe Trident.",
+      "nodeIds": [
+        "document:README.md",
+        "document:docs/design.md",
+        "document:docs/agent-collab-teardown.md",
+        "config:package.json",
+        "config:.claude/launch.json",
+        "config:.ua/config.json",
+        "file:.claude/autoharness/requests"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "What Trident Is",
+      "description": "Start with the README. Trident is a small web page that runs only on your own computer. You ask for something once, a Lead agent writes a plan, and after you approve it, AI workers from different companies (Claude, Codex, OpenRouter models) build it and check each other's work. The README also lists the extras covered later in this tour: workplaces, the Library, Ask several, and approvals.",
+      "nodeIds": [
+        "document:README.md"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "The Plan Behind It",
+      "description": "The design document describes the intended flow: Lead plans, you approve, workers build, a different vendor cross-checks, and the result is merged. It also names the engine parts you will meet next and splits the work into milestones M1-M4. The teardown note compares three other agent tools (Band, Coral, PandaOS) and records which ideas Trident borrowed from each.",
+      "nodeIds": [
+        "document:docs/design.md",
+        "document:docs/agent-collab-teardown.md"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "The Front Door",
+      "description": "Running `npm start` (set up in package.json) or the Claude Code launch config starts one file: server.mjs. It is a local web server at 127.0.0.1:4317 that connects every other part, then sends a live stream of events to the page and accepts button clicks such as approvals, plan decisions and Library saves. Think of it as the switchboard: almost everything in the tour gets plugged in here.",
+      "nodeIds": [
+        "file:src/server.mjs",
+        "config:package.json",
+        "config:.claude/launch.json"
+      ],
+      "languageLesson": "The server pushes updates with server-sent events (SSE): the page opens one long-lived connection to /events and the server keeps writing new messages into it. Clicks go the other way as ordinary POST requests."
+    },
+    {
+      "order": 4,
+      "title": "Workplaces and Settings",
+      "description": "The server hands most of the work to workplaces.mjs. Each workplace is a separate studio with its own folder, board, Lead, team and Ask-several helper, saved in data/workplaces.json; removing one archives it rather than deleting its files. settings.mjs holds the few Trident-wide choices, such as the maximum number of workers per workplace.",
+      "nodeIds": [
+        "file:src/workplaces.mjs",
+        "file:src/settings.mjs"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "The Board",
+      "description": "Every workplace keeps a board: a small SQLite database holding goals, the tasks inside them, and team talk messages. It also writes a short [state] summary that is fed to the Lead so it always knows where things stand. This is the shared memory that the Lead and the workers both read and update.",
+      "nodeIds": [
+        "file:src/board.mjs"
+      ],
+      "languageLesson": "Trident uses node:sqlite, the SQLite database built into Node.js 26, so no separate database server is needed. That is why the README asks for Node 26 or newer."
+    },
+    {
+      "order": 6,
+      "title": "The Lead Plans",
+      "description": "lead.mjs runs the Lead as one long conversation with Claude that stays open between your messages. The Lead never edits the board directly: it can only use the tools in board-tools.mjs, such as propose_plan, assign_task, accept_task and reject_task. Each tool checks its input first, so the board stays tidy even if the model makes a mistake.",
+      "nodeIds": [
+        "file:src/lead.mjs",
+        "file:src/board-tools.mjs"
+      ],
+      "languageLesson": "These tools are an in-process MCP server. MCP (Model Context Protocol) is a standard way to describe tools a model may call; 'in-process' means the tools live inside Trident itself instead of in a separate program."
+    },
+    {
+      "order": 7,
+      "title": "Approvals for Risky Commands",
+      "description": "When an agent wants to do something risky, gate.mjs pauses that action until you choose: allow once, deny, always allow, or always deny. The 'always' choices are saved to a file for that exact operation, so you are not asked twice. In the page, these waiting requests appear in the Needs-you bar.",
+      "nodeIds": [
+        "file:src/gate.mjs"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Workers From Different Vendors",
+      "description": "These three files let Trident talk to each AI vendor in the same simple way: send a message, get a reply. claude.mjs wraps the Claude Agent SDK and uses your Claude login (it removes stray API settings so it stays on your subscription). codex.mjs keeps one Codex program running in the background, and openrouter.mjs reads your key and model and points a Claude-style worker at OpenRouter instead.",
+      "nodeIds": [
+        "file:src/claude.mjs",
+        "file:src/codex.mjs",
+        "file:src/openrouter.mjs"
+      ],
+      "languageLesson": "codex.mjs talks to the Codex app-server using JSON-RPC over stdio: each request is a small JSON message written to the other program's input, and replies come back on its output, matched by an id number."
+    },
+    {
+      "order": 9,
+      "title": "The Team Builds and Cross-Checks",
+      "description": "team.mjs is the heart of the work: it gives each Lead task to a worker, has a model from a different vendor review the result, and then merges or rejects it. git.mjs gives each task its own copy of the project (a git worktree on its own branch), so workers never trip over each other. talk-tools.mjs lets workers leave messages for the team that are read the next time someone looks, so nobody is interrupted.",
+      "nodeIds": [
+        "file:src/team.mjs",
+        "file:src/git.mjs",
+        "file:src/talk-tools.mjs"
+      ],
+      "languageLesson": "A git worktree is a second working folder attached to the same repository, checked out on a different branch. Many tasks can be edited at once without touching the main folder until a merge."
+    },
+    {
+      "order": 10,
+      "title": "The Library of Notes",
+      "description": "The Library is a plain folder of Markdown notes sorted into sections, which every agent can read. library.mjs makes sure any change is saved as a draft first and only becomes the real note when you press Save; the replaced version is kept under .old. library-tools.mjs gives the Lead and workers the list, read and write tools for it, built the same way as the board tools in Step 6.",
+      "nodeIds": [
+        "file:src/library.mjs",
+        "file:src/library-tools.mjs"
+      ]
+    },
+    {
+      "order": 11,
+      "title": "Ask Several Models",
+      "description": "compare.mjs powers the Ask several feature. It sends one question to up to four models at once (Claude, Codex, or any OpenRouter model) and returns each answer with its time and cost, so you can compare them side by side. It reuses the Claude adapter from Step 8.",
+      "nodeIds": [
+        "file:src/compare.mjs"
+      ]
+    },
+    {
+      "order": 12,
+      "title": "The Web Page",
+      "description": "Everything you see lives in one file, index.html: the workplace sidebar, the Lead chat, the Needs-you approvals bar, the task board, team talk, the Library and Settings, and the Ask-several columns. A script inside it listens to the server's event stream from Step 3 and sends your clicks back. ember.css is the Ember design system that gives it its dark, warm look and its buttons, cards and tabs.",
+      "nodeIds": [
+        "file:public/index.html",
+        "file:public/ember.css"
+      ],
+      "languageLesson": "ember.css defines colours once as CSS variables (design tokens) using oklch, a colour format where equal number steps look like equal changes in brightness. Components then reuse those variables, so the look stays consistent."
+    },
+    {
+      "order": 13,
+      "title": "Test Scripts and Probes",
+      "description": "The spikes folder holds small standalone scripts used to try things out before building them in. e2e-team.mjs runs a full request against the live server, auto-approving everything, and logs what happens until the goal is done. The others confirm that a Claude login works and that an OpenRouter key and model are valid, without spending money.",
+      "nodeIds": [
+        "file:spikes/e2e-team.mjs",
+        "file:spikes/claude.mjs",
+        "file:spikes/or-check.mjs"
+      ]
+    }
+  ]
+}

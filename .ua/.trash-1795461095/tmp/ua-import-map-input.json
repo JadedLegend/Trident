@@ -1,0 +1,170 @@
+{
+  "projectRoot": "C:/Users/aLLIEDiNTENT/Desktop/TridentIGuess/Trident",
+  "files": [
+    {
+      "path": ".claude/autoharness/requests",
+      "language": "unknown",
+      "fileCategory": "code"
+    },
+    {
+      "path": ".claude/launch.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/agent-collab-teardown.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/design.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/ember.css",
+      "language": "css",
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/index.html",
+      "language": "html",
+      "fileCategory": "markup"
+    },
+    {
+      "path": "spikes/appserver.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/claude.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/codex.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/e2e-team.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/or-check.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/or-models.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/or-route.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "spikes/twoturn.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/board-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/board.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/claude.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/codex.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/compare.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/gate.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/git.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lead.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/library-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/library.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/openrouter.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/server.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/settings.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/talk-tools.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/team.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/workplaces.mjs",
+      "language": "javascript",
+      "fileCategory": "code"
+    }
+  ]
+}
