@@ -187,10 +187,13 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
   async function round(num, message) {
     const job = jobs.get(num);
     const { worker, wt } = job;
+    // True once the job was stopped or replaced (goal cancelled, new plan, task re-assigned).
+    // Task numbers restart at 1 in every plan, so a stale job must never touch the board again.
+    const stale = () => jobs.get(num) !== job;
     try {
       status(worker, "working", num);
       const summary = await job.session.run(withTalk(worker, message));
-      if (jobs.get(num) !== job) return; // cancelled while it was working
+      if (stale()) return; // cancelled while it was working
       status(worker, "idle");
       const { stat, diff } = changes(wt.dir, wt.base);
 
@@ -209,6 +212,7 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
           skipped.push(`${NAMES[c]} could not check it: ${oneLine(err.message, 100)}`);
         }
       }
+      if (stale()) return; // cancelled while it was being checked
       if (!v) v = { verdict: "fail", notes: "No other worker was able to check this." };
       if (skipped.length) v.notes = `(${skipped.join("; ")}) ${v.notes}`;
       board.updateTask(num, { check_verdict: v.verdict, check_note: oneLine(v.notes, 300) });
@@ -223,6 +227,7 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
       );
     } catch (err) {
       status(worker, "idle");
+      if (stale()) return; // stopping a session makes it throw; that is not a task failure
       board.updateTask(num, { status: "blocked", note: oneLine(`Stopped: ${err.message}`) });
       tellLead(`[team] Task ${num} stopped with an error: ${err.message}. You can assign it again.`);
     }
@@ -264,12 +269,20 @@ export function startTeam({ workspace, worktreeRoot, emit, gate, board, codex, o
       const waiting = ctx.task.depends_on.filter((d) => ctx.tasks.find((t) => t.num === d)?.status !== "done");
       if (waiting.length) return `Task ${num} has to wait for task ${waiting.join(", ")} to be done first.`;
 
+      let wt;
+      try {
+        wt = createWorktree(workspace, worktreeRoot, `g${ctx.goal.id}-t${num}`);
+      } catch (err) {
+        return `Task ${num} could not be started: ${oneLine(err.message, 200)} Tell the user.`;
+      }
       jobs.get(num)?.session.close();
-      const wt = createWorktree(workspace, worktreeRoot, `g${ctx.goal.id}-t${num}`);
       board.updateTask(num, { status: "working", owner: worker, branch: wt.branch, worktree: wt.dir, base: wt.base, note: "", check_by: "", check_verdict: "", check_note: "" });
       const session = await open(worker, wt.dir, { readOnly: false });
       jobs.set(num, { worker, wt, session });
-      const prompt = workPrompt(board.task(num), wt.dir) + (instructions ? `\n\nFrom the Lead: ${instructions}` : "");
+      const clashes = wt.conflicts?.length
+        ? `\n\nThis is your earlier copy of the task, now updated with work accepted since. These files clashed and still contain <<<<<<< / ======= / >>>>>>> markers: ${wt.conflicts.join(", ")}. Combine both sides so nothing accepted is lost, and remove every marker.`
+        : "";
+      const prompt = workPrompt(board.task(num), wt.dir) + clashes + (instructions ? `\n\nFrom the Lead: ${instructions}` : "");
       // Runs in the background; the Lead hears back with a [team] message.
       if (!startRound(num, prompt)) return `Task ${num} is with ${worker}, waiting in line: ${limit()} workers are already busy. It starts by itself when one finishes. End your turn now.`;
       return null;

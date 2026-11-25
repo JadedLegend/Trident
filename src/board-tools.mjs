@@ -33,6 +33,9 @@ export function boardTools(board, team, askSeveral) {
             .max(12),
         },
         async (args) => {
+          // A new plan cancels a goal in progress, so its workers stop too (as the Cancel button does).
+          // Otherwise a worker still busy on the old "task 1" could report into the new plan's task 1.
+          if (board.snapshot().goal?.status === "active") team.stopAll();
           board.proposePlan(args);
           return text("The plan is on the user's screen waiting for approval. End your turn now and wait for their answer.");
         },

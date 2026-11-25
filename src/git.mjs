@@ -27,16 +27,39 @@ export function ensureRepo(workspace) {
   }
 }
 
-// A fresh worktree for one task, branched from the workspace as it is now.
+// A worktree for one task, branched from the workspace as it is now.
+// If the task already has a copy (it was stopped or could not be merged), that copy is kept and
+// first brought up to date with the workspace, so the worker builds on everything accepted since.
+// `conflicts` lists files where the two clashed; they are left with <<<<<<< markers to resolve.
 export function createWorktree(workspace, root, name) {
   commitAll(workspace, `Trident: snapshot before ${name}`);
   mkdirSync(root, { recursive: true });
   const dir = join(root, name);
   const branch = `trident/${name}`;
-  if (existsSync(dir)) return { dir, branch, base: git(dir, "merge-base", "HEAD", "main") };
-  const base = git(workspace, "rev-parse", "HEAD");
-  git(workspace, "worktree", "add", "-q", "-B", branch, dir, base);
-  return { dir, branch, base };
+  const latest = git(workspace, "rev-parse", "HEAD");
+  if (existsSync(dir)) return { dir, branch, base: latest, conflicts: catchUp(dir, latest) };
+  git(workspace, "worktree", "add", "-q", "-B", branch, dir, latest);
+  return { dir, branch, base: latest, conflicts: [] };
+}
+
+// Merge the workspace's latest commit into an existing copy. Returns the files that clashed.
+function catchUp(dir, latest) {
+  commitAll(dir, "Trident: worker's unfinished changes");
+  try {
+    git(dir, "merge", "--no-ff", "-q", "-m", "Trident: bring in the latest workspace", latest);
+    return [];
+  } catch {
+    const clashed = git(dir, "diff", "--name-only", "--diff-filter=U").split("\n").filter(Boolean);
+    if (!clashed.length) {
+      // Not a file clash (something else went wrong): leave the copy as it was.
+      try { git(dir, "merge", "--abort"); } catch {}
+      throw new Error("The task's copy could not be brought up to date with the workspace.");
+    }
+    // Keep the clash markers in a commit, so the worker sees and fixes them in place.
+    git(dir, "add", "-A");
+    git(dir, "commit", "-q", "--no-verify", "-m", "Trident: latest workspace brought in, with clashes to resolve");
+    return clashed;
+  }
 }
 
 // What the worker changed: a short file summary plus the full diff for the checker.
